@@ -1,5 +1,64 @@
 # 第6章：消息系统 —— Agent 的记忆如何组织与传递
 
+## Glossary
+
+| 术语 | 含义 |
+|------|------|
+| **Message** | LLM 能理解的标准消息格式，只有三种：UserMessage、AssistantMessage、ToolResultMessage |
+| **AgentMessage** | Agent 内部使用的消息格式，= Message（3 种标准）+ CustomAgentMessages（自定义扩展） |
+| **CustomAgentMessages** | 核心包预留的空接口，应用层通过声明合并注入自己的消息类型 |
+| **声明合并（Declaration Merging）** | TypeScript 特性，允许在不同文件里往同一个接口追加字段，核心包不需要知道扩展的存在 |
+| **UserMessage** | role 为 "user" 的消息，代表用户输入，content 可以是文本或图片 |
+| **AssistantMessage** | role 为 "assistant" 的消息，代表 LLM 回复，content 可包含文本、思考过程、工具调用 |
+| **ToolResultMessage** | role 为 "toolResult" 的消息，代表工具执行结果，通过 toolCallId 关联到对应的 ToolCall |
+| **BashExecutionMessage** | 自定义消息，记录用户通过 `!` 前缀执行的 bash 命令（command、output、exitCode 等结构化字段） |
+| **CompactionSummaryMessage** | 自定义消息，上下文被压缩后生成的摘要 |
+| **BranchSummaryMessage** | 自定义消息，Git 分支切换时生成的摘要 |
+| **CustomMessage** | 自定义消息，扩展注入的通用消息类型 |
+| **convertToLlm** | 翻译函数，把 AgentMessage[] 转成 Message[]，所有自定义消息拍平成 UserMessage |
+| **transformContext** | 同层变换函数，在 AgentMessage 层面做裁剪、压缩、注入，输入输出类型不变 |
+| **excludeFromContext** | BashExecutionMessage 的布尔字段，为 true 时该消息对 LLM 隐身但 UI 仍可见 |
+| **content 块** | AssistantMessage 的 content 数组中的元素，有三种：TextContent（文本）、ThinkingContent（思考）、ToolCall（工具调用） |
+| **toolCallId** | ToolResultMessage 中的字段，用于关联回 AssistantMessage 里对应的 ToolCall |
+| **stopReason** | AssistantMessage 中的字段，表示 LLM 为什么停止回复（如 "stop" 表示说完了，"toolUse" 表示要调工具） |
+| **内富外严** | Pi 消息系统的核心设计原则——内部用丰富格式自由表达，到 LLM 边界翻译回严格标准格式 |
+
+---
+
+## 设计原则与核心问题
+
+### 核心问题：两个消费者的需求冲突
+
+消息系统要同时服务两个读者，它们的需求是对立的：
+
+- **UI 端**需要结构化字段——Bash 执行要分别拿到 command、output、exitCode、cancelled、truncated，才能做专用渲染（命令高亮、输出等宽字体、退出码颜色标识）
+- **LLM 端**只需要一段扁平文本——"用户执行了 ls -la，输出是 file1.txt\nfile2.txt\n..."，塞进 UserMessage.content 就够用
+
+如果为了 LLM 提前把字段拍扁，UI 就再也拿不回结构化数据；如果只存结构化格式不进 LLM 上下文，LLM 就会失忆。
+
+### 设计原则：内富外严，边界翻译
+
+Pi 的解法是**两边都不妥协**：内部以结构化形式存储（满足 UI + 持久化），在调用 LLM 的边界上做一次有损翻译（满足 LLM）。翻译是最后一刻发生的、单向的、不可逆的。
+
+### 五个关键架构决策
+
+**1. 声明合并做扩展点**
+核心包定义空接口 CustomAgentMessages，应用层通过 TypeScript 声明合并注入自己的消息类型。不用继承（改不了基类）、不用泛型（参数污染），核心包零依赖，应用层全栈类型安全。
+
+**2. 两阶段管道分离职责**
+transformContext（同层裁剪/压缩）和 convertToLlm（跨层翻译）分开。换上下文管理策略不用动翻译逻辑，换应用类型不用动裁剪逻辑，换 LLM 供应商两个都不用动。
+
+**3. 自定义消息统一转成 user 角色**
+LLM API 要求 user/assistant 严格交替。自定义消息本质是"系统注入的信息"，放 user 角色最安全，不会破坏交替规则。
+
+**4. excludeFromContext 做可见性控制**
+一个布尔字段，在翻译边界过滤。消息仍在内部数组中（UI 可见），但 LLM 看不到。实现"对 UI 可见、对 LLM 隐身"。
+
+**5. 消息类型翻译与 Provider 协议翻译解耦**
+convertToLlm 只负责"自定义消息 → 标准三种消息"。标准消息再翻译成各家 Provider 的私有格式（anthropic-messages、openai-completions 等）是 pi-ai 层的工作，两层完全独立。
+
+---
+
 ## 核心问题
 
 Agent 内部的消息和发给 LLM 的消息需求是冲突的：
