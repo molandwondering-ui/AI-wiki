@@ -169,29 +169,77 @@ llmContext.messages: Message[]  → 发给 LLM
 
 ### 转换规则
 
-| role | 处理方式 |
-|------|---------|
-| user / assistant / toolResult | 直接透传 |
-| bashExecution | excludeFromContext=true → 过滤掉；否则 → 转成 UserMessage |
-| custom | 转成 UserMessage |
-| branchSummary | 转成 UserMessage（XML 标签包裹） |
-| compactionSummary | 转成 UserMessage（XML 标签包裹） |
+convertToLlm 内部是一个 switch 语句，按 `role` 字段分派：
 
-**所有自定义消息都变成 user 角色**——因为 LLM API 要求 user/assistant 严格交替，自定义消息本质是"系统注入的信息"，放 user 角色最安全。
+| role | 处理方式 | 转换结果 |
+|------|---------|---------|
+| `"user"` | 直接透传，不做任何修改 | 原样 UserMessage |
+| `"assistant"` | 直接透传 | 原样 AssistantMessage |
+| `"toolResult"` | 直接透传 | 原样 ToolResultMessage |
+| `"bashExecution"` | 先检查 excludeFromContext | true → 返回 undefined（被过滤掉）；false → 转成 UserMessage |
+| `"custom"` | 转成 UserMessage | content 是扩展自定义的文本 |
+| `"branchSummary"` | 转成 UserMessage | 摘要文本用 `<summary>` XML 标签包裹 |
+| `"compactionSummary"` | 转成 UserMessage | 摘要文本用 `<summary>` XML 标签包裹 |
 
-### 转换前后对比
+**所有自定义消息都变成 user 角色**——因为 LLM API 要求 user/assistant 严格交替出现，不能连续两个 assistant。自定义消息本质是"系统注入的信息"（Bash 执行结果、压缩摘要、分支摘要），放在 user 角色中最安全，不会破坏交替规则。
 
-Before（Agent 内部）：
-```typescript
-{ role: "bashExecution", command: "ls -la", output: "total 32\n...", exitCode: 0, cancelled: false, truncated: false }
+### 每种转换的具体产物
+
+**BashExecutionMessage → UserMessage**
+
+```
+转换前：
+{
+    role: "bashExecution",
+    command: "ls -la",
+    output: "total 32\ndrwxr-xr-x  5 user  staff  160 May 30 10:00 .\n...",
+    exitCode: 0,
+    cancelled: false,
+    truncated: false
+}
+
+转换后：
+{
+    role: "user",
+    content: [{
+        type: "text",
+        text: "Ran `ls -la`\n```\ntotal 32\ndrwxr-xr-x  5 user  staff  160 May 30 10:00 .\n...\n```"
+    }]
+}
 ```
 
-After（LLM 看到的）：
-```typescript
-{ role: "user", content: [{ type: "text", text: "Ran `ls -la`\n```\ntotal 32\n...\n```" }] }
+command、output、exitCode 被格式化成一段文本。cancelled、truncated 等布尔标志融合进文本描述里，不再是独立字段。
+
+**CompactionSummaryMessage → UserMessage**
+
+```
+转换前：
+{
+    role: "compactionSummary",
+    summary: "之前的对话讨论了项目架构、数据库选型和 API 设计..."
+}
+
+转换后：
+{
+    role: "user",
+    content: [{
+        type: "text",
+        text: "<summary>之前的对话讨论了项目架构、数据库选型和 API 设计...</summary>"
+    }]
+}
 ```
 
-结构化字段被拍平成文本，cancelled/truncated 等标志融合进描述里。有损、单向、最后一刻发生。
+用 XML 标签包裹，让 LLM 能识别这是一段压缩摘要而不是用户真的说的话。
+
+**BranchSummaryMessage → UserMessage**
+
+模式跟 CompactionSummary 一样——摘要文本用 `<summary>` 标签包裹，变成 UserMessage。
+
+### 转换的本质
+
+- **有损**：结构化字段（exitCode、cancelled、truncated）被拍平成文本，独立字段信息丢失
+- **单向**：翻译后不能反向还原回结构化数据
+- **最后一刻发生**：只在调 LLM 的那一刻翻译，内部 context.messages 始终保留完整的结构化版本
 
 ---
 
