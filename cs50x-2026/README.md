@@ -13,7 +13,7 @@ Harvard **CS50x 2026**（CS50's Introduction to Computer Science，哈佛计算�
 
 ```
 cs50x-2026/
-├── notes/           逐讲学习笔记
+├── notes/           逐讲学习笔记与视频配图
 ├── slides/          11 讲幻灯片 PDF (lecture0–10.pdf)
 ├── transcripts/     11 讲全文讲稿 (lecture0–10.txt)
 └── source/          10 讲课堂示例源码 (src0–9/)
@@ -43,7 +43,7 @@ cs50x-2026/
 
 ## 阅读资料 Readings
 
-- **逐讲笔记**：[Lecture 8：互联网与 Web 开发](notes/Lecture08_互联网与Web开发_基础知识.md)。笔记中的代码引用对应 `source/src8/`。
+- **逐讲笔记**：[Lecture 8 基础知识框架](notes/Lecture08_互联网与Web开发_基础知识.md)和[Lecture 8 视频图文笔记](notes/Lecture08_HTML_CSS_JavaScript_视频图文笔记.md)。笔记中的代码引用对应 `source/src8/`。
 - **讲稿 Transcripts**（`transcripts/lecture0–10.txt`）：每讲全文，可当逐字讲义阅读。
 - **课堂源码 Source**（`source/src0–9/`）：讲课演示的示例程序（Scratch .sb3、C、Python 等）。
 
