@@ -8,10 +8,11 @@
 
 - **[P：Stanford 官方 Lecture 3 讲义，固定到提交 `de53a9f`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_03.pdf)**：本文的课程结论、模型配置表、公式和页码以它为准。`P:p.10` 表示 PDF 第 10 页。
 - **[T：第三方中文字幕，固定到提交 `7b6da52`](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)**：用于补充讲师口头给出的直觉、问答和限制条件。它不是 Stanford 官方文本，可能有语音识别或翻译错误。
+- **[B：tsingyuec 的 Lecture 3 解读，固定到提交 `e966bb4`](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)**：用于对照残差流、串行块和架构取舍的讲解方式；它是基于课程的二次整理。
 - **[N2：仓库既有笔记](notes/笔记02_现代%20Transformer%20核心架构与张量算子工程_笔记.md)**：用于补充中文解释和知识之间的联系；它是二次整理，不能反过来覆盖官方讲义。
 - **补充说明**：本文为小白增加的 shape、参数量推导、示意代码和易错点，明确标成“补充”。
 
-引用优先级是：**官方讲义 P > 讲师口述字幕 T > 仓库笔记 N2 > 本文补充说明**。
+引用优先级是：**官方讲义 P > 讲师口述字幕 T > 二次整理 B/N2 > 本文补充说明**。
 
 ### Lecture 3 的“原代码”在哪里？
 
@@ -63,7 +64,24 @@
 
 ## 2. 起点：先看一个现代 Transformer 块
 
-### 2.1 本讲使用的符号
+**先记住一句话：一个现代 Transformer 块连续更新表示两次——Attention 让 token 读取前文，FFN 再分别处理每个 token；每次更新都加回原来的表示。** 这两次相加形成贯穿各块的残差流，也给旧信息和梯度留出直通路径。
+
+先分清范围：**整个语言模型**把 token ID（词或子词在词表中的编号）变成下一 token 的预测；它中间重复堆叠的 **Transformer 块**只负责更新表示。下图以常见的 *decoder-only*（生成时只能读取当前位置及之前内容）、串行 Pre-Norm 块为例。Pre-Norm 指先归一化分支输入，再计算分支输出。
+
+```text
+token ID → 词嵌入 → Transformer 块 × N → 最终 Norm → 输出投影 → 词表 logits
+
+块内：x ──┬────────────────→ (+) → h
+         └→ Norm → Attention ─┘
+      h ──┬────────────────→ (+) → 更新后的 x
+         └→ Norm → FFN ───────┘
+```
+
+图中每个 `(+)` 都把分支算出的增量加回主干。块的输入和输出宽度相同，才能连续堆叠。最后的输出投影才把表示变成对词表中每个 token 的分数（`logits`）；它属于**整个模型**，不是每个块都做一次。
+
+**来源：** P:p.3–4；B 的“残差流”与“串行块”两节。数据流图与块/模型边界为本文补充。
+
+### 2.1 先认清表示的形状
 
 后文统一使用：
 
@@ -80,9 +98,9 @@
 
 `d_model` 是每个 token 在模型主干中的向量长度；`d_ff` 是 token 进入前馈网络后暂时扩张到的宽度。不要把这里的 `V`（vocabulary size）和注意力里的 Value 张量混为一谈。
 
-### 2.2 原始 Transformer 与现代常见变体
+### 2.2 Attention 读前文，FFN 逐 token 加工
 
-原始 Transformer 常见配置是：正弦位置编码、ReLU FFN、Post-Norm。课程作业采用的现代简化变体则是：
+例如模型读到“猫喝”时，预测后续 token 要参考前面的“猫”：Attention 负责让当前位置利用前文；FFN 则对当前位置已有的表示进一步变换。FFN 自己不读取别的位置。一个块接收 `x: [B, S, d_model]`，先经过 Attention 分支，再经过 FFN 分支。课程作业采用的现代简化配置是：
 
 - Norm 放在 Attention/FFN **之前**；
 - 使用 **RoPE**；
@@ -93,13 +111,60 @@
 
 ```python
 # 补充伪代码，不是 Lecture 3 官方源码
-x = x + attention(rms_norm_1(x))
-x = x + swiglu_ffn(rms_norm_2(x))
+h = x + causal_attention(rms_norm_1(x))  # [B, S, d_model]
+x = h + swiglu_ffn(rms_norm_2(h))        # [B, S, d_model]
 ```
 
-读这两行时，先抓住主干 `x = x + ...`：旧信息沿残差连接直接向后流动，Attention 和 FFN 只负责计算要加进去的“修正量”。
+按顺序读：
 
-**来源：** P:p.3–4；T 开场对作业实现与原始 Transformer 差异的说明。
+1. **Attention 分支**：先对 `x` 做 RMSNorm（按均方根缩放表示），再投影出 Q、K、V。Q、K 用来计算当前位置该关注哪里，V 提供汇入当前位置的内容；RoPE 给 **Q 和 K** 注入位置信息。随后用因果掩码挡住未来位置，计算注意力并投影回 `d_model`。
+2. **第一次残差相加**：把 Attention 的输出加到原来的 `x`，得到 `h`。原来的表示有一条不经过 Attention 的直通路径。
+3. **FFN 分支**：对更新后的 `h` 做 RMSNorm，再用 SwiGLU（带门控的前馈网络）将每个 token 的向量暂时扩张到 `d_ff`、压回 `d_model`；这个分支本身不在 token 之间交换信息。
+4. **第二次残差相加**：把 FFN 的输出加到 `h`，得到下一块的输入 `x`。
+
+这里的 `causal_attention` 只是示意函数：RoPE、因果掩码和 Q/K/V 投影都包含在其中。**RoPE 不直接旋转残差流 `x`**。后文第 3、4、6 节分别展开 Norm、SwiGLU 和 RoPE，第 10 节再讨论 Q、K、V 的头数。
+
+为什么示例块选这几个组件？B 的讲法把选择放在**表达能力、训练稳定性、系统效率**三个目标之间看；这些做法是经验形成的常见组合，不是由两行伪代码推导出的唯一答案：
+
+| 选择 | 主要解决什么问题 | 后文展开 |
+|---|---|---|
+| Pre-Norm：归一化分支输入 | 保留不经过 Norm 的残差路径，帮助深层训练稳定 | 第 3 节 |
+| RMSNorm、常省略 bias | 减少归一化和逐元素操作的开销；效果仍需实验验证 | 第 3 节 |
+| SwiGLU：带门控的 FFN | 用额外一条投影调节中间特征，改善表达 | 第 4 节 |
+| 串行执行 Attention → FFN | 让 FFN 处理 Attention 更新后的表示 | 第 5 节 |
+| RoPE：旋转 Q、K | 让注意力分数带上相对位置信息 | 第 6 节 |
+
+**来源：** P:p.3–4、p.10–29、p.30–35；B 的“架构权衡”“归一化”“门控”“串行块”“RoPE”各节；T 开场对作业实现与原始 Transformer 差异的说明。逐步数据流、函数封装和对照表为本文补充。
+
+### 2.3 每次残差相加前，分支必须回到主干宽度
+
+取一个便于计算的例子：`B=2`、`S=4`、`d_model=12`，用 `h_q=h_kv=3` 个注意力头、每头 `d_head=4`，SwiGLU 中间宽度 `d_ff=32`。这里 `3×4=12`，而 `32=(8/3)×12`，正好对应后文两条常见的宽度经验。
+
+| 阶段 | shape | 为什么 |
+|---|---|---|
+| 块输入 `x` | `[2, 4, 12]` | 2 条序列，每条 4 个 token，每个 token 的主干宽度为 12 |
+| Q、K、V | 各 `[2, 3, 4, 4]` | 分成 3 个头，每头宽 4；RoPE 只改变 Q、K 的数值，不改变 shape |
+| 注意力分数 | `[2, 3, 4, 4]` | 每个头中，4 个查询位置分别与 4 个键位置计算分数 |
+| Attention 输出并合并头 | `[2, 4, 12]` | 回到主干宽度，才能与 `x` 相加 |
+| FFN 的两条中间分支 | 各 `[2, 4, 32]` | SwiGLU 逐元素相乘后，仍是 `[2, 4, 32]` |
+| 块输出 | `[2, 4, 12]` | 压回主干宽度，交给下一块 |
+
+这个例子使用 `h_q=h_kv`，对应普通多头注意力；使用 GQA 时，K、V 的头数可以比 Q 少，但块输入和输出仍是 `[B, S, d_model]`。因果掩码限制可读取的位置，并不缩小分数张量的 shape。
+
+### 2.4 原始模型与现代示例的选择不同
+
+原始 Transformer 论文使用编码器—解码器结构，包含正弦位置编码、ReLU FFN 和 Post-Norm；上面的图则专门画了现代语言模型常用的 decoder-only 块。不要把“原始论文的完整模型”与“现代模型的单个块”当成同一层级比较。
+
+| 选择 | 原始 Transformer | 本节现代简化示例 |
+|---|---|---|
+| 归一化位置 | 残差相加后做 Post-Norm | 分支计算前做 Pre-Norm |
+| 位置处理 | 将正弦位置编码加到输入表示 | 在注意力内部对 Q、K 应用 RoPE |
+| FFN | ReLU，两次线性投影 | SwiGLU，三次线性投影 |
+| 线性层 bias | 原始实现可带 bias | 常省略 bias |
+
+这些是课程用来讲解的典型选择，不是所有现代模型都完全相同；后文会逐项解释原因与例外。
+
+**来源：** P:p.3–4、p.7–9；B 对 Pre-Norm、RMSNorm、门控 FFN 与 RoPE 的梳理。shape 示例与层级区分为本文补充。
 
 ## 3. 归一化：放在哪里，比叫什么更重要
 
@@ -763,10 +828,11 @@ x → RMSNorm → Attention → 残差相加
 - [Stanford CS336 Lecture 3 官方 PDF（固定提交）](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_03.pdf)
 - [CS336 官方课程讲义入口](https://cs336.stanford.edu/lectures/?trace=lecture_03)
 
-### 字幕与仓库笔记
+### 字幕与二次整理
 
 - [Lecture 3 第三方中文字幕（固定提交）](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
 - [仓库内中文字幕](subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
+- [B：tsingyuec 的 Lecture 3 解读（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)
 - [N2：现代 Transformer 核心架构与张量算子工程](notes/笔记02_现代%20Transformer%20核心架构与张量算子工程_笔记.md)
 
 ### 讲义直接引用或讨论的代表论文
