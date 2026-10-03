@@ -5,7 +5,7 @@
 | 专题 | 从哪里开始 | 内容 |
 |---|---|---|
 | [Stanford CS336](Stanford-CS336/README.md) | [Lecture 2：PyTorch 与资源核算](Stanford-CS336/notes/Lecture%202%20PyTorch%28einops%29.md) | 大语言模型架构、训练系统、推理、数据与后训练；另有完整逐讲图文笔记、模块全书和字幕 |
-| [Harvard CS50x 2026](cs50x-2026/README.md) | [Lecture 8：互联网与 Web 开发](cs50x-2026/notes/Lecture08_互联网与Web开发_基础知识.md) | 课程幻灯片、英文讲稿、课堂源码和逐讲笔记 |
+| [Harvard CS50x 2026](cs50x-2026/README.md) | [Lecture 4：内存与指针](cs50x-2026/notes/Lecture04_内存与指针_视频图文笔记.md) | 课程幻灯片、英文讲稿、课堂源码和逐讲笔记 |
 | [Pi-Agent](pi-agent-book/README.md) | [问答笔记](pi-agent-book/qa.md) | Agent 实现相关的问答与章节笔记 |
 
 ## 目录约定
@@ -20,7 +20,7 @@ AI-wiki/
 │   ├── notes/                                      # 逐讲笔记
 │   ├── slides/                                     # 幻灯片
 │   ├── transcripts/                                # 英文讲稿
-│   └── source/                                     # 课堂源码
+│   └── source/                                     # CS50x 课堂示例源码（Week 0–9）
 └── pi-agent-book/                                  # Pi-Agent 问答与章节笔记
 ```
 
