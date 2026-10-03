@@ -3,7 +3,7 @@
 Harvard **CS50x 2026**（CS50's Introduction to Computer Science，哈佛计算机科学导论）全套文档资料。
 主讲：**David J. Malan**。官网：<https://cs50.harvard.edu/x/2026/>（内容为 CC-BY-NC-SA 开放授权）。
 
-本目录包含：**Slides 幻灯片**、**Notes 笔记**、**Psets 作业**，以及课堂源码与讲稿。
+本目录包含：**Slides 幻灯片**、**Notes 笔记**、课堂源码与讲稿。下表列出课程对应的 Pset 主题；当前仓库未收录 Pset 题目文件。
 
 > 讲座材料复用 Fall 2025 录制版（`cdn.cs50.net/2025/fall/...`）。按「只要文档」，**未下载视频**（视频在 CDN 与官方 YouTube playlist）。
 
@@ -13,9 +13,10 @@ Harvard **CS50x 2026**（CS50's Introduction to Computer Science，哈佛计算�
 
 ```
 cs50x-2026/
+├── notes/           逐讲学习笔记
 ├── slides/          11 讲幻灯片 PDF (lecture0–10.pdf)
 ├── transcripts/     11 讲全文讲稿 (lecture0–10.txt)
-├── source/          10 讲课堂示例源码 (src0–9/)
+└── source/          10 讲课堂示例源码 (src0–9/)
 ```
 
 ---
@@ -42,9 +43,12 @@ cs50x-2026/
 
 ## 阅读资料 Readings
 
+- **逐讲笔记**：[Lecture 8：互联网与 Web 开发](notes/Lecture08_互联网与Web开发_基础知识.md)。笔记中的代码引用对应 `source/src8/`。
 - **讲稿 Transcripts**（`transcripts/lecture0–10.txt`）：每讲全文，可当逐字讲义阅读。
 - **课堂源码 Source**（`source/src0–9/`）：讲课演示的示例程序（Scratch .sb3、C、Python 等）。
 
 ---
 
 *资料来源：cs50.harvard.edu/x/2026 与 cdn.cs50.net（Harvard CS50x 2026，CC-BY-NC-SA）。仅供个人学习。*
+
+[← 返回仓库首页](../README.md)

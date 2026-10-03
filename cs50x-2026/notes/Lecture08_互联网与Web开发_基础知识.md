@@ -6,9 +6,9 @@
 
 本文以仓库中的 Lecture 8 原始材料为主：
 
-- **[P：Lecture 8 官方幻灯片](slides/lecture8.pdf)**：术语、协议格式和课堂示例的主要来源。文中的 `P:p.17` 表示 PDF 第 17 页。
-- **[T：Lecture 8 英文讲稿](transcripts/lecture8.txt)**：用于补充老师在课堂上的类比、解释和演示过程。
-- **[S：Lecture 8 示例源码](source/src8/)**：用于说明 HTML、CSS、JavaScript 和表单最终怎样写成代码。
+- **[P：Lecture 8 官方幻灯片](../slides/lecture8.pdf)**：术语、协议格式和课堂示例的主要来源。文中的 `P:p.17` 表示 PDF 第 17 页。
+- **[T：Lecture 8 英文讲稿](../transcripts/lecture8.txt)**：用于补充老师在课堂上的类比、解释和演示过程。
+- **[S：Lecture 8 示例源码](../source/src8/)**：用于说明 HTML、CSS、JavaScript 和表单最终怎样写成代码。
 - **补充说明**：为了避免课堂简化造成误解，本文加入了少量网络基础知识；这部分会明确标成“补充”。
 
 引用优先级是：**幻灯片 P / 示例源码 S > 讲稿 T > 本文补充说明**。
@@ -460,7 +460,7 @@ HTTPS 不表示网站内容一定真实、无病毒或值得信任；它主要�
 
 **HTML（HyperText Markup Language）**是标记语言，用标签描述内容的结构和语义，不是通用编程语言。
 
-Lecture 8 的 [`hello0.html`](source/src8/hello0.html)：
+Lecture 8 的 [`hello0.html`](../source/src8/hello0.html)：
 
 ```html
 <!DOCTYPE html>
@@ -489,7 +489,7 @@ Lecture 8 的 [`hello0.html`](source/src8/hello0.html)：
 - **element（元素）**：开始标签、内容、结束标签构成的整体；
 - **attribute（属性）**：写在开始标签上，为元素提供额外信息。
 
-[`link0.html`](source/src8/link0.html) 中：
+[`link0.html`](../source/src8/link0.html) 中：
 
 ```html
 Visit <a href="image.html">Harvard</a>.
@@ -521,7 +521,7 @@ JavaScript 可以查询、修改这棵树，因此网页才能在加载后继续
 
 ### 13.1 GET 表单怎样变成 URL
 
-Lecture 8 的 [`search1.html`](source/src8/search1.html)：
+Lecture 8 的 [`search1.html`](../source/src8/search1.html)：
 
 ```html
 <form action="https://www.google.com/search" method="get">
@@ -551,7 +551,7 @@ https://www.google.com/search?q=cats
 
 **正则表达式（regular expression / regex）**用一套紧凑语法描述字符串模式，常用于输入校验。
 
-[`register2.html`](source/src8/register2.html) 使用：
+[`register2.html`](../source/src8/register2.html) 使用：
 
 ```html
 <input name="phone"
@@ -588,7 +588,7 @@ https://www.google.com/search?q=cats
 - `font-size`：**property（属性）**；
 - `large`：该属性的 **value（值）**。
 
-Lecture 8 的 [`home7.css`](source/src8/home7.css)：
+Lecture 8 的 [`home7.css`](../source/src8/home7.css)：
 
 ```css
 .centered {
@@ -618,9 +618,9 @@ HTML 中通过 class 使用这些规则：
 | `.note` | 所有 `class="note"` 的元素，可重复使用 |
 | `#title` | `id="title"` 的元素，页面中应保持唯一 |
 
-**源码注意：** 当前 [`home7.html`](source/src8/home7.html) 写的是 `href="home5.css"`，而同目录实际提供的是 `home7.css`。实际运行时外链文件名必须和存在的 CSS 文件一致，否则样式不会加载。这不影响它所演示的 `<link rel="stylesheet">` 概念。
+**源码注意：** 当前 [`home7.html`](../source/src8/home7.html) 写的是 `href="home5.css"`，而同目录实际提供的是 `home7.css`。实际运行时外链文件名必须和存在的 CSS 文件一致，否则样式不会加载。这不影响它所演示的 `<link rel="stylesheet">` 概念。
 
-Bootstrap 之类的 **CSS framework（CSS 框架）**提供现成的样式和组件，让开发者不用从零设计每一个细节；[`bootstrap.html`](source/src8/bootstrap.html) 是课堂示例。
+Bootstrap 之类的 **CSS framework（CSS 框架）**提供现成的样式和组件，让开发者不用从零设计每一个细节；[`bootstrap.html`](../source/src8/bootstrap.html) 是课堂示例。
 
 **来源：** P:p.75–87；T 中 CSS、selector、property、class、id 和 Bootstrap 的讲解；S:`home7.html`、`home7.css`、`link3.html`、`bootstrap.html`。
 
@@ -633,13 +633,13 @@ Bootstrap 之类的 **CSS framework（CSS 框架）**提供现成的样式和组
 - 改变页面内容和样式；
 - 与服务器继续交换数据。
 
-Lecture 8 的 [`hello4.html`](source/src8/hello4.html) 用：
+Lecture 8 的 [`hello4.html`](../source/src8/hello4.html) 用：
 
 ```html
 <script src="hello4.js"></script>
 ```
 
-加载 [`hello4.js`](source/src8/hello4.js)。核心逻辑是：
+加载 [`hello4.js`](../source/src8/hello4.js)。核心逻辑是：
 
 ```javascript
 document.addEventListener('DOMContentLoaded', function() {
@@ -758,19 +758,19 @@ https://www.example.com/products?id=42
 
 ### 课程原始材料
 
-- [Lecture 8 幻灯片：HTML, CSS, JavaScript](slides/lecture8.pdf)
-- [Lecture 8 英文讲稿](transcripts/lecture8.txt)
-- [Lecture 8 全部示例源码](source/src8/)
+- [Lecture 8 幻灯片：HTML, CSS, JavaScript](../slides/lecture8.pdf)
+- [Lecture 8 英文讲稿](../transcripts/lecture8.txt)
+- [Lecture 8 全部示例源码](../source/src8/)
 
 ### 本文重点引用的源码
 
-- HTML 骨架：[`hello0.html`](source/src8/hello0.html)
-- 链接：[`link0.html`](source/src8/link0.html)、[`link3.html`](source/src8/link3.html)
-- GET 搜索表单：[`search0.html`](source/src8/search0.html)、[`search1.html`](source/src8/search1.html)
-- 表单与正则校验：[`register0.html`](source/src8/register0.html)、[`register1.html`](source/src8/register1.html)、[`register2.html`](source/src8/register2.html)
-- CSS：[`home7.html`](source/src8/home7.html)、[`home7.css`](source/src8/home7.css)
-- JavaScript 事件：[`hello4.html`](source/src8/hello4.html)、[`hello4.js`](source/src8/hello4.js)
-- 更完整的交互：[`autocomplete.html`](source/src8/autocomplete.html)、[`geolocation.html`](source/src8/geolocation.html)
+- HTML 骨架：[`hello0.html`](../source/src8/hello0.html)
+- 链接：[`link0.html`](../source/src8/link0.html)、[`link3.html`](../source/src8/link3.html)
+- GET 搜索表单：[`search0.html`](../source/src8/search0.html)、[`search1.html`](../source/src8/search1.html)
+- 表单与正则校验：[`register0.html`](../source/src8/register0.html)、[`register1.html`](../source/src8/register1.html)、[`register2.html`](../source/src8/register2.html)
+- CSS：[`home7.html`](../source/src8/home7.html)、[`home7.css`](../source/src8/home7.css)
+- JavaScript 事件：[`hello4.html`](../source/src8/hello4.html)、[`hello4.js`](../source/src8/hello4.js)
+- 更完整的交互：[`autocomplete.html`](../source/src8/autocomplete.html)、[`geolocation.html`](../source/src8/geolocation.html)
 
 ### 页码导航
 
