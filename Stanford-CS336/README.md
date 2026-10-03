@@ -3,7 +3,7 @@
 斯坦福大学经典的现代大语言模型系统全栈硬核课程，由 Percy Liang、Tatsu Hashimoto、Dan Fu 等顶级学者联袂讲授。从分词机制与底层算子出发，深入现代 Transformer 架构演进、GPU 硬件加速与 Triton 自定义内核编程，覆盖大规模分布式并行训练、扩展定律（Scaling Laws）、自回归推理加速、高质量语料管线与后训练偏好对齐（SFT/RLVR）。全课工程与系统细节极其扎实，是大模型底层实现与系统研发的标杆课程。
 
 - **原视频**：[【极致中配】2026年最新版 Stanford CS336: 从头构建大语言模型](https://www.bilibili.com/video/BV11LEA6eEuj) — Bilibili，BV11LEA6eEuj
-- **全 35 集**，已收录 9 册模块全书、3 篇逐讲基础知识文档、15 篇图文笔记和 35 份逐字稿
+- **全 35 集**，已收录 9 册模块全书、18 篇逐讲图文笔记和 35 份逐字稿
 
 ## 怎么学
 
@@ -13,40 +13,33 @@
 - **攻坚硬件加速与内核开发** → 重点研读卷三（模块 03、04）。从 GPU 内存层次结构、Roofline 性能瓶颈分析，到 Triton 内核编写与 XLA 编译，是系统工程的核心硬骨头
 - **理解预训练与资源规划** → 研读卷四（模块 05）。掌握 Chinchilla 计算最优扩展定律的参数拟合与算力浮点预算方法，避免无效训练开销
 - **聚焦推理优化与后训练对齐** → 研读卷四（模块 06）及卷五（模块 08、09）。深入 KV Cache 显存优化、投机解码量化部署，以及从 SFT、DPO 到可验证规则强化学习（RLVR）的全流程
-- **按讲次打基础** → 先看下方的逐讲基础知识框架；其余讲次可读图文笔记。逐讲基础知识文档会区分课程材料、转录与教学补充
+- **按讲次打基础** → 阅读 `notes/` 下的逐讲图文笔记。Lecture 2–4 经过补充整理，会区分课程材料、转录与教学补充
 - **核对讲师原话与细节推演** → `subtitles/` 提供全部 35 讲的清洗后逐字稿，适合快速全文检索代码参数、论文出处或具体技术选型背景
-
-## 逐讲基础知识
-
-| 讲次 | 笔记 | 重点 |
-|---|---|---|
-| Lecture 2 | [PyTorch、einops 与资源核算](Lecture02_PyTorch、einops与资源核算_基础知识框架.md) | 张量操作、shape 与训练资源估算 |
-| Lecture 3 | [现代 Transformer 架构与超参数](Lecture03_现代Transformer架构与超参数_基础知识框架.md) | Pre-Norm、RMSNorm、SwiGLU、RoPE 与稳定性 |
-| Lecture 4 | [注意力替代方案与混合专家](Lecture04_注意力替代方案与混合专家_基础知识框架.md) | 线性/稀疏注意力、MoE 与系统成本；配图见 `assets/lecture04/` |
-
-另有 [基础知识总览](基础知识.md)。逐讲笔记按课程讲次组织。
 
 ## 逐讲图文笔记
 
-以下 15 篇是 [tsingyuec/cs336-blog](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog) 的图文内容副本，配图保存在 `blog/assets/`。Lecture 2–4 请使用上方已有的基础知识文档。
+18 篇笔记与配图统一保存在 `notes/`。Lecture 1、5–18 是 [tsingyuec/cs336-blog](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog) 的图文副本；Lecture 2–4 在本仓库原有的基础知识文档上，对照原 blog 补入配图和图注。另有 [基础知识总览](基础知识.md)。
 
-| 讲次 | 图文笔记 |
-|---|---|
-| Lecture 1 | [课程概览与分词](blog/Lecture%201%20课程概览与分词.md) |
-| Lecture 5 | [GPUs, TPUs](blog/Lecture%205%20GPUs,%20TPUs.md) |
-| Lecture 6 | [Kernels, Triton, XLA](blog/Lecture%206%20Kernels,%20Triton,%20XLA.md) |
-| Lecture 7 | [Parallelism](blog/Lecture%207%20Parallelism.md) |
-| Lecture 8 | [Parallelism](blog/Lecture%208%20Parallelism.md) |
-| Lecture 9 | [Scaling Laws](blog/Lecture%209%20Scaling%20Laws.md) |
-| Lecture 10 | [Inference](blog/Lecture%2010%20Inference.md) |
-| Lecture 11 | [Scaling Laws](blog/Lecture%2011%20Scaling%20Laws.md) |
-| Lecture 12 | [Evaluation](blog/Lecture%2012%20Evaluation.md) |
-| Lecture 13 | [Data (Sources, Datasets)](blog/Lecture%2013%20Data%20%28Sources,%20Datasets%29.md) |
-| Lecture 14 | [Data](blog/Lecture%2014%20Data.md) |
-| Lecture 15 | [Mid-Post-Training](blog/Lecture%2015%20Mid-Post-Training.md) |
-| Lecture 16 | [Post-Training - RLVR](blog/Lecture%2016%20Post-Training%20-%20RLVR.md) |
-| Lecture 17 | [Alignment - Multimodality](blog/Lecture%2017%20Alignment%20-%20Multimodality.md) |
-| Lecture 18 | [Guest Lecture Dan Fu](blog/Lecture%2018%20Guest%20Lecture%20Dan%20Fu.md) |
+| 讲次 | 笔记 | 版本 |
+|---|---|---|
+| Lecture 1 | [课程概览与分词](notes/Lecture%201%20课程概览与分词.md) | 原 blog 图文副本 |
+| Lecture 2 | [PyTorch、einops 与资源核算](notes/Lecture%202%20PyTorch%28einops%29.md) | 补充版：原有基础知识框架 + blog 配图 |
+| Lecture 3 | [现代 Transformer 架构与超参数](notes/Lecture%203%20Architectures.md) | 补充版：原有基础知识框架 + blog 配图 |
+| Lecture 4 | [注意力替代方案与混合专家](notes/Lecture%204%20Attention%20Alternatives.md) | 补充版：原有基础知识框架 + blog 配图 |
+| Lecture 5 | [GPUs, TPUs](notes/Lecture%205%20GPUs,%20TPUs.md) | 原 blog 图文副本 |
+| Lecture 6 | [Kernels, Triton, XLA](notes/Lecture%206%20Kernels,%20Triton,%20XLA.md) | 原 blog 图文副本 |
+| Lecture 7 | [Parallelism](notes/Lecture%207%20Parallelism.md) | 原 blog 图文副本 |
+| Lecture 8 | [Parallelism](notes/Lecture%208%20Parallelism.md) | 原 blog 图文副本 |
+| Lecture 9 | [Scaling Laws](notes/Lecture%209%20Scaling%20Laws.md) | 原 blog 图文副本 |
+| Lecture 10 | [Inference](notes/Lecture%2010%20Inference.md) | 原 blog 图文副本 |
+| Lecture 11 | [Scaling Laws](notes/Lecture%2011%20Scaling%20Laws.md) | 原 blog 图文副本 |
+| Lecture 12 | [Evaluation](notes/Lecture%2012%20Evaluation.md) | 原 blog 图文副本 |
+| Lecture 13 | [Data (Sources, Datasets)](notes/Lecture%2013%20Data%20%28Sources,%20Datasets%29.md) | 原 blog 图文副本 |
+| Lecture 14 | [Data](notes/Lecture%2014%20Data.md) | 原 blog 图文副本 |
+| Lecture 15 | [Mid-Post-Training](notes/Lecture%2015%20Mid-Post-Training.md) | 原 blog 图文副本 |
+| Lecture 16 | [Post-Training - RLVR](notes/Lecture%2016%20Post-Training%20-%20RLVR.md) | 原 blog 图文副本 |
+| Lecture 17 | [Alignment - Multimodality](notes/Lecture%2017%20Alignment%20-%20Multimodality.md) | 原 blog 图文副本 |
+| Lecture 18 | [Guest Lecture Dan Fu](notes/Lecture%2018%20Guest%20Lecture%20Dan%20Fu.md) | 原 blog 图文副本 |
 
 ## 模块全书目录
 

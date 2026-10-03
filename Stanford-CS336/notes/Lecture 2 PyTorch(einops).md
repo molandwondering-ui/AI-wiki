@@ -10,6 +10,8 @@
 - **[T：第三方中文字幕，固定到提交 7b6da52](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P02_Lecture%202%EF%BC%9A%20PyTorch(einops)%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)**：用于补充老师口头解释。它不是 Stanford 官方文本，存在语音识别和翻译错误。
 - **补充说明**：本文为帮助理解而加入的推导、限制条件和代码勘误，会明确标成“补充”或“注意”。
 
+本讲配图取自 [tsingyuec 的 Lecture 2 图文解读（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%202%20PyTorch%28einops%29.md)，用于对照张量、精度、算术强度与训练内存的课堂画面；图注是对画面的辅助解释。
+
 官方轨迹中的源码 JSON 可直接查看：[lecture_02.json](https://cs336.stanford.edu/lectures/var/traces/lecture_02.json)。代码行号以其中 `files["lecture_02.py"]` 为准。
 
 引用优先级为：**官方可执行源码 C > 讲师口述字幕 T > 本文补充解释**。这样既能保留课堂直觉，也不会把字幕错听当成源码事实。
@@ -73,6 +75,10 @@ from facts import h100_flop_per_sec, h100_bytes_per_sec
 
 ### 2.1 rank、shape 和轴的语义
 
+![张量基础与显存估算：幻灯片给出 8 块 H100 上 AdamW 的每参数字节数 `2+2+(4+4)` 与最大参数量估算，并点明"张量是存储一切的基本单元"。](assets/p02/00224.jpg)
+
+*图：张量基础与显存估算：幻灯片给出 8 块 H100 上 AdamW 的每参数字节数 `2+2+(4+4)` 与最大参数量估算，并点明"张量是存储一切的基本单元"。*
+
 - **张量（tensor）**：规则排列的多维数值数组。
 - **rank（秩）**：轴的数量，不是矩阵代数里的矩阵秩。
 - **shape（形状）**：每个轴的长度。
@@ -106,6 +112,10 @@ x = torch.zeros(B, S, H, D)  # batch, sequence, heads, head_dim
 
 ### 2.2 张量内存的唯一基础公式
 
+![float16 的位布局（5 位指数、10 位尾数），以及"张量内存 = 元素数 × 字节数"的代码示例：4×8 的 fp32 张量 = 128 字节。](assets/p02/00345.jpg)
+
+*图：float16 的位布局（5 位指数、10 位尾数），以及"张量内存 = 元素数 × 字节数"的代码示例：4×8 的 fp32 张量 = 128 字节。*
+
 ```text
 张量内存 = numel（元素数）× element_size（每个元素的字节数）
 ```
@@ -125,6 +135,10 @@ def get_memory_usage(x):
 **来源：** `tensors_memory()` 与 `get_memory_usage()`，C:L113–132、L791–792。
 
 ## 3. 第二层：数值精度决定内存、吞吐与稳定性
+
+![float32 的位布局：1 位符号、8 位指数、23 位尾数，共 32 位 / 4 字节。](assets/p02/00249.jpg)
+
+*图：float32 的位布局：1 位符号、8 位指数、23 位尾数，共 32 位 / 4 字节。*
 
 浮点数可以类比成二进制科学计数法：
 
@@ -177,6 +191,10 @@ BF16 保留了 FP32 的指数宽度，所以动态范围好；代价是尾数较
 关于 FP8、NVFP4 和量化/训练之别的课堂说明来自 C:L168–181 与 T:L1；位布局的说明为本文补充。
 
 ### 3.1 混合精度
+
+![混合精度训练与 fp8：bf16 用于参数/激活/梯度，fp32 用于优化器状态；下方给出 fp8 的两种变体（E4M3、E5M2）。](assets/p02/00514.jpg)
+
+*图：混合精度训练与 fp8：bf16 用于参数/激活/梯度，fp32 用于优化器状态；下方给出 fp8 的两种变体（E4M3、E5M2）。*
 
 本讲使用的简化策略是：
 
@@ -236,6 +254,10 @@ einops 的主要价值不是提高速度，而是让形状变换和求和维度�
 
 ### 4.1 `einsum`：对齐、相乘、求和
 
+![einsum 示例：用命名维度 `seq1 hidden, hidden seq2 -> seq1 seq2` 表达矩阵乘法，`hidden` 被求和消去。](assets/p02/00798.jpg)
+
+*图：einsum 示例：用命名维度 `seq1 hidden, hidden seq2 -> seq1 seq2` 表达矩阵乘法，`hidden` 被求和消去。*
+
 ```python
 x = torch.ones(3, 4)  # [seq1, hidden]
 y = torch.ones(4, 3)  # [hidden, seq2]
@@ -292,6 +314,10 @@ z = einsum(x, y, "... seq1 hidden, ... seq2 hidden -> ... seq1 seq2")
 
 ### 4.2 `reduce`：删除哪些轴，就沿哪些轴归约
 
+![reduce 与 rearrange：`reduce(x, "... hidden -> ...", "sum")` 把维度求和；`rearrange` 用括号把 `total_hidden` 拆成 `heads × hidden1`。](assets/p02/00999.jpg)
+
+*图：reduce 与 rearrange：`reduce(x, "... hidden -> ...", "sum")` 把维度求和；`rearrange` 用括号把 `total_hidden` 拆成 `heads × hidden1`。*
+
 ```python
 x.shape == (2, 3, 4)  # batch, seq, hidden
 y = reduce(x, "... hidden -> ...", "sum")
@@ -329,6 +355,10 @@ x = rearrange(x, "... heads hidden2 -> ... (heads hidden2)")
 ## 5. 第四层：FLOPs、FLOP/s 与 MFU
 
 ### 5.1 三个概念不要混
+
+![线性模型的 FLOPs：`X(B×D) · W(D×K)`，FLOPs = 2·(#token)·(#参数)；并给出 H100 规格与"8 块 H100 跑两周"的总 FLOPs 估算。](assets/p02/01279.jpg)
+
+*图：线性模型的 FLOPs：`X(B×D) · W(D×K)`，FLOPs = 2·(#token)·(#参数)；并给出 H100 规格与"8 块 H100 跑两周"的总 FLOPs 估算。*
 
 - **FLOP**：一次浮点加法或乘法等操作。
 - **FLOPs**：某段计算一共做了多少浮点操作，是工作量。
@@ -383,6 +413,10 @@ torch.cuda.synchronize()
 **来源：** `benchmark()`，C:L830–848。
 
 ### 5.3 MFU
+
+![MFU 幻灯片：实测 `actual_flop_per_sec = 实测 FLOPs / 实测时间`，标称值来自 GPU 规格表，且 FLOP/s 强烈依赖数据类型；下方给出 MFU 定义。](assets/p02/01509.jpg)
+
+*图：MFU 幻灯片：实测 `actual_flop_per_sec = 实测 FLOPs / 实测时间`，标称值来自 GPU 规格表，且 FLOP/s 强烈依赖数据类型；下方给出 MFU 定义。*
 
 ```text
 MFU = 实际 FLOP/s ÷ 该硬件、该 dtype 下的理论峰值 FLOP/s
@@ -443,6 +477,10 @@ AI_hw ≈ 989.5 / 3.35 ≈ 295 FLOP/byte
 
 ### 6.2 五个算例
 
+![算术强度代码：先算出 `arithmetic_intensity = flops/bytes`，与 `h100_accelerator_intensity` 比较并断言"内存受限"；下面定义矩阵乘法的 `bytes` 与 `flops` 计算。](assets/p02/02160.jpg)
+
+*图：算术强度代码：先算出 `arithmetic_intensity = flops/bytes`，与 `h100_accelerator_intensity` 比较并断言"内存受限"；下面定义矩阵乘法的 `bytes` 与 `flops` 计算。*
+
 以下都按 BF16 每元素 2 字节，并采用源码的简化内存流量模型：
 
 | 操作 | 近似 FLOPs | 近似字节数 | AI | 判断 |
@@ -466,6 +504,10 @@ ReLU 和 GELU 是课堂中特别重要的反直觉例子：GELU 每个元素大�
 **来源：** C:L363–468；字幕对五类操作的口头推导，T:L127–168。
 
 ### 6.3 Roofline 公式
+
+![屋顶线图：横轴为算术强度（对数刻度），纵轴为实际 FLOP/s；斜线段是内存受限区，平台上沿是计算受限区，不同线对应不同带宽/加速器。](assets/p02/02370.jpg)
+
+*图：屋顶线图：横轴为算术强度（对数刻度），纵轴为实际 FLOP/s；斜线段是内存受限区，平台上沿是计算受限区，不同线对应不同带宽/加速器。*
 
 ```text
 可达性能 ≤ min(峰值 FLOP/s, 内存带宽 × 算术强度)
@@ -634,6 +676,10 @@ dL/dw2[i,o] = Σ_b dL/dh2[b,o] · h1[b,i]
 
 ### 7.3 `6BP` / `6TP` 从哪里来
 
+![6ND 的来源：幻灯片实测 `num_forward_flops = 134,217,728`、`num_backward_flops = 268,435,456`，证明反向是前向的 2 倍；汇总为前向 2、反向 4、合计 6 倍（#数据点）×（#参数）。](assets/p02/02823.jpg)
+
+*图：6ND 的来源：幻灯片实测 `num_forward_flops = 134,217,728`、`num_backward_flops = 268,435,456`，证明反向是前向的 2 倍；汇总为前向 2、反向 4、合计 6 倍（#数据点）×（#参数）。*
+
 设：
 
 - `B`：一步中处理的数据点数；对语言模型更接近本步 token 数 `batch_size × sequence_length`；
@@ -725,6 +771,10 @@ p.data -= lr * grad / torch.sqrt(g2 + 1e-5)
 **来源：** `optimizer()`、自定义 `AdaGrad`，C:L602–680；课程引用的 [AdaGrad 论文](https://jmlr.org/papers/v12/duchi11a.html)。
 
 ### 8.2 训练内存账本
+
+![显存账本：参数 `2*(D*D*L)`（bf16）、激活 `2*B*D*L`、梯度 `2*参数量`、优化器状态 `4*参数量`（fp32）；Adam 需 8 字节/参数。](assets/p02/02973.jpg)
+
+*图：显存账本：参数 `2*(D*D*L)`（bf16）、激活 `2*B*D*L`、梯度 `2*参数量`、优化器状态 `4*参数量`（fp32）；Adam 需 8 字节/参数。*
 
 令参数量为 `P=D²L`，课程采用 BF16 参数/梯度、FP32 优化器状态：
 

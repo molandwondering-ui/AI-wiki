@@ -4,7 +4,7 @@
 
 ## 阅读口径与来源
 
-本文依据 [Lecture 4 图文转录稿（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/transcripts/Lecture%204%20Attention%20Alternatives.md)和其中对应的课程画面整理。转录稿是经过整理的字幕，并非逐字可靠的官方讲义；含糊的人名、型号和数字不作为确定事实。文中的公式推导、shape 示例与比较表是为理解而补充的解释。图片保存在本仓库的 `assets/lecture04/`，各图旁的时间戳可跳回[原视频](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4)。
+本文对照 [Lecture 4 原 blog 图文（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%204%20Attention%20Alternatives.md)、[图文转录稿（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/transcripts/Lecture%204%20Attention%20Alternatives.md)及对应的课程画面整理。转录稿是经过整理的字幕，并非逐字可靠的官方讲义；含糊的人名、型号和数字不作为确定事实。文中的公式推导、shape 示例与比较表是为理解而补充的解释。图片保存在本仓库的 `assets/p04/`，各图旁的时间戳可跳回[原视频](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4)。
 
 本讲说的“更快”要分清三件事：**渐近复杂度**随序列长度如何增长、**实际运行时间**受硬件与内存访问影响有多大，以及**模型能力**是否因此下降。课堂展示的是具体模型和实验结果，不能把某个实验中的领先直接当成所有任务上的定理。
 
@@ -14,7 +14,7 @@
 
 **冲突**：长度为 `n` 的序列中，全注意力要考虑约 `n²` 个位置对；FFN 对每个 token 单独执行，随长度约线性增长。序列足够长时，Attention 的成本会越来越显眼。与此同时，扩大 FFN 参数通常有益，但把所有参数都用于每个 token 又很贵。[【跳转到 01:23】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=83)
 
-![上下文窗口增长，右侧图显示长序列下 Attention 的计算增长快于 FFN](assets/lecture04/00083.jpg)
+![上下文窗口增长，右侧图显示长序列下 Attention 的计算增长快于 FFN](assets/p04/00083.jpg)
 
 **核心回答**：一条路线减少 Attention 必须读取或比较的信息，另一条路线让 FFN 拥有更多参数、每次却只激活一部分。本讲把它们分别展开：
 
@@ -47,7 +47,7 @@
 
 左边主要花约 `O(n²d_k + n²d_v)`；右边先算 `KᵀV`、再乘 `Q`，约为 `O(nd_kd_v)`，当头维度固定、`n` 很长时对长度呈线性依赖。代价是：**它已经不再是原来的 softmax 注意力**。真正的线性注意力还需设计特征映射、归一化与门控等机制，才能让模型有用。[【跳转到 05:16】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=316)
 
-![结合律示意：先算 QKᵀ 会产生 n×n 矩阵，先算 KᵀV 则产生按头维度决定大小的矩阵](assets/lecture04/00316.jpg)
+![结合律示意：先算 QKᵀ 会产生 n×n 矩阵，先算 KᵀV 则产生按头维度决定大小的矩阵](assets/p04/00316.jpg)
 
 ### 3.2 自回归模型只能读过去，因此每个位置要用自己的前缀状态
 
@@ -61,7 +61,7 @@ yₜ = Sₜᵀ qₜ             # 当前 query 读取截至 t 的状态
 
 这里 `Sₜ` 的 shape 是 `[d_k,d_v]`，不随已经读过的 token 数 `t` 增长。这就把历史信息压进一个固定大小的矩阵；实际模型还会加入输出门或归一化等细节。[【跳转到 06:31】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=391)
 
-![线性注意力的循环形式：每读一个 token 更新固定大小的状态 S，再用 q 读取](assets/lecture04/00391.jpg)
+![线性注意力的循环形式：每读一个 token 更新固定大小的状态 S，再用 q 读取](assets/p04/00391.jpg)
 
 ### 3.3 同一个线性模型可用并行形式训练、循环形式解码
 
@@ -73,11 +73,11 @@ yₜ = Sₜᵀ qₜ             # 当前 query 读取截至 t 的状态
 
 **线性状态并非只能累加**。若状态一直累加而不遗忘，旧信息可能持续占位。课堂用 Mamba-2 说明“衰减门”：简化为 `Sₜ ≈ γₜ Sₜ₋₁ + kₜvₜᵀ`，其中 `γₜ` 由当前输入决定，用来调节旧状态保留多少。这个式子只表达主要直觉，并非完整的 Mamba-2 实现。[【跳转到 10:03】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=603)
 
-![Mamba-2 在状态更新中加入输入相关的衰减门 gamma，让模型能遗忘旧信息](assets/lecture04/00603.jpg)
+![Mamba-2 在状态更新中加入输入相关的衰减门 gamma，让模型能遗忘旧信息](assets/p04/00603.jpg)
 
 Gated DeltaNet 增加写入门 `βₜ`，还会在写入某个 key 对应的新内容时，削弱状态中该 key 方向的旧内容。幻灯片中出现类似 `(I−βₜkₜkₜᵀ)Sₜ₋₁` 的项：可以把它想成“先擦旧记录，再写新记录”。只有在恰当的归一化和参数条件下，它才是严格的正交投影；这里把“投影擦除”当作帮助理解的直觉。[【跳转到 13:30】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=810)
 
-![Gated DeltaNet 的幻灯片把遗忘门、写入门和擦除旧 key 方向的信息放在同一更新式中](assets/lecture04/00835.jpg)
+![Gated DeltaNet 的幻灯片把遗忘门、写入门和擦除旧 key 方向的信息放在同一更新式中](assets/p04/00835.jpg)
 
 这类更新与快速权重编程、在线学习或测试时训练中的一些方法相似。讲师强调：若门控只依赖输入、没有复杂的状态依赖，往往仍能构造适合训练的并行计算形式；具体是否成立取决于更新规则，不能把它当作任意 RNN 的通用性质。[【跳转到 11:50】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=710) · [【跳转到 14:45】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=885)
 
@@ -87,7 +87,7 @@ Gated DeltaNet 增加写入门 `βₜ`，还会在写入某个 key 对应的新�
 
 转录稿举了 **7 个线性层 + 1 个全注意力层**以及 **3 个 Gated DeltaNet 层 + 1 个全注意力层**的模型例子。幻灯片展示：混合模型在所测任务中能保持竞争力，同时提高长上下文解码吞吐；另一组混合比例实验表明，非全注意力层占比继续升高时，性能尤其在检索、问答等任务上可能下降。具体比例是模型设计选择，不是普适最优值。[【跳转到 15:04】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=904) · [【跳转到 16:26】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=986)
 
-![混合架构的吞吐和性能比较：用部分全注意力层保留能力，其他层降低长上下文成本](assets/lecture04/00904.jpg)
+![混合架构的吞吐和性能比较：用部分全注意力层保留能力，其他层降低长上下文成本](assets/p04/00904.jpg)
 
 **算复杂度时也要诚实**：只要仍有全注意力层，整个模型在固定层数配置下仍有随长度二次增长的部分；混合架构主要减少这部分的层数与实际成本。
 
@@ -95,7 +95,7 @@ Gated DeltaNet 增加写入门 `βₜ`，还会在写入某个 key 对应的新�
 
 另一条路不压缩所有历史，而是只读取可能重要的位置。转录稿介绍的 DeepSeek Sparse Attention（DSA）先用轻量索引器给候选历史位置打分，为每个 query 选出 `top-k`，然后只在这些位置上运行较昂贵的注意力。这与 MoE 的“先选择、再计算”是相似的设计模式。[【跳转到 18:46】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1126) · [【跳转到 21:56】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1316)
 
-![DSA 的索引器先对位置打分并选出 top-k，再对选中的位置进行注意力计算](assets/lecture04/01151.jpg)
+![DSA 的索引器先对位置打分并选出 top-k，再对选中的位置进行注意力计算](assets/p04/01151.jpg)
 
 设序列长 `n`，每个查询最终选 `k≪n` 个位置。**完整注意力的昂贵部分**只处理约 `nk` 个被选中的位置对；但这里的索引器仍需为所有候选位置计算分数，在课堂讨论的实现中仍有 `n²` 级的位置对。它的收益来自索引器维度很小、被选中的昂贵计算很少等系统因素，不能简单称为“线性注意力”。[【跳转到 21:40】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1300) · [【跳转到 22:33】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1353)
 
@@ -114,11 +114,11 @@ Gated DeltaNet 增加写入门 `βₜ`，还会在写入某个 key 对应的新�
 
 Attention 之外，本讲的另一半是 **Mixture of Experts（混合专家，MoE）**。这里的“专家”通常是多个 FFN，不是人工标注的医学、法律等职业专家。一个轻量路由器按 token 决定调用哪些 FFN；没有被选中的专家在这次前向计算中不执行。[【跳转到 28:49】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1729)
 
-![MoE 用路由器选择少数 FFN 专家，替换原本每个 token 都执行的单个稠密 FFN](assets/lecture04/01754.jpg)
+![MoE 用路由器选择少数 FFN 专家，替换原本每个 token 都执行的单个稠密 FFN](assets/p04/01754.jpg)
 
 假设原来有一个大小为 `P` 的 FFN，现在放 4 个同样大小的专家、每个 token 只选 1 个：**FFN 总参数约变成 `4P`，每个 token 的专家计算仍约为一个 FFN 的量**。若选 `k` 个专家，就要算 `k` 个；再加上路由、通信等开销，整个模型的 FLOPs、内存和延迟并不会严格保持不变。讲师引用的模型对比显示，在一些固定计算预算下增加专家数能改善损失，因此稀疏参数有实际价值。[【跳转到 29:39】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1779) · [【跳转到 30:54】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1854)
 
-![课堂展示的实验：在所测配置中，增加专家数改善了固定计算预算下的语言建模表现](assets/lecture04/01854.jpg)
+![课堂展示的实验：在所测配置中，增加专家数改善了固定计算预算下的语言建模表现](assets/p04/01854.jpg)
 
 MoE 还提供**专家并行**：把不同专家放在不同设备，再把 token 的激活值送往相应设备。这有助于放大模型，也引入设备间通信与负载不均的问题；是否划算取决于硬件和网络拓扑。[【跳转到 32:59】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1979) · [【跳转到 34:49】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2089)
 
@@ -138,13 +138,13 @@ y = Σ_{i∈I} g_i · FFN_i(x)      # 合并被选专家的输出
 
 `g_i` 是归一化或门控后的权重；具体实现可能在 top-k 前后采用 softmax 或 sigmoid，不能把这段示意代码当成所有模型的精确公式。[【跳转到 44:30】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2670)
 
-![Top-k 路由示意：路由分数决定激活哪些专家，输出再按门控权重合并](assets/lecture04/02645.jpg)
+![Top-k 路由示意：路由分数决定激活哪些专家，输出再按门控权重合并](assets/p04/02645.jpg)
 
 ### 8.2 共享专家和细粒度专家改变了专家的分工
 
 DeepSeek-MoE 相关设计把部分专家拆得更小、更细粒度，同时安排**共享专家**始终参与每个 token 的计算；其余专家仍按路由器的 top-k 选择。直觉是把通用处理交给共享专家，让被路由专家有空间学不同的处理方式。共享专家每次都运行，所以会增加固定计算；部署时可复制共享专家，用额外内存减少通信。[【跳转到 45:31】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2731) · [【跳转到 48:27】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2907)
 
-![专家结构从少量大专家演进到细粒度路由专家与始终启用的共享专家](assets/lecture04/02731.jpg)
+![专家结构从少量大专家演进到细粒度路由专家与始终启用的共享专家](assets/p04/02731.jpg)
 
 课堂展示的消融实验支持细粒度专家在相关设置中的收益；**共享专家的收益证据并非完全一致**，另一项受控研究在其设定下没有测出同样明显的增益。因此应把它当作经过广泛采用的设计选择，而不是所有任务上必胜的结论。[【跳转到 46:38】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2798) · [【跳转到 46:58】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=2818)
 
@@ -154,11 +154,11 @@ DeepSeek-MoE 相关设计把部分专家拆得更小、更细粒度，同时安�
 
 常见办法是额外加一个**负载均衡损失**。课堂用 Switch Transformer 的形式说明：令 `f_i` 为一批 token 中实际分给专家 `i` 的比例，`P_i` 为路由器给专家 `i` 的平均概率质量，辅助项大致与 `N·Σ_i f_iP_i` 成正比。把 `f_i` 看作本次计算中的固定统计量，对 `P_i` 的直接惩罚会随专家负载增大：越忙的专家，越不该继续被无节制地加分。[【跳转到 53:18】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3198)
 
-![Switch Transformer 的均衡损失把实际分配比例与平均路由概率结合起来](assets/lecture04/03198.jpg)
+![Switch Transformer 的均衡损失把实际分配比例与平均路由概率结合起来](assets/p04/03198.jpg)
 
 幻灯片中的消融展示：去掉均衡项后，训练和验证损失变差，几乎所有 token 只流向少数专家；保留均衡项时，专家利用更分散。这里展示的是特定实验，不意味着均衡系数越大越好；过强的均衡约束也可能妨碍模型按任务需要分工。[【跳转到 56:38】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3398) · [【跳转到 59:12】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3552)
 
-![去掉均衡损失后，图中的少数专家吸走大部分 token；加入均衡项后利用更分散](assets/lecture04/03398.jpg)
+![去掉均衡损失后，图中的少数专家吸走大部分 token；加入均衡项后利用更分散](assets/p04/03398.jpg)
 
 专家被分到不同设备后，还要关心**设备级负载**：每个专家看似均衡，不一定保证网络和设备都高效。课程介绍了专家级、设备级辅助目标，以及在线调整专家偏置等后续办法；“无辅助损失均衡”不等于完全不需要其他限制。[【跳转到 55:23】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3323) · [【跳转到 56:13】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3373)
 
@@ -174,7 +174,7 @@ DeepSeek-MoE 相关设计把部分专家拆得更小、更细粒度，同时安�
 
 这些处理手段分别对应**通信、利用率、正确性、稳定性与泛化**，不能只看“激活参数少”就推断推理一定便宜。幻灯片举了在发送激活前降维的方案：共享专家保留较宽的表示，被路由专家只接收较窄的表示，以节省 all-to-all 通信。[【跳转到 60:43】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3643) · [【跳转到 61:56】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3716)
 
-![专家并行需要传输 token 激活；图中的低维路由分支试图减少通信字节数](assets/lecture04/03691.jpg)
+![专家并行需要传输 token 激活；图中的低维路由分支试图减少通信字节数](assets/p04/03691.jpg)
 
 讲师还介绍 **upcycling**：复制一个已训练稠密模型中的 FFN，组成多个专家，新增路由器，再继续训练。这样能复用已有权重，在一些早期模型和实验中优于继续训练原稠密模型；它仍需要后续训练，不是免费获得一个成熟 MoE。[【跳转到 65:59】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=3959)
 
@@ -187,7 +187,7 @@ DeepSeek-MoE 相关设计把部分专家拆得更小、更细粒度，同时安�
 - **MLA（多头潜在注意力）**把需要缓存的 K/V 内容压缩为较低维的潜在表示，在解码时减少缓存；位置编码与压缩内容的配合还需单独处理。这属于 Attention 侧。[【跳转到 70:09】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4209)
 - **MTP（多 token 预测）**让训练目标涉及不止一个未来 token，并可为某些解码加速方法提供候选。它属于预测与推理侧，不能直接归入 MoE 专家设计。[【跳转到 70:34】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4234)
 
-![MLA 幻灯片展示把 KV 内容表示为低维潜在状态，以减少解码时保存的缓存](assets/lecture04/04184.jpg)
+![MLA 幻灯片展示把 KV 内容表示为低维潜在状态，以减少解码时保存的缓存](assets/p04/04184.jpg)
 
 至于再往后走，讲师没有给出确定的新架构配方，而是提出一个方向：让模型在后训练中更主动地管理上下文，例如把压缩、检索与模型内部机制结合。这里是展望，不能当作 Lecture 4 已验证的方法。[【跳转到 25:23】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=1523)
 

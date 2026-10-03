@@ -8,7 +8,7 @@
 
 - **[P：Stanford 官方 Lecture 3 讲义，固定到提交 `de53a9f`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_03.pdf)**：本文的课程结论、模型配置表、公式和页码以它为准。`P:p.10` 表示 PDF 第 10 页。
 - **[T：第三方中文字幕，固定到提交 `7b6da52`](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)**：用于补充讲师口头给出的直觉、问答和限制条件。它不是 Stanford 官方文本，可能有语音识别或翻译错误。
-- **[B：tsingyuec 的 Lecture 3 解读，固定到提交 `e966bb4`](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)**：用于对照残差流、串行块和架构取舍的讲解方式；它是基于课程的二次整理。
+- **[B：tsingyuec 的 Lecture 3 解读，固定到提交 `e966bb4`](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)**：用于对照残差流、串行块和架构取舍的讲解方式，并提供本文配图；它是基于课程的二次整理。
 - **补充说明**：本文为小白增加的 shape、参数量推导、示意代码和易错点，明确标成“补充”。
 
 引用优先级是：**官方讲义 P > 讲师口述字幕 T > 二次整理 B > 本文补充说明**。
@@ -26,6 +26,10 @@
 官方课程入口是 [CS336 Lectures](https://cs336.stanford.edu/lectures/?trace=lecture_03)。本文生成时核对的官方 PDF 共 67 页，作者为 Tatsu Hashimoto。
 
 ## 1. 一张图看懂本讲
+
+![本讲的路线图——先讲架构变体（归一化、激活函数、位置编码），再讲超参数、稳定性技巧与注意力层面的部署优化。](assets/p03/00254.jpg)
+
+*图：本讲的路线图——先讲架构变体（归一化、激活函数、位置编码），再讲超参数、稳定性技巧与注意力层面的部署优化。*
 
 ```text
 现代 Transformer 的选择
@@ -62,6 +66,10 @@
 **来源：** P:p.2、p.7–9、p.67；T 开场关于“从其他模型的经验中寻找共同点”的说明。
 
 ## 2. 起点：先看一个现代 Transformer 块
+
+![残差流示意——`x` 从底部一路贯穿到顶部，各组件把计算结果加回主干道；原始 Transformer 把 LayerNorm 放在残差流内部（post-norm）。](assets/p03/00427.jpg)
+
+*图：残差流示意——`x` 从底部一路贯穿到顶部，各组件把计算结果加回主干道；原始 Transformer 把 LayerNorm 放在残差流内部（post-norm）。*
 
 **先记住一句话：一个现代 Transformer 块连续更新表示两次——Attention 让 token 读取前文，FFN 再分别处理每个 token；每次更新都加回原来的表示。** 这两次相加形成贯穿各块的残差流，也给旧信息和梯度留出直通路径。
 
@@ -169,6 +177,10 @@ x = h + swiglu_ffn(rms_norm_2(h))        # [B, S, d_model]
 
 ### 3.1 Post-Norm 与 Pre-Norm
 
+![pre-norm 与 post-norm 的收敛对比——post-norm（紫色虚线）收敛更差；pre-norm 即使在无预热设置下也明显更好。](assets/p03/00502.jpg)
+
+*图：pre-norm 与 post-norm 的收敛对比——post-norm（紫色虚线）收敛更差；pre-norm 即使在无预热设置下也明显更好。*
+
 **Post-Norm** 先计算分支、做残差相加，再归一化：
 
 ```text
@@ -216,6 +228,10 @@ x_next = x + Norm_out(F(Norm_in(x)))
 **来源：** P:p.13；T 关于 non-residual post norm 的口述。
 
 ### 3.3 LayerNorm 与 RMSNorm
+
+![LayerNorm 与 RMSNorm 的公式对比——RMSNorm 去掉了减均值和偏置项，只保留按均方根的缩放。](assets/p03/00692.jpg)
+
+*图：LayerNorm 与 RMSNorm 的公式对比——RMSNorm 去掉了减均值和偏置项，只保留按均方根的缩放。*
 
 对一个 token 的隐藏向量 `x ∈ R^d`，LayerNorm 同时减均值、除标准差：
 
@@ -295,6 +311,10 @@ shape 是：
 **来源：** P:p.20–21。
 
 ### 4.2 GLU 的核心：多一条“门”
+
+![门控线性单元（GLU）——在普通前馈层上再加一个"门"矩阵 V，用它与激活输出逐元素相乘来调节信号。](assets/p03/01136.jpg)
+
+*图：门控线性单元（GLU）——在普通前馈层上再加一个"门"矩阵 V，用它与激活输出逐元素相乘来调节信号。*
 
 ReGLU 把单分支激活：
 
@@ -384,6 +404,10 @@ FFN 看到的是已经融合上下文后的 `h`。因此 Attention 和 FFN 形�
 
 ### 5.2 并行块
 
+![并行 Transformer 块——把注意力与 MLP 并排计算、输出相加后加回残差流；而串行结构是一个接一个计算。](assets/p03/01371.jpg)
+
+*图：并行 Transformer 块——把注意力与 MLP 并排计算、输出相加后加回残差流；而串行结构是一个接一个计算。*
+
 并行块让两条分支读取同一个输入：
 
 ```python
@@ -408,6 +432,10 @@ y = x + attention(z) + ffn(z)
 
 ### 6.1 Attention 本身不知道顺序
 
+![位置嵌入的演进——正弦/余弦、绝对位置、相对位置，最终 RoPE 成为 2024 年后占据主导的方案。](assets/p03/01624.jpg)
+
+*图：位置嵌入的演进——正弦/余弦、绝对位置、相对位置，最终 RoPE 成为 2024 年后占据主导的方案。*
+
 若没有位置信息，把 token 顺序一起打乱，纯点积 Attention 无法知道“谁在前、谁在后”。课程总结了四条路线：
 
 | 方法 | 如何加入位置 | 直觉 | 代表模型（讲义举例） |
@@ -420,6 +448,10 @@ y = x + attention(z) + ffn(z)
 **来源：** P:p.30。
 
 ### 6.2 RoPE 想满足什么
+
+![RoPE 的直觉——用位置对向量做旋转，两个词的相对角度只取决于它们之间的距离，而与绝对位置无关。](assets/p03/01744.jpg)
+
+*图：RoPE 的直觉——用位置对向量做旋转，两个词的相对角度只取决于它们之间的距离，而与绝对位置无关。*
 
 理想目标是构造位置相关表示 `f(x,i)`，让两个位置的内积只依赖相对距离：
 
@@ -513,6 +545,10 @@ rotated_1 = x0 * sin_theta + x1 * cos_theta
 
 ### 7.1 FFN 宽度
 
+![前馈层比率的安全区——损失对具体取值并不敏感，只要落在"盆地"里就没问题。](assets/p03/02238.jpg)
+
+*图：前馈层比率的安全区——损失对具体取值并不敏感，只要落在"盆地"里就没问题。*
+
 最常见默认值：
 
 ```text
@@ -542,6 +578,10 @@ h_q × d_head ≈ d_model
 
 ### 7.3 深度与宽度：aspect ratio
 
+![纵横比——大多数现代模型都落在 d_model / 层数 ≈ 100 的区间，很少做得特别深或特别宽。](assets/p03/02618.jpg)
+
+*图：纵横比——大多数现代模型都落在 d_model / 层数 ≈ 100 的区间，很少做得特别深或特别宽。*
+
 课程用 `d_model / n_layers` 粗略描述模型是“宽而浅”还是“窄而深”：
 
 - 许多模型约在 100–200；
@@ -555,6 +595,10 @@ h_q × d_head ≈ d_model
 
 ### 7.4 词表大小
 
+![词表大小的两类分野——单语模型约 3 万，多语 / 生产模型 10 万~20 万。](assets/p03/02785.jpg)
+
+*图：词表大小的两类分野——单语模型约 3 万，多语 / 生产模型 10 万~20 万。*
+
 课程给出的粗略范围：
 
 | 场景 | 常见词表规模 | 为什么 |
@@ -563,6 +607,8 @@ h_q × d_head ≈ d_model
 | 多语或生产系统 | 100k–250k | 要覆盖更多文字系统、代码、特殊 token 和业务格式 |
 
 词表更大并非免费：输入 embedding 和输出投影通常都与 `V×d_model` 成正比；Softmax 也要在更多类别上计算。但词表太小会把文本切得更碎，增加序列长度。它是在“每个 token 更贵”和“token 数更多”之间取舍。
+
+**比较不同分词器时**，不要直接比较每 token 的困惑度：同一段文本被切成的 token 数不同，分母也会变。原 blog 提到可改用 **bits per byte（BPB）**，即把整段文本的负对数似然换算成比特，再除以原始字节数。前提是两种分词器都能无损表示同一测试文本，且使用相同的字节统计口径；否则分数仍不可比。这一比较口径来自 B 的“不同分词器能公平比较吗？”一节。
 
 **来源：** P:p.47；T 对 monolingual 与 multilingual vocabulary 的说明。最后一句取舍分析为本文补充。
 
@@ -578,6 +624,10 @@ h_q × d_head ≈ d_model
 | 多语词表 | 常约 100k–250k | 词越多表达力一定越强 |
 
 ## 8. Dropout 与 Weight Decay：大数据不等于完全不正则化
+
+![weight decay 的反直觉——它并非在防过拟合，而是在与优化过程（尤其学习率衰减）相互作用。](assets/p03/03104.jpg)
+
+*图：weight decay 的反直觉——它并非在防过拟合，而是在与优化过程（尤其学习率衰减）相互作用。*
 
 反对预训练 Dropout 的直觉是：训练数据有数万亿 token，模型常只遍历一次语料，不容易像小数据集那样反复记忆。课程表显示，较新的模型经常把预训练 Dropout 设为 0，但仍常使用 Weight Decay。
 
@@ -604,6 +654,10 @@ h_q × d_head ≈ d_model
 **来源：** P:p.52–53。
 
 ### 9.1 z-loss：约束输出 Softmax 的归一化常数
+
+![输出端 softmax 与 z-loss——`log p = u − logZ`，用惩罚项让 logZ 尽量接近 0，从而保持数值稳定。](assets/p03/03376.jpg)
+
+*图：输出端 softmax 与 z-loss——`log p = u − logZ`，用惩罚项让 logZ 尽量接近 0，从而保持数值稳定。*
 
 令词表 logits 为 `u_k`：
 
@@ -634,6 +688,10 @@ loss = cross_entropy + z_loss
 **来源：** P:p.54；T 关于 Softmax 平移不变性和 `log Z` 的解释。
 
 ### 9.2 QK-Norm：在点积前控制 Q、K 尺度
+
+![QK-norm——在 Q·K 之前先对 Q、K 做 RMSNorm，让 softmax 的输入尺度稳定，从而防止注意力退化。](assets/p03/03543.jpg)
+
+*图：QK-norm——在 Q·K 之前先对 Q、K 做 RMSNorm，让 softmax 的输入尺度稳定，从而防止注意力退化。*
 
 普通注意力分数：
 
@@ -697,6 +755,10 @@ KV cache 保存每一层、每个历史 token 的 K 和 V，避免每一步从�
 
 ### 10.2 MHA、MQA 与 GQA
 
+![GQA 的分组结构——减少 K/V 头数、保留 Q 头总数，用可调比例在表达力与推理效率间取折中。](assets/p03/04003.jpg)
+
+*图：GQA 的分组结构——减少 K/V 头数、保留 Q 头总数，用可调比例在表达力与推理效率间取折中。*
+
 | 方法 | Query 头 | KV 头 | KV cache | 主要取舍 |
 |---|---:|---:|---|---|
 | MHA | `h_q` | `h_q` | 最大 | 每个 Q 头有独立 K/V，表达最充分 |
@@ -738,6 +800,10 @@ KV cache 保存每一层、每个历史 token 的 K 和 V，避免每一步从�
 代价是单层无法直接连接相距超过窗口的两个位置。
 
 ### 11.2 为什么交错比“全局或局部二选一”更实用
+
+![混合注意力——每四层中一层用全局注意力，其余层用滑动窗口的局部注意力，逐层把局部信息聚合为全局。](assets/p03/04303.jpg)
+
+*图：混合注意力——每四层中一层用全局注意力，其余层用滑动窗口的局部注意力，逐层把局部信息聚合为全局。*
 
 课程展示的常见方案是每四层中约三层局部、一层全局：
 
@@ -830,7 +896,7 @@ x → RMSNorm → Attention → 残差相加
 ### 字幕与二次整理
 
 - [Lecture 3 第三方中文字幕（固定提交）](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
-- [仓库内中文字幕](subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
+- [仓库内中文字幕](../subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
 - [B：tsingyuec 的 Lecture 3 解读（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)
 
 ### 讲义直接引用或讨论的代表论文
