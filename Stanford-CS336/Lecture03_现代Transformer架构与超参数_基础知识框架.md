@@ -9,10 +9,9 @@
 - **[P：Stanford 官方 Lecture 3 讲义，固定到提交 `de53a9f`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_03.pdf)**：本文的课程结论、模型配置表、公式和页码以它为准。`P:p.10` 表示 PDF 第 10 页。
 - **[T：第三方中文字幕，固定到提交 `7b6da52`](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)**：用于补充讲师口头给出的直觉、问答和限制条件。它不是 Stanford 官方文本，可能有语音识别或翻译错误。
 - **[B：tsingyuec 的 Lecture 3 解读，固定到提交 `e966bb4`](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)**：用于对照残差流、串行块和架构取舍的讲解方式；它是基于课程的二次整理。
-- **[N2：仓库既有笔记](notes/笔记02_现代%20Transformer%20核心架构与张量算子工程_笔记.md)**：用于补充中文解释和知识之间的联系；它是二次整理，不能反过来覆盖官方讲义。
 - **补充说明**：本文为小白增加的 shape、参数量推导、示意代码和易错点，明确标成“补充”。
 
-引用优先级是：**官方讲义 P > 讲师口述字幕 T > 二次整理 B/N2 > 本文补充说明**。
+引用优先级是：**官方讲义 P > 讲师口述字幕 T > 二次整理 B > 本文补充说明**。
 
 ### Lecture 3 的“原代码”在哪里？
 
@@ -196,7 +195,7 @@ Pre-Norm 中存在一条更干净的恒等路径，梯度可以沿着加法直�
 
 **注意：** “更稳定”不代表理论上彻底消灭梯度爆炸，也不代表一定不需要 warmup。课程把“去掉 warmup”称为早期主张，而把现代实际优势概括为稳定性和更大的可用学习率。
 
-**来源：** P:p.10–12；T 的 Pre-Norm/Post-Norm 讲解；N2“归一化拓扑位置与残差动力学”。
+**来源：** P:p.10–12；T 的 Pre-Norm/Post-Norm 讲解。
 
 ### 3.2 分支外 Post-Norm 与 Double Norm
 
@@ -214,7 +213,7 @@ x_next = x + Norm_out(F(Norm_in(x)))
 
 后者常被直观地称为 **Double Norm**。它的目标是既保留干净残差路径，又限制进入或离开分支的数值尺度。课程列出的相关现代模型包括 Grok、Gemma 2 和 OLMo 2，但各模型具体放置位置并不完全一样，不能只看“用了两个 Norm”就认为实现相同。
 
-**来源：** P:p.13；T 关于 non-residual post norm 的口述；N2“外部后置归一化与双重归一化”。
+**来源：** P:p.13；T 关于 non-residual post norm 的口述。
 
 ### 3.3 LayerNorm 与 RMSNorm
 
@@ -260,7 +259,7 @@ RMSNorm 少做均值计算、中心化和 bias 相加，但真正重要的不是
 - RMSNorm 的系统收益更多来自数据移动和实现融合，而不是只看理论运算量；
 - 课程结论是其通常与 LayerNorm 一样好且更便宜，不是说它对所有任务都必然更准。
 
-**来源：** P:p.14–17；T 关于 FLOPs 不等于 runtime 的解释；N2“归一化算子演进与算术强度瓶颈”。
+**来源：** P:p.14–17；T 关于 FLOPs 不等于 runtime 的解释。
 
 ### 3.5 为什么现代 Linear 常去掉 bias
 
@@ -334,7 +333,7 @@ def swiglu_ffn(x, w_gate, w_up, w_down):
 
 **注意：** GPT-3 等非门控模型同样能正常工作。GLU 是强默认项，不是模型可用性的必要条件。
 
-**来源：** P:p.22–26；T 关于门控机制、Shazeer 实验误差棒和非门控反例的口述；N2“门控线性单元拓扑与激活函数演进”。
+**来源：** P:p.22–26；T 关于门控机制、Shazeer 实验误差棒和非门控反例的口述。
 
 ### 4.3 为什么门控 FFN 常用 `8/3 d_model`
 
@@ -367,7 +366,7 @@ d_ff_gated = 8/3 d_model ≈ 2.67d_model
 
 **注意：** 这是等参数量比较的基准，不是硬规则。课程表中 PaLM 为 4、Mistral 7B 和 LLaMA-2 70B 为 3.5，而 Qwen 14B、DeepSeek 67B 等接近 2.67。
 
-**来源：** P:p.23、p.38；T 关于三矩阵和 `2/3` 缩放的推导；N2“前馈参数守恒与维度扩展比例”。
+**来源：** P:p.23、p.38；T 关于三矩阵和 `2/3` 缩放的推导。
 
 ## 5. Transformer 块：串行还是并行
 
@@ -403,7 +402,7 @@ y = x + attention(z) + ffn(z)
 
 **注意：** 不能把 15% 当作任何模型、硬件和实现都能复现的固定加速；讲师也明确说缺少足够好的统一消融来精确量化质量差异。
 
-**来源：** P:p.27–29；T 的课堂问答；N2“块级执行时序与层间拓扑结构”。
+**来源：** P:p.27–29；T 的课堂问答。
 
 ## 6. 位置编码：为什么现代模型偏爱 RoPE
 
@@ -447,7 +446,7 @@ R(θ) = [[cosθ, -sinθ],
 
 高维向量则被拆成许多二维对，每一对使用不同频率：高频更敏感于近距离，低频变化慢，能携带较长距离的信息。
 
-**来源：** P:p.31–34；T 用 “we know” 在不同绝对位置仍保持相对角度的口头例子；N2“旋转位置编码几何机理”。
+**来源：** P:p.31–34；T 用 “we know” 在不同绝对位置仍保持相对角度的口头例子。
 
 ### 6.3 RoPE 与正弦位置编码的关键区别
 
@@ -552,7 +551,7 @@ h_q × d_head ≈ d_model
 
 模型更深并不自动更强。极深模型存在更多串行依赖，难以跨设备并行，推理延迟也更高；更宽则会让大矩阵、参数量和显存压力上升。最终选择既是建模问题，也是系统问题。
 
-**来源：** P:p.44–46；N2“几何纵横比与分布式并行博弈”。
+**来源：** P:p.44–46。
 
 ### 7.4 词表大小
 
@@ -591,7 +590,7 @@ h_q × d_head ≈ d_model
 
 **注意：** 论文未报告 Dropout，不等于能确定其值为 0；课程也提醒，对闭源模型尤其不能据此下结论。
 
-**来源：** P:p.48–51；T 关于 Weight Decay 与学习率协同调节的课堂问答；N2“预训练正则化机制与优化动力学”。
+**来源：** P:p.48–51；T 关于 Weight Decay 与学习率协同调节的课堂问答。
 
 ## 9. 稳定性：重点检查两个 Softmax
 
@@ -632,7 +631,7 @@ loss = cross_entropy + z_loss
 
 **符号注意：** 讲义以“最大化 log-likelihood”的写法展示减去惩罚项；训练代码通常“最小化 loss”，所以写成在交叉熵上**加** `α(log Z)²`，两者方向一致。
 
-**来源：** P:p.54；T 关于 Softmax 平移不变性和 `log Z` 的解释；N2“输出端配分函数漂移与 Z-loss”。
+**来源：** P:p.54；T 关于 Softmax 平移不变性和 `log Z` 的解释。
 
 ### 9.2 QK-Norm：在点积前控制 Q、K 尺度
 
@@ -656,7 +655,7 @@ weights = torch.softmax(scores, dim=-1)
 
 **注意：** QK-Norm 不能替代正确的初始化、学习率和梯度处理；它只针对注意力 logits 的一个重要来源。
 
-**来源：** P:p.55；T 对 Q、K 先 Norm 再点积的逐步说明；N2“注意力内部尺度控制”。
+**来源：** P:p.55；T 对 Q、K 先 Norm 再点积的逐步说明。
 
 ### 9.3 Logit soft-capping：直接限制 logits
 
@@ -675,7 +674,7 @@ logits = cap * torch.tanh(logits / cap)
 
 课程态度很谨慎：它能防止 logits 爆掉，但约束较强，可能带来性能损失。不要因为“更稳定”就默认越强越好。
 
-**来源：** P:p.56；T 关于 Gemma、QK-Norm 与 soft-cap 对比的口述；N2“极值截断方案”。
+**来源：** P:p.56；T 关于 Gemma、QK-Norm 与 soft-cap 对比的口述。
 
 ## 10. 推理注意力：为什么 KV cache 让内存成为瓶颈
 
@@ -717,7 +716,7 @@ KV cache 保存每一层、每个历史 token 的 K 和 V，避免每一步从�
 
 **注意：** “减少头数”在这里专指减少 **K/V 头**，Query 头数可以保持不变；不要误写成所有注意力头一起减少。
 
-**来源：** P:p.61–63；T 对 MHA/MQA/GQA 表达能力与 KV cache 权衡的口述；N2“键值共享注意力拓扑演进”。
+**来源：** P:p.61–63；T 对 MHA/MQA/GQA 表达能力与 KV cache 权衡的口述。
 
 ### 10.3 MLA 是什么位置
 
@@ -754,7 +753,7 @@ Layer 4：Full Attention
 
 课程以 Cohere Command A 为例：短程层使用 RoPE + SWA，长程全注意力层使用 NoPE；也指出其他模型会在局部和全局层都使用 RoPE。因此“交错模式”与“位置编码方案”是两个可以分开选择的维度。
 
-**来源：** P:p.64–66；T 对每四层一层 full attention、局部信息逐层汇聚的解释；N2“超长上下文稀疏混合注意力架构”。
+**来源：** P:p.64–66；T 对每四层一层 full attention、局部信息逐层汇聚的解释。
 
 ## 12. 把选择串起来：一个稳妥的学习基线
 
@@ -833,7 +832,6 @@ x → RMSNorm → Attention → 残差相加
 - [Lecture 3 第三方中文字幕（固定提交）](https://github.com/molandwondering-ui/AI-wiki/blob/7b6da5229a9350542530e3c77be1d14efebd1bf2/Stanford-CS336/subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
 - [仓库内中文字幕](subtitles/P03_Lecture%203%EF%BC%9A%20Architectures%20%E9%87%8D%E5%88%B6%E7%89%88_clean.txt)
 - [B：tsingyuec 的 Lecture 3 解读（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%203%20Architectures.md)
-- [N2：现代 Transformer 核心架构与张量算子工程](notes/笔记02_现代%20Transformer%20核心架构与张量算子工程_笔记.md)
 
 ### 讲义直接引用或讨论的代表论文
 

@@ -3,18 +3,17 @@
 斯坦福大学经典的现代大语言模型系统全栈硬核课程，由 Percy Liang、Tatsu Hashimoto、Dan Fu 等顶级学者联袂讲授。从分词机制与底层算子出发，深入现代 Transformer 架构演进、GPU 硬件加速与 Triton 自定义内核编程，覆盖大规模分布式并行训练、扩展定律（Scaling Laws）、自回归推理加速、高质量语料管线与后训练偏好对齐（SFT/RLVR）。全课工程与系统细节极其扎实，是大模型底层实现与系统研发的标杆课程。
 
 - **原视频**：[【极致中配】2026年最新版 Stanford CS336: 从头构建大语言模型](https://www.bilibili.com/video/BV11LEA6eEuj) — Bilibili，BV11LEA6eEuj
-- **全 35 集**，已产出 9 册模块全书、12 篇复习笔记、35 份逐字稿
+- **全 35 集**，已收录 9 册模块全书、3 篇逐讲基础知识文档、15 篇图文笔记和 35 份逐字稿
 
 ## 怎么学
 
 课程主线覆盖大模型研发的全生命周期：**词表分词 → 模型架构 → 硬件加速与内核 → 分布式并行 → 规模法则 → 高效推理 → 数据工程 → 后训练与强化学习**。建议：
 
 - **系统学习大模型全栈** → `textbooks/` 从卷一顺次读到卷五。课程不仅讲模型架构数学推导，更强调系统实现底层：张量操作、自定义 GPU 内核、并行训练与推理吞吐
-- **攻坚硬件加速与内核开发** → 重点研读卷三（模块 03、04）与笔记 04、05。从 GPU 内存层次结构、Roofline 性能瓶颈分析，到 Triton 内核编写与 XLA 编译，是系统工程的核心硬骨头
-- **理解预训练与资源规划** → 研读卷四（模块 05）与笔记 07。掌握 Chinchilla 计算最优扩展定律的参数拟合与算力浮点预算方法，避免无效训练开销
-- **聚焦推理优化与后训练对齐** → 研读卷四（模块 06）及卷五（模块 08、09），结合笔记 08、11。深入 KV Cache 显存优化、投机解码量化部署，以及从 SFT、DPO 到可验证规则强化学习（RLVR）的全流程
-- **按讲次打基础** → 先看下方的逐讲基础知识框架，再根据需要进入 `notes/` 阅读跨讲专题。逐讲笔记会区分课程材料、转录与教学补充
-- **考前突击与查漏补缺** → 直接看 `notes/`。12 篇复习笔记对核心概念、架构对比、公式推导与工程准则进行了高密度梳理，适合快速建立全局视野
+- **攻坚硬件加速与内核开发** → 重点研读卷三（模块 03、04）。从 GPU 内存层次结构、Roofline 性能瓶颈分析，到 Triton 内核编写与 XLA 编译，是系统工程的核心硬骨头
+- **理解预训练与资源规划** → 研读卷四（模块 05）。掌握 Chinchilla 计算最优扩展定律的参数拟合与算力浮点预算方法，避免无效训练开销
+- **聚焦推理优化与后训练对齐** → 研读卷四（模块 06）及卷五（模块 08、09）。深入 KV Cache 显存优化、投机解码量化部署，以及从 SFT、DPO 到可验证规则强化学习（RLVR）的全流程
+- **按讲次打基础** → 先看下方的逐讲基础知识框架；其余讲次可读图文笔记。逐讲基础知识文档会区分课程材料、转录与教学补充
 - **核对讲师原话与细节推演** → `subtitles/` 提供全部 35 讲的清洗后逐字稿，适合快速全文检索代码参数、论文出处或具体技术选型背景
 
 ## 逐讲基础知识
@@ -25,7 +24,29 @@
 | Lecture 3 | [现代 Transformer 架构与超参数](Lecture03_现代Transformer架构与超参数_基础知识框架.md) | Pre-Norm、RMSNorm、SwiGLU、RoPE 与稳定性 |
 | Lecture 4 | [注意力替代方案与混合专家](Lecture04_注意力替代方案与混合专家_基础知识框架.md) | 线性/稀疏注意力、MoE 与系统成本；配图见 `assets/lecture04/` |
 
-另有 [基础知识总览](基础知识.md)。逐讲笔记按课程讲次组织；下方的 12 篇复习笔记则跨讲归纳主题。
+另有 [基础知识总览](基础知识.md)。逐讲笔记按课程讲次组织。
+
+## 逐讲图文笔记
+
+以下 15 篇是 [tsingyuec/cs336-blog](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog) 的图文内容副本，配图保存在 `blog/assets/`。Lecture 2–4 请使用上方已有的基础知识文档。
+
+| 讲次 | 图文笔记 |
+|---|---|
+| Lecture 1 | [课程概览与分词](blog/Lecture%201%20课程概览与分词.md) |
+| Lecture 5 | [GPUs, TPUs](blog/Lecture%205%20GPUs,%20TPUs.md) |
+| Lecture 6 | [Kernels, Triton, XLA](blog/Lecture%206%20Kernels,%20Triton,%20XLA.md) |
+| Lecture 7 | [Parallelism](blog/Lecture%207%20Parallelism.md) |
+| Lecture 8 | [Parallelism](blog/Lecture%208%20Parallelism.md) |
+| Lecture 9 | [Scaling Laws](blog/Lecture%209%20Scaling%20Laws.md) |
+| Lecture 10 | [Inference](blog/Lecture%2010%20Inference.md) |
+| Lecture 11 | [Scaling Laws](blog/Lecture%2011%20Scaling%20Laws.md) |
+| Lecture 12 | [Evaluation](blog/Lecture%2012%20Evaluation.md) |
+| Lecture 13 | [Data (Sources, Datasets)](blog/Lecture%2013%20Data%20%28Sources,%20Datasets%29.md) |
+| Lecture 14 | [Data](blog/Lecture%2014%20Data.md) |
+| Lecture 15 | [Mid-Post-Training](blog/Lecture%2015%20Mid-Post-Training.md) |
+| Lecture 16 | [Post-Training - RLVR](blog/Lecture%2016%20Post-Training%20-%20RLVR.md) |
+| Lecture 17 | [Alignment - Multimodality](blog/Lecture%2017%20Alignment%20-%20Multimodality.md) |
+| Lecture 18 | [Guest Lecture Dan Fu](blog/Lecture%2018%20Guest%20Lecture%20Dan%20Fu.md) |
 
 ## 模块全书目录
 
@@ -43,33 +64,12 @@
 | 08 | [卷五：模型后训练、强化学习对齐与前沿演进（上）](textbooks/模块08_卷五：模型后训练、强化学习对齐与前沿演进（上）_精读全书.md) | 监督微调 SFT、人类偏好对齐（DPO/RLHF）与 RLVR 强化学习 |
 | 09 | [卷五：模型后训练、强化学习对齐与前沿演进（下）](textbooks/模块09_卷五：模型后训练、强化学习对齐与前沿演进（下）_精读全书.md) | 多模态架构前沿、长序列状态空间模型与嘉宾前沿专题 |
 
-## 复习笔记目录
-
-12 篇，跨模块聚合，比模块粒度更大、更适合速查：
-
-| # | 笔记 | 覆盖内容 |
-| ---: | :--- | :--- |
-| 01 | [大语言模型基础理念与分词器底层架构](notes/笔记01_大语言模型基础理念与分词器底层架构_笔记.md) | 词表构建、BPE 算法与分词器底层实现 |
-| 02 | [现代 Transformer 核心架构与张量算子工程](notes/笔记02_现代%20Transformer%20核心架构与张量算子工程_笔记.md) | Pre-Norm、RoPE、SwiGLU 与张量算子实现 |
-| 03 | [长上下文与现代注意力替代方案](notes/笔记03_长上下文与现代注意力替代方案_笔记.md) | MHA/GQA/MQA 对比、FlashAttention 与线性注意力 |
-| 04 | [现代 AI 硬件加速体系与微架构](notes/笔记04_现代%20AI%20硬件加速体系与微架构_笔记.md) | GPU 内存层级、Roofline 模型与硬件算力瓶颈 |
-| 05 | [高性能 GPU 内核开发与编译器优化](notes/笔记05_高性能%20GPU%20内核开发与编译器优化_笔记.md) | CUDA 编程、Triton 自定义内核开发与编译器优化 |
-| 06 | [大模型大规模分布式训练并行策略](notes/笔记06_大模型大规模分布式训练并行策略_笔记.md) | 数据并行、张量并行、流水线并行与 3D 混合并行 |
-| 07 | [大模型扩展定律与计算最优资源核算](notes/笔记07_大模型扩展定律与计算最优资源核算_笔记.md) | Chinchilla 定律、扩展定律拟合与浮点算力核算 |
-| 08 | [大语言模型推理加速量化与部署技术](notes/笔记08_大语言模型推理加速量化与部署技术_笔记.md) | KV 缓存优化、投机采样、模型量化与推理调度 |
-| 09 | [大模型基准评测防泄漏体系与自动化评估方法](notes/笔记09_大模型基准评测防泄漏体系与自动化评估方法_笔记.md) | 评测基准、污染防范、LLM-as-a-Judge 与自动化评测 |
-| 10 | [预训练高质量数据工程管线](notes/笔记10_预训练高质量数据工程管线_笔记.md) | 数据爬取、清洗过滤、去重管线与合成数据生成 |
-| 11 | [大模型后训练偏好对齐与推理强化学习](notes/笔记11_大模型后训练偏好对齐与推理强化学习_笔记.md) | SFT、DPO、PPO 与基于规则的强化学习（RLVR） |
-| 12 | [高效序列模型演进专题与系统实践](notes/笔记12_高效序列模型演进专题与系统实践_笔记.md) | 状态空间模型（SSM/Mamba）、长序列推理与系统实践 |
-
-笔记开头的知识拓扑树可直接导入 Markmap 或 XMind 生成脑图。
-
 ## 其他入口
 
 - [逐字稿（35 份）](subtitles/) — 核对讲师原话，以及开发适合自己习惯的课程
 
 ---
 
-> `textbooks/`、`notes/` 与 `subtitles/` 主要由 [Video2Book](https://github.com/LINJIANG12/video2book) 整理；逐讲基础知识文档另行编写，并在文内说明来源。所有笔记均为课程的二次整理，不代表原作者与所属机构的观点。原课程版权归原作者与所属机构所有，仅供个人学习使用。
+> `textbooks/` 与 `subtitles/` 主要由 [Video2Book](https://github.com/LINJIANG12/video2book) 整理；逐讲基础知识文档另行编写，并在文内说明来源。所有笔记均为课程的二次整理，不代表原作者与所属机构的观点。原课程版权归原作者与所属机构所有，仅供个人学习使用。
 
 [← 返回仓库首页](../README.md)
