@@ -6,6 +6,7 @@
 |---|---|---|
 | [Stanford CS336](Stanford-CS336/README.md) | [Lecture 2：PyTorch 与资源核算](Stanford-CS336/notes/Lecture%202%20PyTorch%28einops%29.md) | 大语言模型架构、训练系统、推理、数据与后训练；另有逐讲图文笔记、模块全书、字幕和图文转录 |
 | [Harvard CS50x 2026](cs50x-2026/README.md) | [Lecture 4：内存与指针](cs50x-2026/notes/Lecture04_内存与指针_视频图文笔记.md) | 课程幻灯片、英文讲稿、课堂源码和逐讲笔记 |
+| [CSAPP](CSAPP/README.md) | [从 hello.c 到程序运行](CSAPP/notes/ch01/01_1-1_计算机系统漫游.md) | 九曲阑干 1-1 至 3-10：22 篇笔记及配套图文文稿，覆盖系统漫游、信息表示和机器级程序 |
 | [Pi-Agent](pi-agent-book/README.md) | [问答笔记](pi-agent-book/qa.md) | Agent 实现相关的问答与章节笔记 |
 
 ## 目录约定
@@ -18,6 +19,7 @@ AI-wiki/
 │   ├── 参考/                                       # 官方讲义、教材入口与核心实现范例
 │   ├── subtitles/                                  # 课程字幕
 │   └── transcripts/                                # 带画面的图文转录
+├── CSAPP/                                         # 1-1 至 3-10 图文笔记、文稿与视频清单
 ├── cs50x-2026/
 │   ├── notes/                                      # 逐讲笔记
 │   ├── slides/                                     # 幻灯片

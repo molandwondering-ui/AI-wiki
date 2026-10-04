@@ -1,0 +1,249 @@
+{
+  "creator": "九曲阑干",
+  "scope": "1-1 至 3-10",
+  "video_count": 22,
+  "videos": [
+    {
+      "index": 1,
+      "bvid": "BV1cD4y1D7uR",
+      "cid": 214249919,
+      "title": "1-1.计算机系统漫游",
+      "duration": 464,
+      "chapter": 1,
+      "note": "notes/ch01/01_1-1_计算机系统漫游.md",
+      "transcript": "transcripts/01_1-1_计算机系统漫游.md",
+      "url": "https://www.bilibili.com/video/BV1cD4y1D7uR/"
+    },
+    {
+      "index": 2,
+      "bvid": "BV115411h72j",
+      "cid": 216358933,
+      "title": "1-2.计算机系统漫游",
+      "duration": 515,
+      "chapter": 1,
+      "note": "notes/ch01/02_1-2_计算机系统漫游.md",
+      "transcript": "transcripts/02_1-2_计算机系统漫游.md",
+      "url": "https://www.bilibili.com/video/BV115411h72j/"
+    },
+    {
+      "index": 3,
+      "bvid": "BV1mi4y137g8",
+      "cid": 293748229,
+      "title": "1-3.计算机系统漫游",
+      "duration": 328,
+      "chapter": 1,
+      "note": "notes/ch01/03_1-3_计算机系统漫游.md",
+      "transcript": "transcripts/03_1-3_计算机系统漫游.md",
+      "url": "https://www.bilibili.com/video/BV1mi4y137g8/"
+    },
+    {
+      "index": 4,
+      "bvid": "BV1MC4y1t77F",
+      "cid": 221689251,
+      "title": "1-4.计算机系统漫游",
+      "duration": 372,
+      "chapter": 1,
+      "note": "notes/ch01/04_1-4_计算机系统漫游.md",
+      "transcript": "transcripts/04_1-4_计算机系统漫游.md",
+      "url": "https://www.bilibili.com/video/BV1MC4y1t77F/"
+    },
+    {
+      "index": 5,
+      "bvid": "BV1tV411U7N3",
+      "cid": 225272582,
+      "title": "2-1.信息的存储(上)",
+      "duration": 665,
+      "chapter": 2,
+      "note": "notes/ch02/05_2-1_信息的存储(上).md",
+      "transcript": "transcripts/05_2-1_信息的存储(上).md",
+      "url": "https://www.bilibili.com/video/BV1tV411U7N3/"
+    },
+    {
+      "index": 6,
+      "bvid": "BV1DK4y1Y7Yi",
+      "cid": 227869726,
+      "title": "2-1.信息的存储(下)",
+      "duration": 350,
+      "chapter": 2,
+      "note": "notes/ch02/06_2-1_信息的存储(下).md",
+      "transcript": "transcripts/06_2-1_信息的存储(下).md",
+      "url": "https://www.bilibili.com/video/BV1DK4y1Y7Yi/"
+    },
+    {
+      "index": 7,
+      "bvid": "BV1ba4y1E7qy",
+      "cid": 230483529,
+      "title": "2-2.整数的表示(上)",
+      "duration": 432,
+      "chapter": 2,
+      "note": "notes/ch02/07_2-2_整数的表示(上).md",
+      "transcript": "transcripts/07_2-2_整数的表示(上).md",
+      "url": "https://www.bilibili.com/video/BV1ba4y1E7qy/"
+    },
+    {
+      "index": 8,
+      "bvid": "BV1HK411K7TX",
+      "cid": 235293729,
+      "title": "2-2.整数的表示(下)",
+      "duration": 503,
+      "chapter": 2,
+      "note": "notes/ch02/08_2-2_整数的表示(下).md",
+      "transcript": "transcripts/08_2-2_整数的表示(下).md",
+      "url": "https://www.bilibili.com/video/BV1HK411K7TX/"
+    },
+    {
+      "index": 9,
+      "bvid": "BV13Z4y1V734",
+      "cid": 249737665,
+      "title": "2-3.整数的运算(上)",
+      "duration": 450,
+      "chapter": 2,
+      "note": "notes/ch02/09_2-3_整数的运算(上).md",
+      "transcript": "transcripts/09_2-3_整数的运算(上).md",
+      "url": "https://www.bilibili.com/video/BV13Z4y1V734/"
+    },
+    {
+      "index": 10,
+      "bvid": "BV1Ff4y1q7Kf",
+      "cid": 253127057,
+      "title": "2-3.整数的运算(下)",
+      "duration": 462,
+      "chapter": 2,
+      "note": "notes/ch02/10_2-3_整数的运算(下).md",
+      "transcript": "transcripts/10_2-3_整数的运算(下).md",
+      "url": "https://www.bilibili.com/video/BV1Ff4y1q7Kf/"
+    },
+    {
+      "index": 11,
+      "bvid": "BV1VK4y1f7o6",
+      "cid": 256861919,
+      "title": "2-4.浮点数(上)",
+      "duration": 498,
+      "chapter": 2,
+      "note": "notes/ch02/11_2-4_浮点数(上).md",
+      "transcript": "transcripts/11_2-4_浮点数(上).md",
+      "url": "https://www.bilibili.com/video/BV1VK4y1f7o6/"
+    },
+    {
+      "index": 12,
+      "bvid": "BV1zK4y1j7Cn",
+      "cid": 259651902,
+      "title": "2-4.浮点数(下)",
+      "duration": 508,
+      "chapter": 2,
+      "note": "notes/ch02/12_2-4_浮点数(下).md",
+      "transcript": "transcripts/12_2-4_浮点数(下).md",
+      "url": "https://www.bilibili.com/video/BV1zK4y1j7Cn/"
+    },
+    {
+      "index": 13,
+      "bvid": "BV1Ci4y157P5",
+      "cid": 264235902,
+      "title": "3-1.程序的机器级表示",
+      "duration": 527,
+      "chapter": 3,
+      "note": "notes/ch03/13_3-1_程序的机器级表示.md",
+      "transcript": "transcripts/13_3-1_程序的机器级表示.md",
+      "url": "https://www.bilibili.com/video/BV1Ci4y157P5/"
+    },
+    {
+      "index": 14,
+      "bvid": "BV1Lp4y167im",
+      "cid": 267810691,
+      "title": "3-2.寄存器与数据传送指令",
+      "duration": 578,
+      "chapter": 3,
+      "note": "notes/ch03/14_3-2_寄存器与数据传送指令.md",
+      "transcript": "transcripts/14_3-2_寄存器与数据传送指令.md",
+      "url": "https://www.bilibili.com/video/BV1Lp4y167im/"
+    },
+    {
+      "index": 15,
+      "bvid": "BV1sV411b7c1",
+      "cid": 270511385,
+      "title": "3-3.栈与数据传送指令",
+      "duration": 462,
+      "chapter": 3,
+      "note": "notes/ch03/15_3-3_栈与数据传送指令.md",
+      "transcript": "transcripts/15_3-3_栈与数据传送指令.md",
+      "url": "https://www.bilibili.com/video/BV1sV411b7c1/"
+    },
+    {
+      "index": 16,
+      "bvid": "BV1n54y1x7L8",
+      "cid": 272831332,
+      "title": "3-4.算术和逻辑运算指令",
+      "duration": 483,
+      "chapter": 3,
+      "note": "notes/ch03/16_3-4_算术和逻辑运算指令.md",
+      "transcript": "transcripts/16_3-4_算术和逻辑运算指令.md",
+      "url": "https://www.bilibili.com/video/BV1n54y1x7L8/"
+    },
+    {
+      "index": 17,
+      "bvid": "BV1Jf4y1y7Nd",
+      "cid": 279479328,
+      "title": "3-5.指令与条件码",
+      "duration": 484,
+      "chapter": 3,
+      "note": "notes/ch03/17_3-5_指令与条件码.md",
+      "transcript": "transcripts/17_3-5_指令与条件码.md",
+      "url": "https://www.bilibili.com/video/BV1Jf4y1y7Nd/"
+    },
+    {
+      "index": 18,
+      "bvid": "BV1Xr4y1T7T1",
+      "cid": 283629550,
+      "title": "3-6.跳转指令与循环",
+      "duration": 414,
+      "chapter": 3,
+      "note": "notes/ch03/18_3-6_跳转指令与循环.md",
+      "transcript": "transcripts/18_3-6_跳转指令与循环.md",
+      "url": "https://www.bilibili.com/video/BV1Xr4y1T7T1/"
+    },
+    {
+      "index": 19,
+      "bvid": "BV19X4y1P7Pn",
+      "cid": 288476962,
+      "title": "3-7. 过程（函数调用）",
+      "duration": 542,
+      "chapter": 3,
+      "note": "notes/ch03/19_3-7__过程（函数调用）.md",
+      "transcript": "transcripts/19_3-7__过程（函数调用）.md",
+      "url": "https://www.bilibili.com/video/BV19X4y1P7Pn/"
+    },
+    {
+      "index": 20,
+      "bvid": "BV1ho4y1d7J6",
+      "cid": 292663088,
+      "title": "3-8.数组的分配和访问",
+      "duration": 551,
+      "chapter": 3,
+      "note": "notes/ch03/20_3-8_数组的分配和访问.md",
+      "transcript": "transcripts/20_3-8_数组的分配和访问.md",
+      "url": "https://www.bilibili.com/video/BV1ho4y1d7J6/"
+    },
+    {
+      "index": 21,
+      "bvid": "BV1754y1Y7Ut",
+      "cid": 299338885,
+      "title": "3-9.结构体与联合体",
+      "duration": 493,
+      "chapter": 3,
+      "note": "notes/ch03/21_3-9_结构体与联合体.md",
+      "transcript": "transcripts/21_3-9_结构体与联合体.md",
+      "url": "https://www.bilibili.com/video/BV1754y1Y7Ut/"
+    },
+    {
+      "index": 22,
+      "bvid": "BV1Ry4y1h7bm",
+      "cid": 302105402,
+      "title": "3-10.缓冲区溢出",
+      "duration": 408,
+      "chapter": 3,
+      "note": "notes/ch03/22_3-10_缓冲区溢出.md",
+      "transcript": "transcripts/22_3-10_缓冲区溢出.md",
+      "url": "https://www.bilibili.com/video/BV1Ry4y1h7bm/"
+    }
+  ]
+}
