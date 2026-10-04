@@ -2,13 +2,7 @@
 
 > 本讲主线：长上下文让全注意力越来越贵；线性、混合与稀疏注意力试图降低这笔开销。模型的另一半——前馈网络——则可以用混合专家（MoE）增加参数容量，同时只计算少数专家。
 
-## 阅读口径与来源
-
-本文对照 [Lecture 4 原 blog 图文（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog/Lecture%204%20Attention%20Alternatives.md)、[图文转录稿（固定提交）](https://github.com/tsingyuec/cs336-blog/blob/e966bb4c04d05b76d08db954da55cf4a51bd7a63/transcripts/Lecture%204%20Attention%20Alternatives.md)及对应的课程画面整理。转录稿是经过整理的字幕，并非逐字可靠的官方讲义；含糊的人名、型号和数字不作为确定事实。文中的公式推导、shape 示例与比较表是为理解而补充的解释。图片保存在本仓库的 `assets/p04/`，各图旁的时间戳可跳回[原视频](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4)。
-
-本讲说的“更快”要分清三件事：**渐近复杂度**随序列长度如何增长、**实际运行时间**受硬件与内存访问影响有多大，以及**模型能力**是否因此下降。课堂展示的是具体模型和实验结果，不能把某个实验中的领先直接当成所有任务上的定理。
-
-## 1. 为什么本讲同时改造 Attention 和 FFN
+## 1. 解决核心问题：为什么本讲同时改造 Attention 和 FFN
 
 **背景**：Transformer 块主要有两类计算。Attention 让不同位置交换信息；FFN（前馈网络，也叫 MLP）分别处理每个 token。上下文窗口变长后，模型能读更多资料、处理更长的任务历史。横轴是不同模型、纵轴是上下文窗口大小（对数尺度），顶级模型厂商在竞相提供越来越大的上下文。可是成本怎么办？答案很残酷：注意力是二次方的。在序列较短时，网络的 feedforward（前馈）部分开销更大、且随长度线性增长；但注意力是所有位置之间的 all-to-all 连接，复杂度是 O(N²)。随着序列变长，注意力会迅速超过 feedforward 成为主要开销。[【跳转到 00:35】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=35)
 
