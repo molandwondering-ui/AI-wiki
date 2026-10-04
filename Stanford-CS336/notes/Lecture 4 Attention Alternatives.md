@@ -8,13 +8,13 @@
 
 可是如何衡量成本？答案很残酷：注意力是二次方的。
 
-在序列较短时，网络的 feedforward（前馈）部分开销更大、且随长度线性增长，因此对于小模型而言FFN是主要开销；但Attention是所有位置之间的 all-to-all 连接，复杂度是 O(N²)。随着序列变长（即上下文变长），Attention会迅速超过 feedforward 成为主要开销。[【跳转到 00:35】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=35)
-
-**冲突**：长度为 `n` 的序列中，全注意力要考虑约 `n²` 个位置对；FFN的成本随长度约线性增长。序列足够长时，Attention 的成本会越来越显眼。与此同时，扩大 FFN 参数通常有益，但把所有参数都用于每个 token 又很贵。[【跳转到 01:23】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=83)
+**冲突**：在序列较短时，网络的 feedforward（前馈）部分开销更大、且随长度线性增长，因此对于小模型而言FFN是主要开销；但Attention是所有位置之间的 all-to-all 连接，复杂度是 O(N²)。随着序列变长（即上下文变长），Attention会迅速超过 feedforward 成为主要开销。[【跳转到 00:35】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=35)
 
 ![上下文窗口增长，右侧图显示长序列下 Attention 的计算增长快于 FFN](assets/p04/00083.jpg)
 
-**核心回答**：一条路线减少 Attention 必须读取或比较的信息，另一条路线让 FFN 拥有更多参数、每次却只激活一部分。本讲把它们分别展开：
+**疑问**：如果我们想处理十万、甚至上百万 token 的上下文，有没有办法让计算量随序列长度变成线性依赖？即便做不到完全线性，是否存在办法在不牺牲太多性能的前提下大幅降低成本？另外，Transformer 的另一半——MLP 层——有没有更高效的实现方式？
+
+**核心回答**：在本篇课程中，我们会学习两种处理方式：一种方式减少 Attention 必须读取或比较的信息，即利用矩阵乘法的结合律，去掉 softmax 后把 QKᵀV 重新结合成 Q(KᵀV)，从而将对序列长度的依赖从二次降为线性（这就是线性注意力，它同时具备"密集并行"与"RNN 循环"两种形式）；在此基础上加门控得到 Mamba-2、再加投影擦除得到 Gated DeltaNet，最终以"线性层 + 少量全注意力层"的混合架构落地。另一种方式是让 FFN 拥有更多参数、每次却只激活一部分（即MoE）。用混合专家（MoE）的稀疏路由，在 FLOPs 不变的前提下把参数量放大数倍。目前，这两种方式在生产环境中均得到验证。本讲把它们分别展开：
 
 ```text
 长上下文成本
@@ -22,7 +22,11 @@
 └─ FFN：每次使用全部参数 → MoE 路由到少数专家
 ```
 
-这两条路线可以同时出现在一个模型中；它们解决的是不同的成本。先看 Attention。
+一个反计算机科班的直觉是：常数因子其实非常重要（相较于O notation，线形or二次方）。在本讲课程中，对context成本影响最大的进展是Flash Attention，在后续的课程中会系统介绍这一点。Flash Attention会将Attention的计算方式优化成对系统更加友好的方式，这样能为Attention的性能带来“惊人”的提升。
+<img width="1634" height="840" alt="image" src="https://github.com/user-attachments/assets/e677fcf5-bc69-4653-8681-7db8834ee9ab" />
+
+
+这两条路线可以同时出现在一个模型中；它们解决的是不同的成本。我们可以先看 Attention的处理方式。
 
 ## 2. FlashAttention 降低实际成本，但全注意力仍随长度平方增长
 
