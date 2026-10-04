@@ -208,8 +208,8 @@ DeepSeek-MoE 相关设计把部分专家拆得更小、更细粒度，同时安�
 
 最后两项是**整模型中相邻但不同的机制**，并非 MoE 路由本身：
 
-- **MLA（多头潜在注意力）**把需要缓存的 K/V 内容压缩为较低维的潜在表示，在解码时减少缓存；位置编码与压缩内容的配合还需单独处理。这属于 Attention 侧。[【跳转到 70:09】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4209)
-- **MTP（多 token 预测）**让训练目标涉及不止一个未来 token，并可为某些解码加速方法提供候选。它属于预测与推理侧，不能直接归入 MoE 专家设计。[【跳转到 70:34】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4234)
+- **MLA（多头潜在注意力）** 把需要缓存的 K/V 内容压缩为较低维的潜在表示，在解码时减少缓存；位置编码与压缩内容的配合还需单独处理。这属于 Attention 侧。[【跳转到 70:09】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4209)
+- **MTP（多 token 预测）** 让训练目标涉及不止一个未来 token，并可为某些解码加速方法提供候选。它属于预测与推理侧，不能直接归入 MoE 专家设计。[【跳转到 70:34】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=4234)
 
 ![MLA 幻灯片展示把 KV 内容表示为低维潜在状态，以减少解码时保存的缓存](assets/p04/04184.jpg)
 
