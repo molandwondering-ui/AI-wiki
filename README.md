@@ -15,6 +15,7 @@ AI-wiki/
 ├── Stanford-CS336/
 │   ├── notes/                                      # Lecture 1–18 逐讲图文笔记与配图
 │   ├── textbooks/                                  # 按模块编排的长篇材料
+│   ├── 参考/                                       # 官方讲义、教材入口与核心实现范例
 │   ├── subtitles/                                  # 课程字幕
 │   └── transcripts/                                # 带画面的图文转录
 ├── cs50x-2026/

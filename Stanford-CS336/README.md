@@ -16,6 +16,7 @@
 - **按讲次打基础** → 阅读 `notes/` 下的逐讲图文笔记。Lecture 2–4 经过补充整理，会区分课程材料、转录与教学补充
 - **核对讲师原话与细节推演** → `subtitles/` 提供全部 35 讲的清洗后逐字稿，适合快速全文检索代码参数、论文出处或具体技术选型背景
 - **按画面回看讲解** → `transcripts/` 收录 19 份图文转录，字幕按时间顺序与视频画面并排呈现；图片在线加载
+- **对照官方教材动手** → [参考/](参考/README.md) 收录 Lecture 1、2 的官方 Python 讲义，提供 Lecture 3、4 的课件入口；Lecture 2 配有 5 个小范例及笔记末尾的源码引用表
 
 ## 逐讲图文笔记
 
@@ -24,7 +25,7 @@
 | 讲次 | 笔记 | 版本 |
 |---|---|---|
 | Lecture 1 | [课程概览与分词](notes/Lecture%201%20课程概览与分词.md) | 原 blog 图文副本 |
-| Lecture 2 | [PyTorch、einops 与训练资源估算](notes/Lecture%202%20PyTorch%28einops%29.md) | 重写版：小例子讲解 + 公式推导 + 课堂配图 |
+| Lecture 2 | [PyTorch、einops 与训练资源估算](notes/Lecture%202%20PyTorch%28einops%29.md) | 重写版：讲解、配图、官方代码引用与独立范例 |
 | Lecture 3 | [现代 Transformer 架构与超参数](notes/Lecture%203%20Architectures.md) | 补充版：原有基础知识框架 + blog 配图 |
 | Lecture 4 | [注意力替代方案与混合专家](notes/Lecture%204%20Attention%20Alternatives.md) | 补充版：原有基础知识框架 + blog 配图 |
 | Lecture 5 | [GPUs, TPUs](notes/Lecture%205%20GPUs,%20TPUs.md) | 原 blog 图文副本 |
@@ -60,6 +61,7 @@
 
 ## 其他入口
 
+- [参考教材与官方源码](参考/README.md) — Lecture 1–4 的教材入口，以及 Lecture 2 的核心实现范例
 - [逐字稿（35 份）](subtitles/) — 核对讲师原话，以及开发适合自己习惯的课程
 - [图文转录（19 份）](transcripts/README.md) — 按时间顺序对照字幕与画面；来源为 [tsingyuec/cs336-blog 的 transcripts](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/transcripts)
 

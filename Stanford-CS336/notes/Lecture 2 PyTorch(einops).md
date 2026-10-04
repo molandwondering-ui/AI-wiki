@@ -648,3 +648,88 @@ if torch.cuda.is_available():
 - [NVIDIA H100 数据表](https://resources.nvidia.com/en-us-gpu-resources/h100-datasheet-24306)、[JAX Scaling Book 的 Roofline 章节](https://jax-ml.github.io/scaling-book/roofline/)：进一步了解硬件数字和性能估算。
 
 课堂页面里的 `@inspect`、`@stepover` 等注释供演示工具使用，`edtrace`、`gpu_util` 等也是课程辅助工具；本文示例不依赖它们。除单独标出的 CUDA 计时代码外，小例子都可用安装了 PyTorch 和 einops 的 CPU 环境运行，按正文出现的顺序执行即可。
+
+
+## 附录：核心知识点、官方实现与范例
+
+官方 [`lecture_02.py`](../参考/官方讲义/lecture_02.py) 已放进仓库的[“参考”目录](../参考/README.md)。下面的链接固定到同一个官方版本，点开就能看到对应函数；右侧的范例提取了关键步骤，用小数据展示结果。
+
+### 知识点、源码与范例的对应关系
+
+| 核心知识点 | 官方实现，点击查看对应行 | 本仓库范例 |
+|---|---|---|
+| 元素数和精度决定张量内存 | [`get_memory_usage()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L791-L792) | [张量与 einops](../参考/示例/lecture02_tensors.py) |
+| 用维度名字表达乘法、求和与重排 | [`einops_einsum()`、`einops_reduce()`、`einops_rearrange()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L222-L276) | [张量与 einops](../参考/示例/lecture02_tensors.py) |
+| 反向传播分别计算输入梯度和权重梯度 | [`gradients_basics()`、`gradients_flops()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L484-L556) | [手算与自动微分对照](../参考/示例/lecture02_gradients.py) |
+| 把可学习的权重登记到模型中 | [`Block`、`DeepNetwork`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L577-L599) | [模型与训练步骤](../参考/示例/lecture02_training.py) |
+| 优化器如何使用梯度和历史状态更新参数 | [`AdaGrad`、`train_loop()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L660-L715) | [模型与训练步骤](../参考/示例/lecture02_training.py) |
+| 减少同时保留的激活，保持计算结果正确 | [`gradient_accumulation()`、`activation_checkpointing()` 与检查点模型](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L718-L787) | [显存优化的结果对照](../参考/示例/lecture02_memory_saving.py) |
+| 用参数量、token 数、硬件速度估算资源 | [`motivating_questions()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L71-L86)；[`get_promised_flop_per_sec()`、`benchmark()`](https://github.com/stanford-cs336/lectures/blob/de53a9f979a6ee35f7d13a5e1aadee5ea1afc58e/lecture_02.py#L795-L848) | [训练时间和显存预算](../参考/示例/lecture02_budget.py)；GPU 计时见第 10 节 |
+
+### 范例：把反向传播写成两个矩阵乘法
+
+前面讲过 `6PT` 的来历。这里沿用官方 `gradients_flops()` 的办法，把其中一层的两项梯度亲手算出来，再与 PyTorch 的结果比较：
+
+```python
+import torch
+from einops import einsum
+
+x = torch.tensor([[1., 2., 3.]], requires_grad=True)
+w = torch.tensor([[1., 0.], [0., 1.], [1., 1.]], requires_grad=True)
+y = x @ w
+y.retain_grad()                  # 保留中间结果的梯度，方便对照
+y.square().mean().backward()
+
+with torch.no_grad():
+    x_grad = einsum(y.grad, w, "batch out, feature out -> batch feature")
+    w_grad = einsum(y.grad, x, "batch out, batch feature -> feature out")
+
+print(torch.allclose(x.grad, x_grad))   # True
+print(torch.allclose(w.grad, w_grad))   # True
+```
+
+第一行 `einsum` 保留 `batch, feature`，得到输入的梯度；第二行保留 `feature, out`，得到权重的梯度。前向做一次矩阵乘法，反向为了这两项各做一次，这就是反向计算量通常约为前向两倍的来源。
+
+完整的[梯度范例](../参考/示例/lecture02_gradients.py)还保留了官方 `[1, 2, 3]` 的标量求导例子，可以先从它开始读。
+
+### 范例：AdaGrad 额外保存了什么
+
+官方 `AdaGrad.step()` 的关键是 `g2`：它保存这个参数历次梯度的平方和。下面只用一个参数，把“算梯度”和“更新参数”分开观察：
+
+```python
+import torch
+
+weight = torch.tensor([1.0], requires_grad=True)
+g2 = torch.zeros_like(weight)
+loss = weight.square().sum()
+loss.backward()                 # 梯度为 2，weight 此时仍为 1
+
+with torch.no_grad():
+    g2 += weight.grad.square()   # 历史平方和变成 4
+    weight -= 0.1 * weight.grad / (g2 + 1e-5).sqrt()
+
+print(g2.item())                 # 4.0
+print(round(weight.item(), 3))   # 0.9
+```
+
+下一次更新要继续保留 `g2`，因为它记录了历史。把这个例子扩展到一百万个参数，就要额外保存一百万个对应的历史值。优化器状态为什么占显存，可以直接从这段代码看出来。
+
+完整的[训练范例](../参考/示例/lecture02_training.py)把官方的 `Block`、`ModuleList`、AdaGrad 和训练循环接在一起。它用 `torch.no_grad()` 更新参数，并让每个样本的预测和目标一一对应，适合跟着改。
+
+### 范例：省显存以后，结果还一样吗
+
+[显存优化范例](../参考/示例/lecture02_memory_saving.py)创建三份参数完全相同的小模型：第一份一次处理 64 个样本，第二份分 8 次累积梯度，第三份使用激活检查点。
+
+运行后会核对：
+
+```text
+整批与梯度累积：各参数的梯度一致
+普通前向与检查点：输出、各参数的梯度一致
+```
+
+这里用 `torch.testing.assert_close()` 逐个比较参数梯度。如果分批时忘记平均损失，或者中途清空梯度，比较就不能通过。这个例子验证了这些方法怎样保留计算结果；实际 GPU 显存收益需要在相应硬件上测量。
+
+5 个范例的运行命令和依赖见[参考目录说明](../参考/README.md)。其中预算范例只需要 Python，其余范例需要 PyTorch 和 einops。
+
+
+**源码版本补充：**本次收录的官方版本在 `gradient_accumulation()` 中使用 `micro_batch_size = B / 4`，即把 64 个样本分成每份 16 个。正文用每份 8 个的例子，讲的是同一机制；阅读时以这里链接的固定版本为准。
