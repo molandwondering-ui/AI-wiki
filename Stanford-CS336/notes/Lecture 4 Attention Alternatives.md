@@ -10,7 +10,7 @@
 
 ## 1. 为什么本讲同时改造 Attention 和 FFN
 
-**背景**：Transformer 块主要有两类计算。Attention 让不同位置交换信息；FFN（前馈网络，也叫 MLP）分别处理每个 token。上下文窗口变长后，模型能读更多资料、处理更长的任务历史。[【跳转到 00:35】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=35)
+**背景**：Transformer 块主要有两类计算。Attention 让不同位置交换信息；FFN（前馈网络，也叫 MLP）分别处理每个 token。上下文窗口变长后，模型能读更多资料、处理更长的任务历史。横轴是不同模型、纵轴是上下文窗口大小（对数尺度），顶级模型厂商在竞相提供越来越大的上下文。可是成本怎么办？答案很残酷：注意力是二次方的。在序列较短时，网络的 feedforward（前馈）部分开销更大、且随长度线性增长；但注意力是所有位置之间的 all-to-all 连接，复杂度是 O(N²)。随着序列变长，注意力会迅速超过 feedforward 成为主要开销。[【跳转到 00:35】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=35)
 
 **冲突**：长度为 `n` 的序列中，全注意力要考虑约 `n²` 个位置对；FFN 对每个 token 单独执行，随长度约线性增长。序列足够长时，Attention 的成本会越来越显眼。与此同时，扩大 FFN 参数通常有益，但把所有参数都用于每个 token 又很贵。[【跳转到 01:23】](https://www.bilibili.com/video/BV11LEA6eEuj/?p=4&t=83)
 
