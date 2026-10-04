@@ -19,12 +19,12 @@
 
 ## 逐讲图文笔记
 
-18 篇笔记与配图统一保存在 `notes/`。Lecture 1、5–18 是 [tsingyuec/cs336-blog](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog) 的图文副本；Lecture 2–4 在本仓库原有的基础知识文档上，对照原 blog 补入配图和图注。另有 [基础知识总览](基础知识.md)。
+18 篇笔记与配图统一保存在 `notes/`。Lecture 1、5–18 是 [tsingyuec/cs336-blog](https://github.com/tsingyuec/cs336-blog/tree/e966bb4c04d05b76d08db954da55cf4a51bd7a63/blog) 的图文副本；Lecture 2 结合原 blog 与官方源码，以小例子重写张量、计算量和训练资源估算；Lecture 3–4 在本仓库原有的基础知识文档上，对照原 blog 补入配图和图注。另有 [基础知识总览](基础知识.md)。
 
 | 讲次 | 笔记 | 版本 |
 |---|---|---|
 | Lecture 1 | [课程概览与分词](notes/Lecture%201%20课程概览与分词.md) | 原 blog 图文副本 |
-| Lecture 2 | [PyTorch、einops 与资源核算](notes/Lecture%202%20PyTorch%28einops%29.md) | 补充版：原有基础知识框架 + blog 配图 |
+| Lecture 2 | [PyTorch、einops 与训练资源估算](notes/Lecture%202%20PyTorch%28einops%29.md) | 重写版：小例子讲解 + 公式推导 + 课堂配图 |
 | Lecture 3 | [现代 Transformer 架构与超参数](notes/Lecture%203%20Architectures.md) | 补充版：原有基础知识框架 + blog 配图 |
 | Lecture 4 | [注意力替代方案与混合专家](notes/Lecture%204%20Attention%20Alternatives.md) | 补充版：原有基础知识框架 + blog 配图 |
 | Lecture 5 | [GPUs, TPUs](notes/Lecture%205%20GPUs,%20TPUs.md) | 原 blog 图文副本 |
