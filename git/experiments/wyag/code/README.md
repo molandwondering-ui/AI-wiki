@@ -1,5 +1,7 @@
 # WYAG 当前代码：init 与 blob
 
+原教程入口：[Write Yourself a Git — Introduction](https://wyag.thb.lt/#intro)。本目录的代码与实验记录是基于教程思路的简化学习实现。
+
 2026-10-11 的学习版本，来源：[Write Yourself a Git](https://wyag.thb.lt/)。这是根据教程思路编写的简化实现，不是完整 Git。
 
 ## 文件
