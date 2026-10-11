@@ -4,5 +4,6 @@
 
 - [实验 01：从初始化到第一次提交](wyag/01-从初始化到第一次提交.md)
 - [实验 02：提交历史、分支与恢复](wyag/02-提交历史分支与恢复.md)
+- [当前 WYAG 源码与运行说明](wyag/code/README.md)：初始化与 blob 读写的 Python 实现。
 
 [返回 Git 笔记](../README.md)
