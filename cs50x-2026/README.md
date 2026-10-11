@@ -43,6 +43,9 @@ cs50x-2026/
 
 ## 阅读资料 Readings
 
+- [Lecture 1 C 视频图文笔记](notes/Lecture01_C_视频图文笔记.md)：对应B站第3集，含代码解释、16张截图与学习实验路线。
+- [Lecture 1 画面与官方英文字幕对照](transcripts/Lecture01_C_画面与官方字幕对照.md)：备用字幕来源与处理说明见文档顶部。
+
 - **逐讲笔记**：[Lecture 4 内存与指针视频图文笔记](notes/Lecture04_内存与指针_视频图文笔记.md)、[Lecture 8 基础知识框架](notes/Lecture08_互联网与Web开发_基础知识.md)和[Lecture 8 视频图文笔记](notes/Lecture08_HTML_CSS_JavaScript_视频图文笔记.md)。笔记中的代码引用分别对应 `source/src4/` 和 `source/src8/`。
 - **讲稿 Transcripts**（`transcripts/lecture0–10.txt`）：每讲全文，可当逐字讲义阅读。
 - **[课堂示例源码 Source](source/README.md)**（`source/src0–9/`）：按讲次存放演示程序（Scratch .sb3、C、Python 等）。
