@@ -1,5 +1,7 @@
 # Git 学习笔记
 
+[Git 实验记录](experiments/README.md)：按操作顺序学习 WYAG、对象库、暂存区和提交。
+
 | 笔记 | 来源 |
 |---|---|
 | [Pro Git 前五章核心笔记](ProGit-前五章核心笔记.md) | [《Pro Git》第二版中文版，第 1–5 章](https://git-scm.com/book/zh/v2) |
