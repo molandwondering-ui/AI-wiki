@@ -1,0 +1,135 @@
+{
+  "observed_date": "2026-10-25",
+  "scope": "Fresh isolated browser, before sign-in and Google redirect only. No Google credentials entered; no completed login.",
+  "requests": [
+    {
+      "method": "POST",
+      "host": "dash.better-auth.com",
+      "path": "/api/auth/sign-in/social",
+      "status": 200,
+      "query": {},
+      "request_body": {
+        "provider": "google",
+        "callbackURL": "/"
+      },
+      "response_content_keys": [
+        "mimeType",
+        "size"
+      ],
+      "set_cookie_names": []
+    },
+    {
+      "method": "GET",
+      "host": "accounts.google.com",
+      "path": "/o/oauth2/v2/auth",
+      "status": 0,
+      "query": {
+        "response_type": [
+          "code"
+        ],
+        "client_id": [
+          "[redacted]"
+        ],
+        "state": [
+          "[redacted]"
+        ],
+        "scope": [
+          "email profile openid"
+        ],
+        "redirect_uri": [
+          "https://dash.better-auth.com/api/auth/callback/google"
+        ],
+        "code_challenge_method": [
+          "S256"
+        ],
+        "code_challenge": [
+          "[redacted]"
+        ],
+        "include_granted_scopes": [
+          "[redacted]"
+        ]
+      },
+      "response_content_keys": [
+        "mimeType",
+        "size"
+      ],
+      "set_cookie_names": []
+    },
+    {
+      "method": "GET",
+      "host": "accounts.google.com",
+      "path": "/v3/signin/identifier",
+      "status": 200,
+      "query": {
+        "opparams": [
+          "[redacted]"
+        ],
+        "dsh": [
+          "[redacted]"
+        ],
+        "client_id": [
+          "[redacted]"
+        ],
+        "code_challenge": [
+          "[redacted]"
+        ],
+        "code_challenge_method": [
+          "S256"
+        ],
+        "include_granted_scopes": [
+          "[redacted]"
+        ],
+        "o2v": [
+          "[redacted]"
+        ],
+        "redirect_uri": [
+          "https://dash.better-auth.com/api/auth/callback/google"
+        ],
+        "response_type": [
+          "code"
+        ],
+        "scope": [
+          "email profile openid"
+        ],
+        "service": [
+          "[redacted]"
+        ],
+        "state": [
+          "[redacted]"
+        ],
+        "flowName": [
+          "[redacted]"
+        ],
+        "continue": [
+          "[redacted]"
+        ],
+        "app_domain": [
+          "[redacted]"
+        ],
+        "rart": [
+          "[redacted]"
+        ]
+      },
+      "response_content_keys": [
+        "mimeType",
+        "size"
+      ],
+      "set_cookie_names": []
+    }
+  ],
+  "page_observations": {
+    "sign_in_url": "https://dash.better-auth.com/sign-in",
+    "sign_up_toggle": {
+      "url_after": "https://dash.better-auth.com/sign-in",
+      "same_document": true
+    },
+    "google_destination": "https://accounts.google.com/v3/signin/identifier",
+    "credential_entry": false,
+    "login_completed": false
+  },
+  "limitations": [
+    "HAR recorder did not include response bodies or reliable complete response headers. Empty cookie lists are not proof that no cookie was set.",
+    "The Google authorization request has recorder status 0; this is not a real HTTP status or proof of failure. The subsequent Google sign-in page was observed with HTTP 200.",
+    "Physical deployment, database, runtime version and post-login token/session behavior were not inspected."
+  ]
+}
