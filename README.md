@@ -4,7 +4,7 @@
 
 | 专题 | 从哪里开始 | 内容 |
 |---|---|---|
-| [登录与注册](login-registration/README.md) | [基础概念](login-registration/basics.md) · [Google 登录图文教程](login-registration/google-login.md) | 客户端与服务端、Cookie 与 session、Google OAuth、离线交互教程及可运行 Demo |
+| [登录与注册](login-registration/README.md) | [基础概念](login-registration/basics.md) · [Google 登录图文教程](login-registration/google-login.md) · [SSO](login-registration/sso.md) | 客户端与服务端、Cookie 与 session、Google OAuth、SSO 视频图文笔记、离线交互教程及可运行 Demo |
 | [Stanford CS336](Stanford-CS336/README.md) | [Lecture 2：PyTorch 与资源核算](Stanford-CS336/notes/Lecture%202%20PyTorch%28einops%29.md) | 大语言模型架构、训练系统、推理、数据与后训练；另有逐讲图文笔记、模块全书、字幕和图文转录 |
 | [Harvard CS50x 2026](cs50x-2026/README.md) | [Lecture 4：内存与指针](cs50x-2026/notes/Lecture04_内存与指针_视频图文笔记.md) | 课程幻灯片、英文讲稿、课堂源码和逐讲笔记 |
 | [CSAPP](CSAPP/README.md) | [从 hello.c 到程序运行](CSAPP/notes/ch01/01_1-1_计算机系统漫游.md) | 九曲阑干 1-1 至 3-10：22 篇笔记及配套图文文稿，覆盖系统漫游、信息表示和机器级程序 |

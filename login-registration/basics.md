@@ -28,6 +28,8 @@ Google 已经有你的账号，不代表本站也有。很多产品把“Google 
 
 SSO 描述的是“一次认证，在多个应用间复用身份”的体验与机制，不是一个独立协议。OAuth 2.0 主要解决授权访问；OpenID Connect（OIDC）在其上增加标准化的身份认证。本专题的 Google 登录使用 `openid` scope 来获取身份信息。
 
+延伸阅读：[SSO 视频图文教程](sso.md)，进一步区分身份平台、业务应用、各自的会话，以及 OIDC、SAML 和 JWT 的关系。
+
 ## 3. 客户端、服务端与数据库
 
 ```mermaid

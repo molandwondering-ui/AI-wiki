@@ -1,0 +1,16 @@
+{
+  "title": "【IT老齐615】理解单点登录SSO",
+  "author": "IT老齐",
+  "url": "https://www.bilibili.com/video/BV11Kt5eVEBk/",
+  "bvid": "BV11Kt5eVEBk",
+  "duration_seconds_api": 582,
+  "media_duration_seconds": 581.4,
+  "notes_date": "2026-11-01",
+  "subtitle_source": "Local MLX Whisper small multilingual ASR; manually edited alongside video frames. Not official subtitles.",
+  "frame_source": "Video frames at indicated integer seconds; 852x480 publicly available stream.",
+  "limitations": [
+    "Kedou returned no subtitles; yt-dlp only listed danmaku.",
+    "Original video includes third-party diagrams; their visible credits are retained.",
+    "This tutorial is an explanation, not an audit of Trello or Google production deployments."
+  ]
+}
