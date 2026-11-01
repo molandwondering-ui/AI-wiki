@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>body{max-width:960px;margin:40px auto;padding:0 24px;font:17px/1.7 system-ui}pre{white-space:pre-wrap;background:#f4f4f4;padding:16px}img,video{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px}</style></head><body><p>Source: <a href="https://sp24.datastructur.es/labs/lab02/faq/">https://sp24.datastructur.es/labs/lab02/faq/</a> · snapshot 2026-11-01</p><div class="main-content" id="main-content" role="main">
+<nav class="content-nav nav-faq">
+<ul class="nav-list js-toc"><li class="nav-list-item">FAQ<ul><li class="nav-list-item"><a class="nav-list-link" href="https://sp24.datastructur.es/labs/lab02/faq/#im-getting-merge-conflicts-after-re-pulling-the-skeleton">I’m getting merge conflicts after re-pulling the skeleton</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://sp24.datastructur.es/labs/lab02/faq/#theres-a-lot-of-red-in-my-intellij">There’s a lot of red in my IntelliJ</a></li></ul></li></ul>
+</nav>
+<div class="content-container">
+<h1 class="title">
+        
+        
+          FAQ
+        
+        
+      </h1>
+<h2 id="im-getting-merge-conflicts-after-re-pulling-the-skeleton">
+<a aria-labelledby="im-getting-merge-conflicts-after-re-pulling-the-skeleton" class="anchor-heading" href="https://sp24.datastructur.es/labs/lab02/faq/#im-getting-merge-conflicts-after-re-pulling-the-skeleton"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> I’m getting merge conflicts after re-pulling the skeleton
+        
+        
+      </h2>
+<p>First, add and commit your local changes so that <code class="language-plaintext highlighter-rouge">git status</code> reads that your working
+tree is clean.</p>
+<p>Then, refer to the <a href="https://sp24.datastructur.es/resources/guides/git/wtfs/">Git WTFs</a> section on resolving merge
+conflicts. You’ll need to incorporate both your local changes (this likely
+includes your <code class="language-plaintext highlighter-rouge">BombMain</code> passwords) and the bug fixes
+from the skeleton.</p>
+<p>After you’ve resolved the merge conflicts in the files, you’ll need to re-add and commit them
+to complete the merge.</p>
+<p>Come into office hours or lab if you’re unsure on what to do!</p>
+<h2 id="theres-a-lot-of-red-in-my-intellij">
+<a aria-labelledby="theres-a-lot-of-red-in-my-intellij" class="anchor-heading" href="https://sp24.datastructur.es/labs/lab02/faq/#theres-a-lot-of-red-in-my-intellij"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> There’s a lot of red in my IntelliJ
+        
+        
+      </h2>
+<p>First, be sure you’ve imported the libraries correctly. Refer back to step 5 of the
+<a href="https://sp24.datastructur.es/resources/guides/assignment-workflow/#opening-in-intellij">Assignment Workflow</a>
+if you need a refresher on how to do this.</p>
+<p>If that doesn’t work, be sure that <code class="language-plaintext highlighter-rouge">src</code> is blue and <code class="language-plaintext highlighter-rouge">tests</code> is green. Refer to
+the <a href="https://sp24.datastructur.es/resources/guides/intellij/wtfs/">IntelliJ WTFS</a>
+to mark your <code class="language-plaintext highlighter-rouge">src</code> and <code class="language-plaintext highlighter-rouge">tests</code> folders appropriately.</p>
+</div>
+<hr/>
+<footer>
+<script>
+(function() {
+  var navList = document.querySelector('.aux-nav-list');
+  if (!navList || !navList.firstElementChild) return;
+  var darkToggle = navList.firstElementChild;
+  darkToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDark();
+  });
+})();
+</script>
+<script src="https://sp24.datastructur.es/assets/js/jquery.min.js"></script>
+<script src="https://sp24.datastructur.es/assets/js/clipboard.min.js"></script>
+<script>
+// adapted from https://stackoverflow.com/a/48078807/1217368
+// Waiting for https://github.com/just-the-docs/just-the-docs/pull/945
+$(document).ready(function () {
+  $('pre.highlight').each(function (i) {
+    // create an id for the current code section
+    var currentId = 'codeBlock' + i
+
+    // find the code section and add the id to it
+    var codeSection = $(this).find('code')
+    codeSection.attr('id', currentId)
+
+    // now create the button, setting the clipboard target to the id
+    var btn = document.createElement('a')
+    btn.setAttribute('type', 'btn')
+    btn.setAttribute('class', 'badge badge-light btn-copy-code')
+    btn.setAttribute('data-clipboard-target', '#' + currentId)
+    btn.innerHTML = '<i class="fal fa-copy"></i> Copy'
+    $(this).after(btn)
+  })
+
+  new ClipboardJS('.btn-copy-code')
+})
+</script>
+<script src="https://sp24.datastructur.es/assets/js/tocbot.min.js"></script>
+<script>
+// Tries to mirror the HTML TOC
+tocbot.init({
+  tocSelector: '.js-toc',
+  contentSelector: '.main-content',
+  headingSelector: 'h2, h3',
+  ignoreSelector: '.no_toc',
+  hasInnerContainers: true,
+  linkClass: 'nav-list-link',
+  activeLinkClass: 'active',
+  listClass: 'nav-list',
+  listItemClass: 'nav-list-item',
+  activeListItemClass: 'active',
+  collapseDepth: 3,
+  scrollSmooth: false,
+});
+</script>
+</footer>
+</div></body></html>

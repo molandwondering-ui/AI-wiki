@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-01",
+  "notes": 10,
+  "figures": 83,
+  "local_links_checked": 1580,
+  "lab_starter_files": 43,
+  "java_runtime": "unavailable; lab tests not run",
+  "starter_status": "original unsolved; Lab08 intentionally lacks required methods",
+  "issues": [],
+  "lab_images_cached": 40,
+  "lab_image_references_checked": 42,
+  "library_jars_verified": 19,
+  "browser_preview": {
+    "course_index": "rendered and visually inspected",
+    "hashing_note": "formula layout visually inspected; all 10 figures loaded; 3 math blocks rendered without errors",
+    "lab02_official_snapshot": "14 image elements loaded successfully"
+  }
+}

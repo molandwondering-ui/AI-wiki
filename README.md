@@ -8,6 +8,7 @@
 | [Stanford CS336](Stanford-CS336/README.md) | [Lecture 2：PyTorch 与资源核算](Stanford-CS336/notes/Lecture%202%20PyTorch%28einops%29.md) | 大语言模型架构、训练系统、推理、数据与后训练；另有逐讲图文笔记、模块全书、字幕和图文转录 |
 | [Harvard CS50x 2026](cs50x-2026/README.md) | [Lecture 4：内存与指针](cs50x-2026/notes/Lecture04_内存与指针_视频图文笔记.md) | 课程幻灯片、英文讲稿、课堂源码和逐讲笔记 |
 | [CSAPP](CSAPP/README.md) | [从 hello.c 到程序运行](CSAPP/notes/ch01/01_1-1_计算机系统漫游.md) | 九曲阑干 1-1 至 3-10：22 篇笔记及配套图文文稿，覆盖系统漫游、信息表示和机器级程序 |
+| [Berkeley CS61B Spring 2024](CS61B/README.md) | [Lecture 1：Java 入门与对象](CS61B/notes/Lecture01_Java入门与对象.md) | 正课 Lecture 1–9 与 Lecture 19；中文图文笔记、幻灯片、字幕及 Lab 01/02/03/08 |
 | [Pi-Agent](pi-agent-book/README.md) | [问答笔记](pi-agent-book/qa.md) | Agent 实现相关的问答与章节笔记 |
 | [Git](git/README.md) | [版本控制与 Git](git/Version-Control-Git.md) | Git 数据模型、暂存区、分支、远程同步与日常笔记发布流程 |
 
@@ -28,6 +29,7 @@ AI-wiki/
 │   ├── slides/                                     # 幻灯片
 │   ├── transcripts/                                # 英文讲稿
 │   └── source/                                     # CS50x 课堂示例源码（Week 0–9）
+├── CS61B/                                         # 正课笔记、图文字幕与配套实验
 ├── git/                                           # Git 版本控制学习笔记
 └── pi-agent-book/                                  # Pi-Agent 问答与章节笔记
 ```

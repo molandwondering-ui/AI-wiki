@@ -1,0 +1,217 @@
+[
+  {
+    "path": "labs/lab03/starter/src/adventure/AdventureGame.java",
+    "bytes": 3016,
+    "sha256": "7df4662bb2423e918c77c40b240c4a5cf251e2efb6e06027f736eb2e3ba4cdab"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/AdventureStage.java",
+    "bytes": 179,
+    "sha256": "188f25cbf12ce4d119aaf73f1ee7568015e132b225ee7bdc3a9c034b3e7541db"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/AdventureUtils.java",
+    "bytes": 309,
+    "sha256": "df8c03f5b5bd1c21a0742d24aed9f8a0f7790c0b89db3d9d359fa4bbd989a111"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/BeeCountingStage.java",
+    "bytes": 3010,
+    "sha256": "b5894d1011018c5a03232df6ca4ffde8412aa95c494443a4e707751a212fd93e"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/FillerStage.java",
+    "bytes": 1128,
+    "sha256": "3c1eb8eabe1c1b16842491bb0b7222f274c97abd7e3862e8c9d4b3989a6fbc08"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/MachineStage.java",
+    "bytes": 4829,
+    "sha256": "f5850c733d3a384c421ecf89f8965a21aed4bdc79f6623332740bec65a611a23"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/PalindromeStage.java",
+    "bytes": 2783,
+    "sha256": "3f18568816a6d9ca1089573ea467db2a1913276ba62ae6fb0bf20cf9ffec3c45"
+  },
+  {
+    "path": "labs/lab03/starter/src/adventure/SpeciesListStage.java",
+    "bytes": 3993,
+    "sha256": "fede54ebf835b9592d2c4f169664f1745fe083cb796254105cda05ca3b8f59cb"
+  },
+  {
+    "path": "labs/lab03/starter/src/common/IntList.java",
+    "bytes": 1789,
+    "sha256": "28a6128fce001dec00d22587b5d72df9d6619d5683f739775bcb8552a72ca622"
+  },
+  {
+    "path": "labs/lab03/starter/src/puzzle/Puzzle.java",
+    "bytes": 2838,
+    "sha256": "dbf6d7906b7b03f2db3ea89a9f9cfd9438e1a07e7d82baff0b579a51857513ab"
+  },
+  {
+    "path": "labs/lab03/starter/src/puzzle/answer.txt",
+    "bytes": 103,
+    "sha256": "566f6c4033c879e2d55dcf99d73aa95ee791513783766e2623f73b36cd55a702"
+  },
+  {
+    "path": "labs/lab03/starter/tests/adventure/AdventureGameTests.java",
+    "bytes": 2844,
+    "sha256": "d6cf59d90cf387852d0105ba679d17076ed4f3218a9aef21e11afe542aa39f2f"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/AdventureGame/answers.txt",
+    "bytes": 3683,
+    "sha256": "5db892978ca0781d19e005548f64d50b7ab6b650e1fd74831dc9ba37c7e05b49"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/AdventureGame/input.txt",
+    "bytes": 173,
+    "sha256": "be445a45c251af64dcf15d96671f1616a0ffcc69403f0e6ed72d7bf2478a345c"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/BeeCountingStage/answers.txt",
+    "bytes": 446,
+    "sha256": "924c5800282cab5557eaeb1a32a140397d18d586118dc0660a037c5eda85fe65"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/BeeCountingStage/input.txt",
+    "bytes": 8,
+    "sha256": "a9fb43376415378817ccb797ac3ea4a4de16b311740453725a70f8d1f2814fc2"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/MachineStage/answers.txt",
+    "bytes": 722,
+    "sha256": "8e4ce8953d1b594865a61c4cae846bc5d43cad987227247ae567683113d0c92a"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/MachineStage/input.txt",
+    "bytes": 33,
+    "sha256": "f60f2058f17e142818445ef79bd5dbdbb4b9496c65e1aeb7a663fa061a569a43"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/PalindromeStage/answers.txt",
+    "bytes": 366,
+    "sha256": "c52b92af13e4200701ab1ba4f3da96356aded4db23ecd864ad516e6a6ecf8357"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/PalindromeStage/input.txt",
+    "bytes": 15,
+    "sha256": "cb081faf1653b219f602ec53d67e0895fe12748d5023c4a842f4d55d3b31548c"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/SpeciesListStage/answers.txt",
+    "bytes": 915,
+    "sha256": "f33462d30bc22598a2f928a51f804cf29962b47818bc4e9f0b6f1953d04bcadd"
+  },
+  {
+    "path": "labs/lab03/starter/tests/data/SpeciesListStage/input.txt",
+    "bytes": 41,
+    "sha256": "eacdf07acc265f6e7a94913fb232164a88ee4e1576acb390bac52604a88d18bb"
+  },
+  {
+    "path": "labs/lab03/starter/tests/helpers/CaptureSystemOutput.java",
+    "bytes": 6672,
+    "sha256": "e942b36ae746239e1d620c1e6a5d98e3487a7947d5e2f27df8938b584612d567"
+  },
+  {
+    "path": "labs/lab03/starter/tests/puzzle/PuzzleReference.txt",
+    "bytes": 2838,
+    "sha256": "dbf6d7906b7b03f2db3ea89a9f9cfd9438e1a07e7d82baff0b579a51857513ab"
+  },
+  {
+    "path": "labs/lab03/starter/tests/puzzle/PuzzleTest.java",
+    "bytes": 1333,
+    "sha256": "49245184cbe6eb7448703cde9cdb5decf973651cc629e3a18ea6a29d8123da1e"
+  },
+  {
+    "path": "labs/lab02/starter/src/bomb/Bomb.java",
+    "bytes": 2253,
+    "sha256": "da638d78a0e51e96e958a69cab21b39765b6156e1ed5a922b9a7a90f115201c5"
+  },
+  {
+    "path": "labs/lab02/starter/src/bomb/BombMain.java",
+    "bytes": 678,
+    "sha256": "591f535aea8d92a39d255245a09f2f1d866d48190e0fa03778a11cce73f37720"
+  },
+  {
+    "path": "labs/lab02/starter/src/common/IntList.java",
+    "bytes": 1789,
+    "sha256": "28a6128fce001dec00d22587b5d72df9d6619d5683f739775bcb8552a72ca622"
+  },
+  {
+    "path": "labs/lab02/starter/tests/bomb/BombTest.java",
+    "bytes": 2522,
+    "sha256": "08a84468926f07e8769b7c16ebc3708e395edbee4f38d82f79bd74041064b3aa"
+  },
+  {
+    "path": "labs/lab08/starter/src/hashmap/Map61B.java",
+    "bytes": 1401,
+    "sha256": "ade1304c8cf59e0090e88612797c2ea9033a579f72b4579c86cb63f7430d375d"
+  },
+  {
+    "path": "labs/lab08/starter/src/hashmap/MyHashMap.java",
+    "bytes": 2161,
+    "sha256": "5e3c4b1e15db5f80066214f21014c936f8738aff27867035f62df2f8ff5e590f"
+  },
+  {
+    "path": "labs/lab08/starter/src/hashmap/ULLMap.java",
+    "bytes": 4004,
+    "sha256": "35a21b3eeeeeb192df35861ef885ea4995740e7b4e45e4fe75fc7b3ab548f376"
+  },
+  {
+    "path": "labs/lab08/starter/src/results.txt",
+    "bytes": 0,
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  {
+    "path": "labs/lab08/starter/tests/hashmap/MyHashMapFactory.java",
+    "bytes": 1154,
+    "sha256": "170cf21f91c5409904c33da54769afec3ca5cafdafb0a2c3211a1c2a41562e94"
+  },
+  {
+    "path": "labs/lab08/starter/tests/hashmap/TestMyHashMap.java",
+    "bytes": 11306,
+    "sha256": "8afb052517407f2fcdeead4d6de2898adc706d33d83d681826a729a1788ea9ba"
+  },
+  {
+    "path": "labs/lab08/starter/tests/hashmap/TestMyHashMapBuckets.java",
+    "bytes": 3656,
+    "sha256": "e0ae5215460427f74aedfdadcceabe6a7c2730d12749d87a7356a0d4f455a177"
+  },
+  {
+    "path": "labs/lab08/starter/tests/hashmap/TestMyHashMapExtra.java",
+    "bytes": 2499,
+    "sha256": "7b4029c1b7e52b7992e2052e81a257208bfe7e28d098bce941e5bb87d225bea3"
+  },
+  {
+    "path": "labs/lab08/starter/tests/speed/BucketsSpeedTest.java",
+    "bytes": 3792,
+    "sha256": "ef8db560d8ce335a49ce75a1413e411b00a36c793f0eacf3f54582ec7e13fc8d"
+  },
+  {
+    "path": "labs/lab08/starter/tests/speed/InsertInOrderSpeedTest.java",
+    "bytes": 4055,
+    "sha256": "4873b93c93302d26fc954eda9ae427f061ec265f1d844f2f8ef1fff8147679d5"
+  },
+  {
+    "path": "labs/lab08/starter/tests/speed/InsertRandomSpeedTest.java",
+    "bytes": 4793,
+    "sha256": "a3a5f4ee2beff24642a0b2a070c38086ee90b900ac0aec68425fc837bbf6b3da"
+  },
+  {
+    "path": "labs/lab08/starter/tests/speed/StringUtils.java",
+    "bytes": 2662,
+    "sha256": "a1170255db1de6cc098f488a6b3586ff8c4a6e9acba00c3fb099cdbee730e88d"
+  },
+  {
+    "path": "labs/lab01/starter/src/Arithmetic.java",
+    "bytes": 1002,
+    "sha256": "4d523752431bbba924913392480daa64893390ab3177c3e278926a788b1b9065"
+  },
+  {
+    "path": "labs/lab01/starter/tests/ArithmeticTest.java",
+    "bytes": 1285,
+    "sha256": "c67143a017c90218fd725d9585385f95c5e4da9901dde7a54a7b6dc5a698b2bd"
+  }
+]

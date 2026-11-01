@@ -1,0 +1,242 @@
+[
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/arithmetic_intellij.png",
+    "file": "assets/9b4334ca46c28714.png",
+    "bytes": 65233,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/arithmetic_prompt.png",
+    "file": "assets/dd094013bbe7e9e7.png",
+    "bytes": 58891,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/arithmetic_run_main.png",
+    "file": "assets/e7cc96941228a26d.png",
+    "bytes": 86027,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/arithmetic_test_failed.png",
+    "file": "assets/9037c19918342745.png",
+    "bytes": 121785,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/empty_terminal.png",
+    "file": "assets/76e8fa52bf4ceffc.png",
+    "bytes": 45213,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/import_algs4.png",
+    "file": "assets/ca80777ba19c7896.png",
+    "bytes": 344482,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/plugin_setup1.png",
+    "file": "assets/6dc44e438e606956.png",
+    "bytes": 288112,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/plugin_setup2.png",
+    "file": "assets/7bf8a3837a4085cf.png",
+    "bytes": 170254,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/plugin_setup3.png",
+    "file": "assets/bedbdfd0c4a20b09.png",
+    "bytes": 263691,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/run_main_intellij.png",
+    "file": "assets/58950f52642608f8.png",
+    "bytes": 417645,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/terminal_directory.png",
+    "file": "assets/5f6aaeec16ff01e4.png",
+    "bytes": 76336,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/testFailed.png",
+    "file": "assets/5c3126d06f010560.png",
+    "bytes": 773,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab01/img/testPassed.png",
+    "file": "assets/bd6b7a46bd7af8f8.png",
+    "bytes": 373,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/code_breakpoints.png",
+    "file": "assets/49870f7a9fd6e8ca.png",
+    "bytes": 41744,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/conditional_breakpoint.png",
+    "file": "assets/ef12a612de1898ee.png",
+    "bytes": 70381,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/debug.png",
+    "file": "assets/016d03dac66166c1.png",
+    "bytes": 4954,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/debugger_session.png",
+    "file": "assets/3c7ad0bdeaac277e.png",
+    "bytes": 180055,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/java_visualizer.png",
+    "file": "assets/90d089197e60b7d9.png",
+    "bytes": 69013,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/rerun.png",
+    "file": "assets/dc3518497269b88b.png",
+    "bytes": 5113,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/resume.png",
+    "file": "assets/56b08c6610bb1ec7.png",
+    "bytes": 4556,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/run_debugger.png",
+    "file": "assets/5170fbbf4317d88f.png",
+    "bytes": 31887,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/step-into.png",
+    "file": "assets/65435b144e5031c5.png",
+    "bytes": 4113,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/step-out.png",
+    "file": "assets/3bc532840e209324.png",
+    "bytes": 4099,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/step-over.png",
+    "file": "assets/0edc4ec01c4c75cd.png",
+    "bytes": 4315,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/stop.png",
+    "file": "assets/09c54577b10ce8ec.png",
+    "bytes": 4113,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab02/img/view-breakpoints.png",
+    "file": "assets/6b8c6de55fbc9005.png",
+    "bytes": 4798,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/add-exception-breakpoint-popup.png",
+    "file": "assets/39da6e9346522ed9.png",
+    "bytes": 8197,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/advanced-breakpoint-window.png",
+    "file": "assets/a0554c25f130daf4.png",
+    "bytes": 46023,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/adventure_stack_trace.png",
+    "file": "assets/777bc368a71bf79f.png",
+    "bytes": 58041,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/eval-expr-add-watches.png",
+    "file": "assets/61d6bacd541310e5.png",
+    "bytes": 7488,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/evaluate-expression-1717.png",
+    "file": "assets/b04547147b50175b.png",
+    "bytes": 36583,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/evaluate-expression-973.png",
+    "file": "assets/27afff1708aff8c2.png",
+    "bytes": 35187,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/line-53-exception-breakpoint.png",
+    "file": "assets/ed6f84a1a1c86311.png",
+    "bytes": 13136,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/more-breakpoint-popup.png",
+    "file": "assets/dc75852e3dce3417.png",
+    "bytes": 20399,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/puzzle-oob-exception.png",
+    "file": "assets/b0d0736e58469fcc.png",
+    "bytes": 41540,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/puzzle-runtime-exception.png",
+    "file": "assets/c925968654d5799f.png",
+    "bytes": 26283,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/runtime-exception-breakpoint.png",
+    "file": "assets/6d6b21903a439a11.png",
+    "bytes": 86942,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/step-out.png",
+    "file": "assets/dc2d97ac694601b5.png",
+    "bytes": 4099,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab03/img/step-over.png",
+    "file": "assets/fdd106ef0c62f554.png",
+    "bytes": 4315,
+    "status": "ok"
+  },
+  {
+    "url": "https://sp24.datastructur.es/labs/lab08/img/ht-buckets.png",
+    "file": "assets/de27ed4c17426ea1.png",
+    "bytes": 92535,
+    "status": "ok"
+  }
+]

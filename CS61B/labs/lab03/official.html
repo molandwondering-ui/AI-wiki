@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>body{max-width:960px;margin:40px auto;padding:0 24px;font:17px/1.7 system-ui}pre{white-space:pre-wrap;background:#f4f4f4;padding:16px}img,video{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px}</style></head><body><p>Source: <a href="https://sp24.datastructur.es/labs/lab03/">https://sp24.datastructur.es/labs/lab03/</a> · snapshot 2026-11-01</p><div class="main-content" id="main-content" role="main">
+<nav class="content-nav">
+<ul class="nav-list js-toc"><li class="nav-list-item">Lab 03: Debugging (Part 2)<ul><li class="nav-list-item"><a class="nav-list-link" href="#faq">FAQ</a></li><li class="nav-list-item"><a class="nav-list-link" href="#introduction">Introduction</a></li><li class="nav-list-item"><a class="nav-list-link" href="#adventure">Adventure</a><ul><li class="nav-list-item"><a class="nav-list-link" href="#running-the-game-and-tests">Running the Game and Tests</a></li><li class="nav-list-item"><a class="nav-list-link" href="#reading-stack-traces">Reading Stack Traces</a></li><li class="nav-list-item"><a class="nav-list-link" href="#debug-beecountingstage">Debug BeeCountingStage</a></li><li class="nav-list-item"><a class="nav-list-link" href="#debug-speciesliststage">Debug SpeciesListStage</a></li><li class="nav-list-item"><a class="nav-list-link" href="#debug-palindromestage">Debug PalindromeStage</a></li><li class="nav-list-item"><a class="nav-list-link" href="#debug-machinestage">Debug MachineStage</a></li></ul></li><li class="nav-list-item"><a class="nav-list-link" href="#another-debugging-puzzle-optional">Another Debugging Puzzle?! [OPTIONAL]</a><ul><li class="nav-list-item"><a class="nav-list-link" href="#exception-breakpoints">Exception Breakpoints</a></li><li class="nav-list-item"><a class="nav-list-link" href="#expressions-and-watches">Expressions and Watches</a></li></ul></li><li class="nav-list-item"><a class="nav-list-link" href="#deliverables-and-scoring">Deliverables and Scoring</a></li><li class="nav-list-item"><a class="nav-list-link" href="#submission">Submission</a></li></ul></li></ul>
+</nav>
+<div class="content-container">
+<h1 class="title">
+        
+        
+          Lab 03: Debugging (Part 2)
+        
+        
+      </h1>
+<h2 id="faq">
+<a aria-labelledby="faq" class="anchor-heading" href="#faq"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> FAQ
+        
+        
+      </h2>
+<p>The FAQ for Lab 03 is <a href="https://sp24.datastructur.es/labs/lab03/faq/">here</a>.</p>
+<h2 id="introduction">
+<a aria-labelledby="introduction" class="anchor-heading" href="#introduction"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Introduction
+        
+        
+      </h2>
+<p>This is a continuation of debugging from last week. In this week’s lab, we will 
+be utilizing the debugging tools we used last week and gaining more practice 
+with debugging. The goal for today’s lab is to learn more about the following:</p>
+<ul>
+<li>Reading the stack trace and knowing how to isolate the bug from it.</li>
+<li>Understanding the different types of exceptions we might run into.</li>
+<li>Getting more comfortable using the IntelliJ debugger.</li>
+<li>Exception breakpoints, expressions and watches (optional).</li>
+</ul>
+<p>As usual, don’t hesitate to look things up if you’re unsure what something means, particularly, 
+what a specific exception or error means if it comes up in the stack trace (which we’ll be
+covering in today’s lab). The hints are meant to guide your thinking, but we encourage you 
+to try going through the lab on your own first before opening the hints.</p>
+<h2 id="adventure">
+<a aria-labelledby="adventure" class="anchor-heading" href="#adventure"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Adventure</code>
+</h2>
+<h3 id="running-the-game-and-tests">
+<a aria-labelledby="running-the-game-and-tests" class="anchor-heading" href="#running-the-game-and-tests"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Running the Game and Tests
+        
+        
+      </h3>
+<p>The very first thing you should do is run the <code class="language-plaintext highlighter-rouge">main</code> method in <code class="language-plaintext highlighter-rouge">AdventureGame</code>
+to run through the game. Follow the instructions that are given once you run 
+through the game. This will give you a sense of what the program you are
+debugging is supposed to do (if you run into an error, that’s normal).</p>
+<p>Then, after you’ve run the game, run the tests in <code class="language-plaintext highlighter-rouge">tests/adventure/AdventureGameTests</code>. 
+They should fail on <code class="language-plaintext highlighter-rouge">BeeCountingStage</code> which will lead you into debugging the first error
+below (note that all the tests will be failing at this point). To pass the entirety of 
+<code class="language-plaintext highlighter-rouge">AdventureGameTests</code>, you’ll need to fix all the individual stage tests (fixing one stage will 
+show that you passed that individual stage). <strong>The stages are meant to be completed in order
+of the spec.</strong></p>
+<p>We encourage you to run through the game for each stage you complete to see how they’re all 
+related to the game. Don’t forget to commit frequently to save your progress!</p>
+<h3 id="reading-stack-traces">
+<a aria-labelledby="reading-stack-traces" class="anchor-heading" href="#reading-stack-traces"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Reading Stack Traces
+        
+        
+      </h3>
+<p>When a <em>runtime error</em> occurs in Java, a stack trace is printed to the console
+to provide information on where the error occurred and what steps the program
+took to get there. When running <code class="language-plaintext highlighter-rouge">Adventure</code> for the first time, your stack
+trace will look something like this:</p>
+<p><img alt="stack trace" data-original-src="https://sp24.datastructur.es/labs/lab03/img/adventure_stack_trace.png" src="../assets/777bc368a71bf79f.png" style="max-height: 325;"/></p>
+<p>The first thing to note is what kind of error occurred; this is shown at the
+first line of the stack trace. In this case, our code threw a
+<code class="language-plaintext highlighter-rouge">NullPointerException</code>.</p>
+<p>For some exceptions, including <code class="language-plaintext highlighter-rouge">NullPointerException</code>s, Java will give you an
+explanation. Here, <code class="language-plaintext highlighter-rouge">this.input</code> is <code class="language-plaintext highlighter-rouge">null</code>, so we can’t invoke (call) a method on
+it.</p>
+<p>The lines beneath it represent the sequence of methods the program took to
+arrive at the error: the first line in the list is where the error occurred
+and the line beneath it represents the line of code that called the method
+which threw the error, and so on.</p>
+<p>You can click on <strong class="blue"><code class="language-plaintext highlighter-rouge">blue text</code></strong> to navigate to that file and line.</p>
+<p class="info">To get a sense of how you would interpret stack traces in, you would usually start from
+the top. As mentioned, the first line in the stack trace is where the error occurred -
+in other words, it is the last method call that took place before the error,
+so you can use that to isolate where the bug is. Depending on how the program is written, how 
+it’s designed and what code you’ve written/contributed, you would navigate to the appropriate
+line in the stack trace and click on the <strong class="blue"><code class="language-plaintext highlighter-rouge">blue text</code></strong> to go that line and start 
+debugging.</p><hr/>
+<p class="warning">For each of the following stages, <strong>only change what is necessary</strong>! You should
+not be rewriting entire blocks of code unless otherwise specified. We’ve
+included how many lines we changed as a guideline.</p>
+<p class="info">You can run through the adventure game each time if you’d like to
+validate correctness, but you don’t need to - feel free to debug through the
+tests directly. For each file you’ll be working in, it contains a <code class="language-plaintext highlighter-rouge">playStage</code> method,
+and you can set a breakpoint in that method. From there, you can start debugging 
+in <code class="language-plaintext highlighter-rouge">AdventureGameTests</code>.</p>
+<h3 id="debug-beecountingstage">
+<a aria-labelledby="debug-beecountingstage" class="anchor-heading" href="#debug-beecountingstage"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Debug <code class="language-plaintext highlighter-rouge">BeeCountingStage</code>
+</h3>
+<p class="task">Fix the <code class="language-plaintext highlighter-rouge">NullPointerException</code> that occurs in <code class="language-plaintext highlighter-rouge">BeeCountingStage</code> by
+analyzing the stack trace. You can ignore the lines with <code class="language-plaintext highlighter-rouge">&lt;XX internal lines&gt;</code>;
+these are from test framework or library code and usually won’t help you find
+errors. <br/><br/> Expected lines modified: 1</p>
+<details>
+<summary>
+<p><strong>Hint 1</strong></p>
+</summary>
+<p>Just because the error occurs on a certain line doesn’t necessarily mean that
+piece of code is incorrect - something not shown in the stack trace may
+be the elusive culprit!</p>
+</details>
+<details>
+<summary>
+<p><strong>Hint 2</strong></p>
+</summary>
+<p>Take a close look at the constructor. Look at the variables that are declared and what 
+is instantiated.</p>
+</details><hr/>
+<p>It turns out that this isn’t the only error in <code class="language-plaintext highlighter-rouge">BeeCountingStage</code>!</p>
+<p class="task">Fix the <code class="language-plaintext highlighter-rouge">IndexOutOfBoundsError</code> that occurs in <code class="language-plaintext highlighter-rouge">BeeCountingStage</code>.</p>
+<p class="info">Ignore the grey links to <code class="language-plaintext highlighter-rouge">Objects.java</code> and <code class="language-plaintext highlighter-rouge">ArrayList.java</code> at the
+top of the stack trace. The error may have <em>occurred</em> in code that was not
+yours, but the root cause was probably something <em>your code</em> tried to do. 
+<br/><br/> Expected lines modified: 1</p><hr/>
+<details>
+<summary>
+<p><strong>Hint 1</strong></p>
+</summary>
+<p>Don’t forget, Java is 0-indexed!</p>
+</details>
+<h3 id="debug-speciesliststage">
+<a aria-labelledby="debug-speciesliststage" class="anchor-heading" href="#debug-speciesliststage"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Debug <code class="language-plaintext highlighter-rouge">SpeciesListStage</code>
+</h3>
+<p class="task">Fix the error(s) in <code class="language-plaintext highlighter-rouge">SpeciesListStage</code>. If you don’t see what the
+issue is inside the method where the exception occurred (the top line of the
+stack trace), it’s often a good idea to look at the second line to see where the
+method is being called from, and with what arguments. 
+<br/><br/> Expected lines modified: 3-4</p><hr/>
+<details>
+<summary>
+<p><strong>Hint 1</strong></p>
+</summary>
+<p>Consider the possibilities for lists. Does the code account for all of
+them? Are there any edge cases the code fails to handle?</p>
+<p>It might also help to read the javadoc comments above the method to gain more 
+context on what the method does.</p>
+</details>
+<h3 id="debug-palindromestage">
+<a aria-labelledby="debug-palindromestage" class="anchor-heading" href="#debug-palindromestage"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Debug <code class="language-plaintext highlighter-rouge">PalindromeStage</code>
+</h3>
+<p class="task">Sometimes, IntelliJ will tell you something that it thinks is wrong.
+Hover over the yellow / orange highlights in the method with the bug (in the
+<code class="language-plaintext highlighter-rouge">digitsToIntList</code> method in <code class="language-plaintext highlighter-rouge">PalindromeStage</code> - you can navigate to it 
+through the stack trace). Does that give you any useful information?
+<br/><br/> Use this feature to address the error in <code class="language-plaintext highlighter-rouge">PalindromeStage</code>.</p>
+<p class="info">If the debugger feels unresponsive, it is usually due to an infinite
+loop somewhere in your code. If you set a breakpoint and it is never reached,
+then you know an infinite loop occurs before the breakpoint! Use this in
+combination with stepping to isolate the problem.</p>
+<p class="warning"><strong>There are two bugs in this part that you’ll need to fix. Fix the most obvious one 
+first and then try to isolate and solve the second one. The hint for this part of the 
+lab applies to the second bug that needs to be resolved.</strong>
+<br/><br/> Expected lines modified: 3</p>
+<details>
+<summary>
+<p><strong>Hint 1 (Only applies to second bug)</strong></p>
+</summary>
+<p>If you haven’t already, read through the note above. Look at the method where <code class="language-plaintext highlighter-rouge">digitsToIntList</code>
+is called on. If you set a breakpoint in the method and run through the debugger, do we ever exit 
+out the <code class="language-plaintext highlighter-rouge">while</code> loop? What is the condition we need to meet to break out of the <code class="language-plaintext highlighter-rouge">while</code> loop? Is it 
+being met? Try using the Java Visualizer in conjunction so you can inspect the bug more closely 
+with the visualizer.</p>
+</details>
+<h3 id="debug-machinestage">
+<a aria-labelledby="debug-machinestage" class="anchor-heading" href="#debug-machinestage"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Debug <code class="language-plaintext highlighter-rouge">MachineStage</code>
+</h3>
+<p>The <code class="language-plaintext highlighter-rouge">sumOfElementwiseMax</code> method in <code class="language-plaintext highlighter-rouge">MachineStage</code> is supposed to take two
+arrays, compute the element-wise max of those two arrays, and then sum the
+resulting maxes. For example, for two arrays <code class="language-plaintext highlighter-rouge">{2, 0, 10, 14}</code> and
+<code class="language-plaintext highlighter-rouge">{-5, 5, 20, 30}</code>, the element-wise max is <code class="language-plaintext highlighter-rouge">{2, 5, 20, 30}</code>. In the second
+position, the larger of <code class="language-plaintext highlighter-rouge">0</code> and <code class="language-plaintext highlighter-rouge">5</code> is <code class="language-plaintext highlighter-rouge">5</code>. The sum of this element-wise max is
+$2 + 5 + 20 + 30 = 57$.</p>
+<p>There are two different bugs that make the method return an incorrect result.
+You can assume the input parsing code in <code class="language-plaintext highlighter-rouge">playStage</code> works correctly.</p>
+<p>To find the bugs, you should not step into the <code class="language-plaintext highlighter-rouge">mysteryMax</code> or <code class="language-plaintext highlighter-rouge">mysteryAdd</code>
+functions, or even try to understand what they are doing. That is, you should
+use <img alt="step over" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab03/img/step-over.png" src="../assets/fdd106ef0c62f554.png"/> to <em>only see the result</em>. These
+are <strong><em>mysterious</em></strong> functions that are deliberately obfuscated. If you find
+yourself having accidentally stepped into one of these two functions, use the
+<img alt="step out" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab03/img/step-out.png" src="../assets/dc2d97ac694601b5.png"/> button to escape.</p>
+<p>Even without stepping INTO these functions, you should be able to tell whether
+they have a bug or not. That’s the glory of abstraction! Even if I don’t know
+how a fish works at a molecular level, there are some cases where I can clearly
+tell that a fish is dead.</p>
+<p class="task">Fix the two bugs so that <code class="language-plaintext highlighter-rouge">sumOfElementwiseMax</code> returns a correct
+result. If you find a bug in <code class="language-plaintext highlighter-rouge">mysteryMax</code> or <code class="language-plaintext highlighter-rouge">mysteryAdd</code>, rewrite the method entirely
+instead of trying to fix it. Don’t rewrite code unnecessarily, though – be
+sure that it’s broken first! <br/><br/> Expected lines modified: 2-5</p><hr/>
+<details>
+<summary>
+<p><strong>Hints</strong></p>
+</summary>
+<ul>
+<li>Understand what the <code class="language-plaintext highlighter-rouge">sumOfElementwiseMax</code> function is supposed to do. When
+you give inputs to the game, try computing the answer by hand or with a
+calculator. Verify your computation against the output, and you’ll see that
+the output is incorrect.</li>
+<li>Set a breakpoint on the line that calls <code class="language-plaintext highlighter-rouge">sumOfElementwiseMax</code>. When you run
+the debugger, step into <code class="language-plaintext highlighter-rouge">sumOfElementwiseMax</code>, then use
+<img alt="step over" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab03/img/step-over.png" src="../assets/fdd106ef0c62f554.png"/> to see the result of the call
+to <code class="language-plaintext highlighter-rouge">arrayMax</code>. Is the output of <code class="language-plaintext highlighter-rouge">arrayMax</code> what you expect it to be?</li>
+<li>You should step into <code class="language-plaintext highlighter-rouge">arrayMax</code> if you think that there’s a bug there. Don’t
+step into <code class="language-plaintext highlighter-rouge">mysteryMax</code>, though – if and only if you think it has a bug,
+rewrite it completely.</li>
+<li>Repeat for <code class="language-plaintext highlighter-rouge">arraySum</code> and <code class="language-plaintext highlighter-rouge">mysteryAdd</code>.</li>
+</ul>
+</details>
+<h2 id="another-debugging-puzzle-optional">
+<a aria-labelledby="another-debugging-puzzle-optional" class="anchor-heading" href="#another-debugging-puzzle-optional"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Another Debugging Puzzle?! [OPTIONAL]
+        
+        
+      </h2>
+<p>The rest of the lab is <strong>optional</strong>. We’ll cover some additional 
+tools that you can use in the IntelliJ debugger that you may find useful - 
+exception breakpoints and expressions and watches.</p>
+<p class="danger">Do not modify <code class="language-plaintext highlighter-rouge">Puzzle.java</code>!</p>
+<p class="warning">These exercises will involve working
+with code that may seem quite cryptic and unfamiliar. Enforce the abstraction
+barriers and try to find the answers without having to understand exactly what
+is going on!</p>
+<h3 id="exception-breakpoints">
+<a aria-labelledby="exception-breakpoints" class="anchor-heading" href="#exception-breakpoints"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Exception Breakpoints
+        
+        
+      </h3>
+<p>When debugging, you may sometimes run into an unexpected error, making it
+difficult to figure out what is wrong with your code. To help with this,
+IntelliJ allows you to set breakpoints on exceptions. These ensure that when
+your code throws an exception, the debugger will pause execution and allow you
+to inspect the state of your program.</p>
+<p>Go ahead and run the <code class="language-plaintext highlighter-rouge">Puzzle</code> class. You should see the following output:</p>
+<p><img alt="Puzzle output" data-original-src="https://sp24.datastructur.es/labs/lab03/img/puzzle-runtime-exception.png" src="../assets/c925968654d5799f.png"/></p>
+<p>For many common exceptions, IntelliJ will indicate a “Create breakpoint” button
+in the console output (just to the right of <code class="language-plaintext highlighter-rouge">java.lang.RuntimeException</code> in the
+above screenshot), which will allow you to access the advanced breakpoint
+window. To access it without this button, create a breakpoint on any line (in
+the following screenshot, we’ve created a breakpoint on line 23), right-click
+it, and select “More”.</p>
+<p><img alt="More breakpoint popup" data-original-src="https://sp24.datastructur.es/labs/lab03/img/more-breakpoint-popup.png" src="../assets/dc75852e3dce3417.png"/></p>
+<p>The advanced breakpoint window should look something like this:</p>
+<p><img alt="Advanced breakpoint window" data-original-src="https://sp24.datastructur.es/labs/lab03/img/advanced-breakpoint-window.png" src="../assets/a0554c25f130daf4.png"/></p>
+<p>There’s a lot going on here, but you don’t need to understand most of it. Click
+the plus symbol in the top-left corner, and you should see a popup like this:</p>
+<p><img alt="Exception breakpoint popup" data-original-src="https://sp24.datastructur.es/labs/lab03/img/add-exception-breakpoint-popup.png" src="../assets/39da6e9346522ed9.png"/></p>
+<p>Select “Java Exception Breakpoints”, and another window will appear where you
+can specify the type of exception for which we want to pause execution. The
+console told us that we were getting a <code class="language-plaintext highlighter-rouge">java.lang.RuntimeException</code>, so go ahead
+and select that.</p>
+<p><img alt="Runtime Exception Breakpoint" data-original-src="https://sp24.datastructur.es/labs/lab03/img/runtime-exception-breakpoint.png" src="../assets/6d6b21903a439a11.png"/></p>
+<p>You should now see the original advanced breakpoint window, with a newly created
+exception breakpoint aptly named ‘java.lang.RuntimeException’ (if you used the
+console’s “Create breakpoint” button to access the window, you may see two
+copies of this, and that’s okay).</p>
+<p>You will have the option to break on caught or uncaught exceptions, or both.
+This can be useful because a lot of library code intentionally throws and
+catches a lot of exceptions, so this allows us to focus on the unhandled ones if
+necessary. For now, go ahead and leave both options checked.</p>
+<p>If you debug the program at this point, your code should pause on line 53, with
+a little lightning bolt symbol in place of the usual red circle. This indicates
+that the breakpoint was triggered by an exception, rather than a normal
+breakpoint.</p>
+<p><img alt="Line 53 Exception breakpoint" data-original-src="https://sp24.datastructur.es/labs/lab03/img/line-53-exception-breakpoint.png" src="../assets/ed6f84a1a1c86311.png"/></p>
+<p>From this, we can see that IntelliJ is hinting that the problem may be in
+<code class="language-plaintext highlighter-rouge">src/puzzle/answer.txt</code>. By inspecting that file, poking around <code class="language-plaintext highlighter-rouge">Puzzle.java</code>,
+and using other debugging techniques you learned in Lab 02 and this lab, can 
+you figure out what’s going on?</p>
+<p class="task">Fix <code class="language-plaintext highlighter-rouge">answer.txt</code> so that <code class="language-plaintext highlighter-rouge">Puzzle</code> no longer throws a <code class="language-plaintext highlighter-rouge">RuntimeException</code>. 
+Feel free to look at the hint if you’re stuck!</p>
+<details>
+<summary>
+<p><strong>Hint</strong></p>
+</summary>
+<p>The issue is that <code class="language-plaintext highlighter-rouge">Puzzle.java</code> parses <code class="language-plaintext highlighter-rouge">answer.txt</code> for an integer guess, and
+doesn’t find any, so it throws an exception. To fix this, replace the TODO line
+of <code class="language-plaintext highlighter-rouge">answer.txt</code> with any integer.</p>
+</details>
+<p>After fixing the bug, run <code class="language-plaintext highlighter-rouge">Puzzle</code> again. You should now see the following
+output:</p>
+<p><img alt="Puzzle out-of-bounds exception" data-original-src="https://sp24.datastructur.es/labs/lab03/img/puzzle-oob-exception.png" src="../assets/b0d0736e58469fcc.png"/></p>
+<p>Read the error message and see if you can find the answer! If you’ve got it
+correct, <code class="language-plaintext highlighter-rouge">Puzzle.java</code> will no longer error and you should pass <code class="language-plaintext highlighter-rouge">testPuzzle</code>
+inside of <code class="language-plaintext highlighter-rouge">tests/puzzle/PuzzleTest</code>.</p>
+<p class="task">Replace the value in <code class="language-plaintext highlighter-rouge">answer.txt</code> so that <code class="language-plaintext highlighter-rouge">Puzzle</code> no longer errors.</p>
+<h3 id="expressions-and-watches">
+<a aria-labelledby="expressions-and-watches" class="anchor-heading" href="#expressions-and-watches"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Expressions and Watches
+        
+        
+      </h3>
+<p>When debugging, you may not always have the value that you want to inspect
+stored in a variable. Luckily, IntelliJ has a solution for us! Once paused on a
+certain line, you can use the “Evaluate Expression” tool (shaped like a
+calculator). You can click on the calculator icon to open up a whole new window,
+but you can also just type the expression into the debugger directly:</p>
+<p><img alt="Evaluate Expression Blank" data-original-src="https://sp24.datastructur.es/labs/lab03/img/eval-expr-add-watches.png" src="../assets/61d6bacd541310e5.png"/></p>
+<p>You can use variables and method calls with this tool too! Even though we’ve
+only used <code class="language-plaintext highlighter-rouge">Math</code> library methods in the following example, you can call anything
+you want. Here, we are using the tool in <code class="language-plaintext highlighter-rouge">Puzzle.java</code> with an initial <code class="language-plaintext highlighter-rouge">answer</code>
+guess of <code class="language-plaintext highlighter-rouge">973</code>:</p>
+<p><img alt="Evaluate Expression 973" data-original-src="https://sp24.datastructur.es/labs/lab03/img/evaluate-expression-973.png" src="../assets/27afff1708aff8c2.png"/></p>
+<p>After you resume the program, <code class="language-plaintext highlighter-rouge">result</code> will be lost. If you don’t want to lose
+it, you can use Ctrl+Shift+Enter (Windows) or Cmd+Shift+Enter (Mac) to add it as
+a <em>watch</em>. This will keep it around even after you continue execution. Moreover,
+watches will change value accordingly with the program, just like normal
+variables would!</p>
+<p>Watches will persist even after you stop and rerun your program, so they can be
+very useful for debugging over multiple executions. As an example, I’ve changed
+my guess from before to be <code class="language-plaintext highlighter-rouge">1717</code> and reran the program entirely, but didn’t
+have to re-evaluate the expression for the debugger to tell me what it was!</p>
+<p><img alt="Evaluate Expression 1717" data-original-src="https://sp24.datastructur.es/labs/lab03/img/evaluate-expression-1717.png" src="../assets/b04547147b50175b.png"/></p>
+<p>There won’t be an associated exercise with this part, but we think it would be a 
+useful thing to know about!</p><hr/>
+<p>Congratulations, you’ve made it to the end of Lab03!</p>
+<h2 id="deliverables-and-scoring">
+<a aria-labelledby="deliverables-and-scoring" class="anchor-heading" href="#deliverables-and-scoring"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Deliverables and Scoring
+        
+        
+      </h2>
+<p>The lab is out of 5 points. There are no hidden tests on Gradescope. If you
+pass all the local tests for <code class="language-plaintext highlighter-rouge">Adventure</code>, you will receive full credit on the 
+lab (unless you modified things you weren’t supposed to modify). To reiterate, 
+“Another Debugging Puzzle?!” is optional for this lab. The final deliverables are:</p>
+<ul>
+<li><code class="language-plaintext highlighter-rouge">BeeCountingStage</code> (1.25 pts)</li>
+<li><code class="language-plaintext highlighter-rouge">SpeciesListStage</code> (1.25 pts)</li>
+<li><code class="language-plaintext highlighter-rouge">PalindromeStage</code> (1.25 pts)</li>
+<li><code class="language-plaintext highlighter-rouge">MachineStage</code> (1.25 pts)</li>
+</ul>
+<h2 id="submission">
+<a aria-labelledby="submission" class="anchor-heading" href="#submission"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Submission
+        
+        
+      </h2>
+<p>Just as you did for the previous assignments, add, commit, then push your Lab 03
+code to GitHub. Then, submit to Gradescope to test your code. If you need a
+refresher, check out the instructions in the
+<a href="https://sp24.datastructur.es/labs/lab01/">Lab 1 spec</a> 
+and the
+<a href="https://sp24.datastructur.es/resources/guides/assignment-workflow/#opening-in-intellij">Assignment Workflow Guide</a>.</p>
+</div>
+<hr/>
+<footer>
+<script>
+(function() {
+  var navList = document.querySelector('.aux-nav-list');
+  if (!navList || !navList.firstElementChild) return;
+  var darkToggle = navList.firstElementChild;
+  darkToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDark();
+  });
+})();
+</script>
+<script src="https://sp24.datastructur.es/assets/js/jquery.min.js"></script>
+<script src="https://sp24.datastructur.es/assets/js/clipboard.min.js"></script>
+<script>
+// adapted from https://stackoverflow.com/a/48078807/1217368
+// Waiting for https://github.com/just-the-docs/just-the-docs/pull/945
+$(document).ready(function () {
+  $('pre.highlight').each(function (i) {
+    // create an id for the current code section
+    var currentId = 'codeBlock' + i
+
+    // find the code section and add the id to it
+    var codeSection = $(this).find('code')
+    codeSection.attr('id', currentId)
+
+    // now create the button, setting the clipboard target to the id
+    var btn = document.createElement('a')
+    btn.setAttribute('type', 'btn')
+    btn.setAttribute('class', 'badge badge-light btn-copy-code')
+    btn.setAttribute('data-clipboard-target', '#' + currentId)
+    btn.innerHTML = '<i class="fal fa-copy"></i> Copy'
+    $(this).after(btn)
+  })
+
+  new ClipboardJS('.btn-copy-code')
+})
+</script>
+<script src="https://sp24.datastructur.es/assets/js/tocbot.min.js"></script>
+<script>
+// Tries to mirror the HTML TOC
+tocbot.init({
+  tocSelector: '.js-toc',
+  contentSelector: '.main-content',
+  headingSelector: 'h2, h3',
+  ignoreSelector: '.no_toc',
+  hasInnerContainers: true,
+  linkClass: 'nav-list-link',
+  activeLinkClass: 'active',
+  listClass: 'nav-list',
+  listItemClass: 'nav-list-item',
+  activeListItemClass: 'active',
+  collapseDepth: 3,
+  scrollSmooth: false,
+});
+</script>
+</footer>
+</div></body></html>

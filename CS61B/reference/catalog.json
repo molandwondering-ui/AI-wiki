@@ -1,0 +1,103 @@
+[
+  {
+    "lecture": 1,
+    "part": 1,
+    "title": "1. Intro",
+    "slides": "https://docs.google.com/presentation/d/19NEzpJJ-a0lI-tdz9yC1kP-8Apt2oZm-918IsDiqgYQ",
+    "recording": "https://www.youtube.com/watch?v=tby2de4c1u8",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/1.-introduction"
+    ]
+  },
+  {
+    "lecture": 2,
+    "part": 6,
+    "title": "2. Defining and Using Classes",
+    "slides": "https://docs.google.com/presentation/d/1zt0yh_gzmfjCdB1y7DzTdwNSfTtepnQAtORH7PqebQM",
+    "recording": "https://www.youtube.com/watch?v=PK9ueGEHcjE",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/2.-defining-and-using-classes"
+    ]
+  },
+  {
+    "lecture": 3,
+    "part": 12,
+    "title": "3. Lists I: References, Recursion, and Lists",
+    "slides": "https://docs.google.com/presentation/d/1G5k4HcjJ7C2fT_9xQdvpfWjKC4xQa--5FnwXPGf0nwg",
+    "recording": "https://www.youtube.com/watch?v=33B7eyjSO58",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/3.-references-recursion-and-lists"
+    ]
+  },
+  {
+    "lecture": 4,
+    "part": 15,
+    "title": "4. Lists II: SLLists",
+    "slides": "https://docs.google.com/presentation/d/1Uty7XFuhRuCg3SoaSaViXzJhPTZDoYUV878L2I_pe_k",
+    "recording": "https://www.youtube.com/watch?v=Rli_V5yGkrI",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/4.-sllists"
+    ]
+  },
+  {
+    "lecture": 5,
+    "part": 18,
+    "title": "5. Lists III: DLLists and Arrays",
+    "slides": "https://docs.google.com/presentation/d/1jjivjdvD4mx6qb4bd4rUKB6FDZbYtveJ5NKeyVeA1lk",
+    "recording": "https://www.youtube.com/watch?v=rf8beYo231Q",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/5.-dllists",
+      "https://cs61b-2.gitbook.io/cs61b-textbook/6.-arrays"
+    ]
+  },
+  {
+    "lecture": 6,
+    "part": 9,
+    "title": "6. Testing",
+    "slides": "https://docs.google.com/presentation/d/1AxuxcFWc_9U-gmdBRPGcEqE-7Q0-48hEw5Iupbama74",
+    "recording": "https://www.youtube.com/watch?v=rJ1gCk41lbo",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/7.-testing"
+    ]
+  },
+  {
+    "lecture": 7,
+    "part": 21,
+    "title": "7. Lists IV: Arrays and Lists",
+    "slides": "https://docs.google.com/presentation/d/1RJuwap1NZDYFUS7eiPy_SZu7oWHJladwuhKQpQcTjt8",
+    "recording": "https://www.youtube.com/watch?v=DnYJueFQgs4",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/8.-arraylist"
+    ]
+  },
+  {
+    "lecture": 8,
+    "part": 25,
+    "title": "8. Inheritance I: Interface and Implementation Inheritance",
+    "slides": "https://docs.google.com/presentation/d/1LxnOVy_k13llkePdQIdBrZ5jEpgRmbrvMilD-ppRjlc",
+    "recording": "https://www.youtube.com/watch?v=-dobEvKn8mM",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/9.-inheritance-i-interface-and-implementation-inheritance"
+    ]
+  },
+  {
+    "lecture": 9,
+    "part": 28,
+    "title": "9. Inheritance II: Extends, Casting, Higher Order Functions",
+    "slides": "https://docs.google.com/presentation/d/1jVqC44HVViVtajnF18KsZ6MdIfseTfOSerfvxH4pzP0",
+    "recording": "https://www.youtube.com/watch?v=IreQ12TQiHk",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/10.-inheritance-ii-extends-casting-higher-order-functions"
+    ]
+  },
+  {
+    "lecture": 19,
+    "part": 59,
+    "title": "19. Hashing",
+    "slides": "https://docs.google.com/presentation/d/12Su6RdBjVCGd5MrKE6Y5s-J4OyBgv--v-4LHjEwtJbU",
+    "recording": "https://youtu.be/9kcG-8TrbBA",
+    "chapters": [
+      "https://cs61b-2.gitbook.io/cs61b-textbook/19.-hashing"
+    ]
+  }
+]

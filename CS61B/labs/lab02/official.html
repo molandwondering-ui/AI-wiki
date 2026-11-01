@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>body{max-width:960px;margin:40px auto;padding:0 24px;font:17px/1.7 system-ui}pre{white-space:pre-wrap;background:#f4f4f4;padding:16px}img,video{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px}</style></head><body><p>Source: <a href="https://sp24.datastructur.es/labs/lab02/">https://sp24.datastructur.es/labs/lab02/</a> · snapshot 2026-11-01</p><div class="main-content" id="main-content" role="main">
+<nav class="content-nav">
+<ul class="nav-list js-toc"><li class="nav-list-item">Lab 02: Debugging (Part 1)<ul><li class="nav-list-item"><a class="nav-list-link" href="#faq">FAQ</a></li><li class="nav-list-item"><a class="nav-list-link" href="#introduction">Introduction</a><ul><li class="nav-list-item"><a class="nav-list-link" href="#setup">Setup</a></li><li class="nav-list-item"><a class="nav-list-link" href="#goals-and-outcomes">Goals and Outcomes</a></li></ul></li><li class="nav-list-item"><a class="nav-list-link" href="#bomb">Bomb</a><ul><li class="nav-list-item"><a class="nav-list-link" href="#interactive-debugging">Interactive Debugging</a></li><li class="nav-list-item"><a class="nav-list-link" href="#debugger-overview">Debugger Overview</a></li><li class="nav-list-item"><a class="nav-list-link" href="#bomb-introduction-phase-0">Bomb Introduction (Phase 0)</a></li><li class="nav-list-item"><a class="nav-list-link" href="#visualizer-phase-1">Visualizer (Phase 1)</a></li><li class="nav-list-item"><a class="nav-list-link" href="#conditional-breakpoints-phase-2">Conditional Breakpoints (Phase 2)</a></li></ul></li><li class="nav-list-item"><a class="nav-list-link" href="#deliverables-and-scoring">Deliverables and Scoring</a></li><li class="nav-list-item"><a class="nav-list-link" href="#submission">Submission</a></li><li class="nav-list-item"><a class="nav-list-link" href="#acknowledgements">Acknowledgements</a></li></ul></li></ul>
+</nav>
+<div class="content-container">
+<h1 class="title">
+        
+        
+          Lab 02: Debugging (Part 1)
+        
+        
+      </h1>
+<h2 id="faq">
+<a aria-labelledby="faq" class="anchor-heading" href="#faq"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> FAQ
+        
+        
+      </h2>
+<p>Each assignment will have an FAQ linked at the top. You can also access it by
+adding “/faq” to the end of the URL. The FAQ for Lab 02 is located
+<a href="https://sp24.datastructur.es/labs/lab02/faq">here</a>.</p>
+<h2 id="introduction">
+<a aria-labelledby="introduction" class="anchor-heading" href="#introduction"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Introduction
+        
+        
+      </h2>
+<p>To debug a program, you must first know what’s wrong. In this lab, you’ll get
+some experience with using the debugger to see the program state. When you run into
+a bug, the error is accompanied with a “stack trace” that details the method
+calls that caused the error in the first place. We won’t cover going through the stack trace 
+in this lab, but we’ll talk more about it in a later lab.</p>
+<h3 id="setup">
+<a aria-labelledby="setup" class="anchor-heading" href="#setup"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Setup
+        
+        
+      </h3>
+<p>Follow the
+<a href="https://sp24.datastructur.es/resources/guides/assignment-workflow/#opening-in-intellij">assignment workflow</a>
+to get the assignment and open it in IntelliJ.</p>
+<h3 id="goals-and-outcomes">
+<a aria-labelledby="goals-and-outcomes" class="anchor-heading" href="#goals-and-outcomes"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Goals and Outcomes
+        
+        
+      </h3>
+<p>In this lab, you will enhance your code debugging abilities by defusing a
+(programmatic) bomb. We’ll guide you through this process, but the intention 
+is to make this a realistic debugging experience.</p>
+<p>By the end of this lab, you will…</p>
+<ul>
+<li>Be able to use the debugger and visualizer to inspect program state.</li>
+<li>Be able to interpret test failure messages.</li>
+<li>Be better able to approach debugging code.</li>
+</ul>
+<p class="info">For this lab and course in general, we highly encourage that you try things out on your own first,
+including looking things up if you’re unsure what something is. In this lab, this might be about what a certain
+error means or the exception that is thrown - google it!</p>
+<h2 id="bomb">
+<a aria-labelledby="bomb" class="anchor-heading" href="#bomb"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Bomb</code>
+</h2>
+<p>The <code class="language-plaintext highlighter-rouge">BombMain</code> class calls the various <code class="language-plaintext highlighter-rouge">phase</code> methods of the <code class="language-plaintext highlighter-rouge">Bomb</code> class.
+For this lab, we’ll be running the lab through the tests in <code class="language-plaintext highlighter-rouge">BombTest.java</code>. 
+If you were to run <code class="language-plaintext highlighter-rouge">BombTest</code> (in the testing folder), you’ll notice that there are some errors - 
+this is because the current inputs to the phase methods in <code class="language-plaintext highlighter-rouge">BombMain</code> aren’t the 
+correct passwords! Your job is to figure out what the passwords to each of these phases 
+is by <em>using the IntelliJ debugger</em>.</p>
+<p class="danger"><strong>WARNING</strong>: The code is written so that you can’t find the password just by reading it. For
+this lab, you are <strong>forbidden</strong> from editing the <code class="language-plaintext highlighter-rouge">Bomb</code> and <code class="language-plaintext highlighter-rouge">BombTest</code> code, whether to add
+print statements or otherwise modify it. The point of this exercise is to get comfortable 
+using tools that will help you a lot down the road. Please take it seriously! <strong>If you modify those
+files, you will not pass the tests on the autograder!</strong></p>
+<p>As mentioned, you’ll be running your code from <code class="language-plaintext highlighter-rouge">BombTest.java</code> in the testing folder 
+and you can use those tests to help you debug, as on other assignments, you will
+end up writing your own tests to help you fix bugs! The <strong>only</strong> file you
+need to modify is <code class="language-plaintext highlighter-rouge">BombMain.java</code></p>
+<p><strong><code class="language-plaintext highlighter-rouge">BombTest.java</code> is where you will be running the program. <code class="language-plaintext highlighter-rouge">Bomb.java</code> and <code class="language-plaintext highlighter-rouge">BombMain.java</code>
+will not have the green run button since it does not contain a <code class="language-plaintext highlighter-rouge">static void main(String[] args)</code> 
+so please make sure to run the program through <code class="language-plaintext highlighter-rouge">BombTest.java</code>!</strong></p>
+<h3 id="interactive-debugging">
+<a aria-labelledby="interactive-debugging" class="anchor-heading" href="#interactive-debugging"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Interactive Debugging
+        
+        
+      </h3>
+<p>So far, you might have practiced debugging by using print statements to
+see the values of certain variables as a program runs. When placed
+strategically, the output from printing might help make the bugs obvious or
+narrow down their cause. This method is called <strong>print debugging</strong>. While print
+debugging can be very useful, it has a few disadvantages:</p>
+<ul>
+<li>It requires you to modify your code, and clean it up after.</li>
+<li>It’s tedious to decide and write out exactly what you want to print.</li>
+<li>Printing isn’t always formatted nicely.</li>
+</ul>
+<p>In this lab, we’ll show you a new technique, <strong>interactive debugging</strong> –
+debugging by using an interactive tool, or a debugger. We’ll focus on IntelliJ’s
+built-in debugger.</p>
+<h3 id="debugger-overview">
+<a aria-labelledby="debugger-overview" class="anchor-heading" href="#debugger-overview"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Debugger Overview
+        
+        
+      </h3>
+<h4 id="breakpoints">
+<a aria-labelledby="breakpoints" class="anchor-heading" href="#breakpoints"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Breakpoints
+        
+        
+      </h4>
+<p>Before starting the IntelliJ debugger, you should set a few <strong>breakpoints</strong>.
+Breakpoints mark places in your code where you can <em>suspend</em> the program while
+debugging and examine its state. This:</p>
+<ul>
+<li>Doesn’t require you to modify your code or clean it up after, since
+breakpoints are ignored in normal execution.</li>
+<li>Lets you see <em>all</em> the variables without needing to write print statements.</li>
+<li>Lets IntelliJ display everything in a structured manner</li>
+</ul>
+<p>Go ahead and open up <code class="language-plaintext highlighter-rouge">Bomb.java</code> and place a breakpoint. To set a breakpoint, 
+click the area just to the right of the line number.</p>
+<p><img alt="code breakpoints" data-original-src="https://sp24.datastructur.es/labs/lab02/img/code_breakpoints.png" src="../assets/49870f7a9fd6e8ca.png" style="max-height: 325px;"/></p>
+<p>A red circle or diamond should appear where you clicked. If nothing appears,
+make sure that you click next to a line with code. When the debugger reaches
+this point in the program, it will pause <strong>before</strong> the execution of the line or
+method. Clicking the breakpoint again will remove it.</p>
+<h4 id="running-the-debugger">
+<a aria-labelledby="running-the-debugger" class="anchor-heading" href="#running-the-debugger"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Running the Debugger
+        
+        
+      </h4>
+<p>Now, let’s set a few breakpoints - you can do this either in <code class="language-plaintext highlighter-rouge">Bomb.java</code> or <code class="language-plaintext highlighter-rouge">BombMain.java</code>. 
+With these set, we can start a debugging session! Click on the green triangle next to the 
+class or test you want to debug (in test files there may be two green triangles). 
+Instead of clicking the green triangle to run, click the
+<img alt="debug" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/debug.png" src="../assets/016d03dac66166c1.png"/> debug option:</p>
+<p><img alt="run debugger" data-original-src="https://sp24.datastructur.es/labs/lab02/img/run_debugger.png" src="../assets/5170fbbf4317d88f.png" style="max-height: 325px;"/></p>
+<p>The selected program should run until it hits its first breakpoint. A debugger
+window should also appear on the bottom of the interface, where the console was.</p>
+<p><img alt="debugger session" data-original-src="https://sp24.datastructur.es/labs/lab02/img/debugger_session.png" src="../assets/3c7ad0bdeaac277e.png" style="max-height: 325px;"/></p>
+<p>On the left, you will be able to see all current method calls and on the right,
+you will be able to see the values of instantiated variables at this point in
+the program (they will also be shown in gray text in the editor). For instances
+of classes, you can click the dropdown to expand them and look at their fields.</p>
+<p>In the debugger, you have a few options:</p>
+<ul>
+<li>Learn something from the displayed values, identify what’s wrong, and fix
+your bug! Click <img alt="stop" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/stop.png" src="../assets/09c54577b10ce8ec.png"/> to stop the debug session.</li>
+<li>Click <img alt="resume" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/resume.png" src="../assets/56b08c6610bb1ec7.png"/> to resume the program (until it
+hits another breakpoint or terminates).</li>
+<li>Click <img alt="step over" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/step-over.png" src="../assets/0edc4ec01c4c75cd.png"/> to advance the program by
+one line of code.
+    <ul>
+<li><img alt="step into" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/step-into.png" src="../assets/65435b144e5031c5.png"/> does something similar, but
+it will step into any method called in the current line, while
+<img alt="step over" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/step-over.png" src="../assets/0edc4ec01c4c75cd.png"/> will step over it.</li>
+<li><img alt="step out" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/step-out.png" src="../assets/3bc532840e209324.png"/> will advance the program until
+after it returns from the current method.</li>
+</ul>
+</li>
+<li>If you accidentally step too far and want to start the session over, click
+<img alt="rerun" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/rerun.png" src="../assets/dc3518497269b88b.png"/> (at least right now, there isn’t a good way to directly 
+step back).</li>
+</ul>
+<h3 id="bomb-introduction-phase-0">
+<a aria-labelledby="bomb-introduction-phase-0" class="anchor-heading" href="#bomb-introduction-phase-0"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> <code class="language-plaintext highlighter-rouge">Bomb</code> Introduction (Phase 0)
+        
+        
+      </h3>
+<p class="info">For this lab, we will be providing method breakdowns if you want an 
+overview of the method/phase that you’re debugging.</p>
+<p class="task">Set a breakpoint at <code class="language-plaintext highlighter-rouge">phase0</code> and use the debugger to find the password
+for <code class="language-plaintext highlighter-rouge">phase0</code> and replace the <code class="language-plaintext highlighter-rouge">phase0</code> argument accordingly in
+<code class="language-plaintext highlighter-rouge">bomb/BombMain.java</code>. You can start the program from <code class="language-plaintext highlighter-rouge">testBombPhase0</code> in 
+<code class="language-plaintext highlighter-rouge">tests/bomb/BombTest.java</code>.</p>
+<p>Once you’ve found the correct password, running the code (not in debug mode)
+should output <code class="language-plaintext highlighter-rouge">You passed phase 0 with the password \&lt;password\&gt;!</code> instead of
+<code class="language-plaintext highlighter-rouge">Phase 0 went BOOM!</code></p>
+<details>
+<summary>
+<p><strong><code class="language-plaintext highlighter-rouge">phase0</code> Method Breakdown</strong></p>
+</summary>
+<p>The <code class="language-plaintext highlighter-rouge">phase0</code> method first generates a secret String <code class="language-plaintext highlighter-rouge">correctPassword</code> (you don’t
+need to understand how <code class="language-plaintext highlighter-rouge">shufflePassword</code> works). The <code class="language-plaintext highlighter-rouge">password</code> passed in from
+<code class="language-plaintext highlighter-rouge">BombMain</code> is then compared against <code class="language-plaintext highlighter-rouge">correctPassword</code>. The goal of this phase is
+to use the debugger to find the value of <code class="language-plaintext highlighter-rouge">correctPassword</code> and pass in a
+<code class="language-plaintext highlighter-rouge">password</code> that matches that value!</p>
+</details>
+<h3 id="visualizer-phase-1">
+<a aria-labelledby="visualizer-phase-1" class="anchor-heading" href="#visualizer-phase-1"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Visualizer (Phase 1)
+        
+        
+      </h3>
+<p>For this portion of the lab, we’ll be working with <code class="language-plaintext highlighter-rouge">IntList</code>. If you need a quick recap, 
+refer to the relevant lecture slides from this week.</p>
+<p>Adding to our implementation of <code class="language-plaintext highlighter-rouge">IntList</code> are two methods that may not have been 
+mentioned: <code class="language-plaintext highlighter-rouge">print</code> and <code class="language-plaintext highlighter-rouge">of</code>. The <code class="language-plaintext highlighter-rouge">of</code> method makes it more convenient to create <code class="language-plaintext highlighter-rouge">IntList</code>s. 
+Here’s a brief demonstration of how it works. Consider the following code:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IntList lst <span class="o">=</span> new IntList<span class="o">(</span>1, new IntList<span class="o">(</span>2, new IntList<span class="o">(</span>3, null<span class="o">)))</span><span class="p">;</span>
+</code></pre></div></div>
+<p>That’s a lot of typing for just a list of 1, 2, and 3 (quite confusing too)! 
+The <code class="language-plaintext highlighter-rouge">IntList.of</code> method addresses this problem. To create an IntList containing 
+the elements 1, 2, and 3, you can simply type:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IntList lst <span class="o">=</span> IntList.of<span class="o">(</span>1, 2, 3<span class="o">)</span><span class="p">;</span>
+</code></pre></div></div>
+<p>The other method <code class="language-plaintext highlighter-rouge">print</code> returns a <code class="language-plaintext highlighter-rouge">String</code> representation of an IntList.</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>IntList lst <span class="o">=</span> IntList.of<span class="o">(</span>1, 2, 3<span class="o">)</span><span class="p">;</span>
+System.out.println<span class="o">(</span>lst.print<span class="o">())</span>
+// Output: 1 -&gt; 2 -&gt; 3
+</code></pre></div></div>
+<p>Back to debugging - while being able to see variable values is great, sometimes we have data that’s
+not the easiest to inspect. For example, to look at long <code class="language-plaintext highlighter-rouge">IntList</code>s, we need to
+click a lot of dropdowns. The Java Visualizer shows a box-and-pointer diagram of
+the variables in your program, which is much better suited for <code class="language-plaintext highlighter-rouge">IntList</code>s. To
+use the visualizer, run the debugger until you stop at a breakpoint, then click
+the “Java Visualizer” tab. The tab is outlined in red below.</p>
+<p><img alt="Java Visualizer Tab" data-original-src="https://sp24.datastructur.es/labs/lab02/img/java_visualizer.png" src="../assets/90d089197e60b7d9.png"/></p>
+<p><strong>The password for phase 1 is an <code class="language-plaintext highlighter-rouge">IntList</code>, not a <code class="language-plaintext highlighter-rouge">String</code>. You may find the
+<code class="language-plaintext highlighter-rouge">IntList.of</code> method helpful.</strong></p>
+<p class="task">Set a breakpoint at <code class="language-plaintext highlighter-rouge">phase1</code> and use the Java Visualizer
+to find the password for <code class="language-plaintext highlighter-rouge">phase1</code> and replace the <code class="language-plaintext highlighter-rouge">phase1</code> argument accordingly
+in <code class="language-plaintext highlighter-rouge">bomb/BombMain.java</code>. You can start the program from <code class="language-plaintext highlighter-rouge">testBombPhase1</code> in
+<code class="language-plaintext highlighter-rouge">tests/bomb/BombTest.java</code>.</p>
+<details>
+<summary>
+<p><strong><code class="language-plaintext highlighter-rouge">phase1</code> Method Breakdown</strong></p>
+</summary>
+<p>The <code class="language-plaintext highlighter-rouge">phase1</code> method generates a secret <code class="language-plaintext highlighter-rouge">IntList</code> called <code class="language-plaintext highlighter-rouge">correctIntListPassword</code>
+(similar to the previous phase, you don’t need to understand how
+<code class="language-plaintext highlighter-rouge">shufflePasswordIntList</code> works). The <code class="language-plaintext highlighter-rouge">password</code> (in the form of an <code class="language-plaintext highlighter-rouge">IntList</code>)
+passed in from <code class="language-plaintext highlighter-rouge">BombMain</code> is then compared against the <code class="language-plaintext highlighter-rouge">correctIntListPassword</code>
+for equality. The goal of this phase is to use the debugger’s Java Visualizer to
+find the structure and value of the <code class="language-plaintext highlighter-rouge">correctIntListPassword</code>’s IntList and pass
+in a <code class="language-plaintext highlighter-rouge">password</code> that matches it!</p>
+</details>
+<h3 id="conditional-breakpoints-phase-2">
+<a aria-labelledby="conditional-breakpoints-phase-2" class="anchor-heading" href="#conditional-breakpoints-phase-2"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Conditional Breakpoints (Phase 2)
+        
+        
+      </h3>
+<p>Consider a program that loops 5000 times - trying to step 
+through each time to find the error wouldn’t be too efficient. Instead, you would want 
+your program to pause on a specific iteration, such as the last one. In other words, you 
+would want your program to pause on certain conditions. To do so, create a breakpoint at the 
+line of interest and open the “Edit breakpoint” menu by right-clicking the breakpoint icon itself. 
+There, you can enter a boolean condition such that the program will only pause at this
+breakpoint if the condition is true. It will look something like this:</p>
+<p><img alt="Conditional Breakpoint" data-original-src="https://sp24.datastructur.es/labs/lab02/img/conditional_breakpoint.png" src="../assets/ef12a612de1898ee.png"/></p>
+<p>Another thing you can do is to set breakpoints for exceptions in Java. If your
+program is crashing, you can have the debugger pause where the exception is
+thrown and display the state of your program. To do so, click
+<img alt="view breakpoint" class="inline" data-original-src="https://sp24.datastructur.es/labs/lab02/img/view-breakpoints.png" src="../assets/6b8c6de55fbc9005.png"/>
+in the debugger window and press the plus icon to create a “Java Exception
+Breakpoint”. In the window that should appear, enter the name of the exception
+that your program is throwing.</p>
+<p class="task">Set a breakpoint at <code class="language-plaintext highlighter-rouge">phase2</code> and use the debugger to find the password
+for <code class="language-plaintext highlighter-rouge">phase2</code> and replace the <code class="language-plaintext highlighter-rouge">phase2</code> argument accordingly in
+<code class="language-plaintext highlighter-rouge">bomb/BombMain.java</code>. Remember, don’t edit <code class="language-plaintext highlighter-rouge">Bomb.java</code>! You can start the program 
+from <code class="language-plaintext highlighter-rouge">testBombPhase2</code> in <code class="language-plaintext highlighter-rouge">tests/bomb/BombTest.java</code>.</p>
+<p class="info"><strong>NOTE</strong>: The password isn’t given explicitly like in the previous phases.
+Rather, your task is to “try to find it” using a conditional breakpoint.</p>
+<details>
+<summary>
+<p><strong><code class="language-plaintext highlighter-rouge">phase2</code> Method Breakdown</strong></p>
+</summary>
+<p>The <code class="language-plaintext highlighter-rouge">phase2</code> method takes in your <code class="language-plaintext highlighter-rouge">password</code> from <code class="language-plaintext highlighter-rouge">BombMain</code>.</p>
+<p>The method adds 100,000 random integers to a <code class="language-plaintext highlighter-rouge">Set</code> called <code class="language-plaintext highlighter-rouge">numbers</code>. It
+then loops through them using a for-each loop, incrementing a variable <code class="language-plaintext highlighter-rouge">i</code> as it
+goes along. On the 1338th iteration (because Java is zero-indexed, <code class="language-plaintext highlighter-rouge">i == 1337</code>
+on iteration 1338), we check whether your password is equal to the current
+<code class="language-plaintext highlighter-rouge">number</code>.</p>
+</details><hr/>
+<p>At this point, you should be able to run the tests in <code class="language-plaintext highlighter-rouge">tests/bomb/BombTest.java</code>
+and have all of them pass with a green checkmark.</p>
+<h2 id="deliverables-and-scoring">
+<a aria-labelledby="deliverables-and-scoring" class="anchor-heading" href="#deliverables-and-scoring"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Deliverables and Scoring
+        
+        
+      </h2>
+<p class="warning"><strong>Make sure you did not edit <code class="language-plaintext highlighter-rouge">Bomb.java</code> or <code class="language-plaintext highlighter-rouge">BombTest.java</code>.</strong> There are tests 
+on the autograder that check if you edited those files and you will not pass 
+if there are changes in the file (this includes adding comments). <strong>The 
+local tests prevent you from editing <code class="language-plaintext highlighter-rouge">Bomb.java</code>, but not <code class="language-plaintext highlighter-rouge">BombTest.java</code>
+(this is only on the autograder), so do not touch those files!</strong></p>
+<p>The lab is out of 5 points.</p>
+<ul>
+<li>Find all the passwords in <code class="language-plaintext highlighter-rouge">BombMain.java</code> and ensure that you pass all tests locally 
+before submitting to Gradescope.</li>
+</ul>
+<h2 id="submission">
+<a aria-labelledby="submission" class="anchor-heading" href="#submission"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Submission
+        
+        
+      </h2>
+<p>Just as you did in Lab 1, add, commit, then push your Lab 2 code to GitHub.
+Then, submit to Gradescope to test your code. If you need a refresher, check
+out the instructions in the
+<a href="https://sp24.datastructur.es/labs/lab01/#submitting-to-gradescope">Lab 1 spec</a> and the
+<a href="https://sp24.datastructur.es/resources/guides/assignment-workflow/#opening-in-intellij">Assignment Workflow Guide</a>.</p>
+<h2 id="acknowledgements">
+<a aria-labelledby="acknowledgements" class="anchor-heading" href="#acknowledgements"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Acknowledgements
+        
+        
+      </h2>
+<p>This assignment is adapted from Adam Blank.**</p>
+</div>
+<hr/>
+<footer>
+<script>
+(function() {
+  var navList = document.querySelector('.aux-nav-list');
+  if (!navList || !navList.firstElementChild) return;
+  var darkToggle = navList.firstElementChild;
+  darkToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDark();
+  });
+})();
+</script>
+<script src="https://sp24.datastructur.es/assets/js/jquery.min.js"></script>
+<script src="https://sp24.datastructur.es/assets/js/clipboard.min.js"></script>
+<script>
+// adapted from https://stackoverflow.com/a/48078807/1217368
+// Waiting for https://github.com/just-the-docs/just-the-docs/pull/945
+$(document).ready(function () {
+  $('pre.highlight').each(function (i) {
+    // create an id for the current code section
+    var currentId = 'codeBlock' + i
+
+    // find the code section and add the id to it
+    var codeSection = $(this).find('code')
+    codeSection.attr('id', currentId)
+
+    // now create the button, setting the clipboard target to the id
+    var btn = document.createElement('a')
+    btn.setAttribute('type', 'btn')
+    btn.setAttribute('class', 'badge badge-light btn-copy-code')
+    btn.setAttribute('data-clipboard-target', '#' + currentId)
+    btn.innerHTML = '<i class="fal fa-copy"></i> Copy'
+    $(this).after(btn)
+  })
+
+  new ClipboardJS('.btn-copy-code')
+})
+</script>
+<script src="https://sp24.datastructur.es/assets/js/tocbot.min.js"></script>
+<script>
+// Tries to mirror the HTML TOC
+tocbot.init({
+  tocSelector: '.js-toc',
+  contentSelector: '.main-content',
+  headingSelector: 'h2, h3',
+  ignoreSelector: '.no_toc',
+  hasInnerContainers: true,
+  linkClass: 'nav-list-link',
+  activeLinkClass: 'active',
+  listClass: 'nav-list',
+  listItemClass: 'nav-list-item',
+  activeListItemClass: 'active',
+  collapseDepth: 3,
+  scrollSmooth: false,
+});
+</script>
+</footer>
+</div></body></html>

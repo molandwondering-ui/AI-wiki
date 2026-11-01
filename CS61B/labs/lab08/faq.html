@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"/><style>body{max-width:960px;margin:40px auto;padding:0 24px;font:17px/1.7 system-ui}pre{white-space:pre-wrap;background:#f4f4f4;padding:16px}img,video{max-width:100%}table{border-collapse:collapse}td,th{border:1px solid #ddd;padding:8px}</style></head><body><p>Source: <a href="https://sp24.datastructur.es/labs/lab08/faq/">https://sp24.datastructur.es/labs/lab08/faq/</a> · snapshot 2026-11-01</p><div class="main-content" id="main-content" role="main">
+<nav class="content-nav nav-faq">
+<ul class="nav-list js-toc"><li class="nav-list-item">FAQ - Lab08 <ul><li class="nav-list-item"><a class="nav-list-link" href="https://sp24.datastructur.es/labs/lab08/faq/#im-getting-a-generic-array-creation-error">I’m getting a “Generic array creation” error.</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://sp24.datastructur.es/labs/lab08/faq/#failing-edge-cases">Failing edge cases</a></li><li class="nav-list-item"><a class="nav-list-link" href="https://sp24.datastructur.es/labs/lab08/faq/#im-running-into-issues-with-resizing-and-getting-expected-to-be-greater-than-this-value-but-was-this-value">I’m running into issues with resizing and getting expected to be greater than this value, but was this value.</a></li></ul></li></ul>
+</nav>
+<div class="content-container">
+<h1 class="title">
+        
+        
+          FAQ - Lab08 
+        
+        
+      </h1>
+<h3 id="im-getting-a-generic-array-creation-error">
+<a aria-labelledby="im-getting-a-generic-array-creation-error" class="anchor-heading" href="https://sp24.datastructur.es/labs/lab08/faq/#im-getting-a-generic-array-creation-error"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> I’m getting a “Generic array creation” error.
+        
+        
+      </h3>
+<p>Be sure to instantiate your buckets table with <code class="language-plaintext highlighter-rouge">new Collection[size]</code> or <code class="language-plaintext highlighter-rouge">(Collection&lt;Node&gt;[]) new Object[size]</code>!</p>
+<h3 id="failing-edge-cases">
+<a aria-labelledby="failing-edge-cases" class="anchor-heading" href="https://sp24.datastructur.es/labs/lab08/faq/#failing-edge-cases"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> Failing edge cases
+        
+        
+      </h3>
+<p>The <code class="language-plaintext highlighter-rouge">Bee</code> class has some strange <code class="language-plaintext highlighter-rouge">equals</code> and <code class="language-plaintext highlighter-rouge">hashCode</code> implementations. If you’re stuck on this test, use the debugger to see what values are expected from the reference map, which is Java’s built-in HashMap. Walking through the expected behavior by hand may help as well.</p>
+<p>Some things to think about:</p>
+<p>The reference map has some (maybe) unexpected behaviors. <em>Why</em> does the reference map behave the way it does (remember <code class="language-plaintext highlighter-rouge">equals</code> and <code class="language-plaintext highlighter-rouge">hashCode</code>!)?
+Does your map behave the same way?</p>
+<h3 id="im-running-into-issues-with-resizing-and-getting-expected-to-be-greater-than-this-value-but-was-this-value">
+<a aria-labelledby="im-running-into-issues-with-resizing-and-getting-expected-to-be-greater-than-this-value-but-was-this-value" class="anchor-heading" href="https://sp24.datastructur.es/labs/lab08/faq/#im-running-into-issues-with-resizing-and-getting-expected-to-be-greater-than-this-value-but-was-this-value"><svg aria-hidden="true" viewbox="0 0 16 16"><use xlink:href="#svg-link"></use></svg></a> I’m running into issues with resizing and getting expected to be greater than this value, but was this value.
+        
+        
+      </h3>
+<p>For example, you might be seeing this error message:</p>
+<div class="language-shell highlighter-rouge"><div class="highlight"><pre class="highlight"><code>expected to be greater than: 16
+but was                    : 16
+</code></pre></div></div>
+<p>If you’re running into this issue, a common problem is how the load factor is being calculated. The load
+factor can be found by dividing the total number of elements in the hashmap divided by the total number
+of buckets - both values are commonly stored as integers, but remember, the load factor is a double.
+How might integer division cause an error?</p>
+</div>
+<hr/>
+<footer>
+<script>
+(function() {
+  var navList = document.querySelector('.aux-nav-list');
+  if (!navList || !navList.firstElementChild) return;
+  var darkToggle = navList.firstElementChild;
+  darkToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    toggleDark();
+  });
+})();
+</script>
+<script src="https://sp24.datastructur.es/assets/js/jquery.min.js"></script>
+<script src="https://sp24.datastructur.es/assets/js/clipboard.min.js"></script>
+<script>
+// adapted from https://stackoverflow.com/a/48078807/1217368
+// Waiting for https://github.com/just-the-docs/just-the-docs/pull/945
+$(document).ready(function () {
+  $('pre.highlight').each(function (i) {
+    // create an id for the current code section
+    var currentId = 'codeBlock' + i
+
+    // find the code section and add the id to it
+    var codeSection = $(this).find('code')
+    codeSection.attr('id', currentId)
+
+    // now create the button, setting the clipboard target to the id
+    var btn = document.createElement('a')
+    btn.setAttribute('type', 'btn')
+    btn.setAttribute('class', 'badge badge-light btn-copy-code')
+    btn.setAttribute('data-clipboard-target', '#' + currentId)
+    btn.innerHTML = '<i class="fal fa-copy"></i> Copy'
+    $(this).after(btn)
+  })
+
+  new ClipboardJS('.btn-copy-code')
+})
+</script>
+<script src="https://sp24.datastructur.es/assets/js/tocbot.min.js"></script>
+<script>
+// Tries to mirror the HTML TOC
+tocbot.init({
+  tocSelector: '.js-toc',
+  contentSelector: '.main-content',
+  headingSelector: 'h2, h3',
+  ignoreSelector: '.no_toc',
+  hasInnerContainers: true,
+  linkClass: 'nav-list-link',
+  activeLinkClass: 'active',
+  listClass: 'nav-list',
+  listItemClass: 'nav-list-item',
+  activeListItemClass: 'active',
+  collapseDepth: 3,
+  scrollSmooth: false,
+});
+</script>
+</footer>
+</div></body></html>

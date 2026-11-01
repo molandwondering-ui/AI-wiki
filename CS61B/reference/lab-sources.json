@@ -1,0 +1,159 @@
+{
+  "date": "2026-11-01",
+  "skeleton_commit": "67caa5eef7f4a8402313e27476b18edf2b21d727",
+  "library_commit": "6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2",
+  "libraries": [
+    {
+      "name": "algs4.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/algs4.jar",
+      "git_blob": "018e0445ec82b0a8ad4deae03197c9e5ce135208",
+      "sha256": "1485faf43ef09e46f5d665a1b6401af8825f1ff5a45a58dd23c01ca6d3765404",
+      "bytes": 2020032,
+      "status": "ok"
+    },
+    {
+      "name": "truth-1.1.3.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/truth-1.1.3.jar",
+      "git_blob": "dd27ca4aaa06523f69a362e6941f0b1827980e39",
+      "sha256": "fc0b67782289a2aabfddfdf99eff1dcd5edc890d49143fcd489214b107b8f4f3",
+      "bytes": 243021,
+      "status": "ok"
+    },
+    {
+      "name": "guava-30.1.1-android.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/guava-30.1.1-android.jar",
+      "git_blob": "90939f40db3ab2d959d98b821c2a95ab7b353cf7",
+      "sha256": "355f79352f8c252f2bdaa06c687c4836a38016caccfc4c28d16ae77ecfdffa2f",
+      "bytes": 2714143,
+      "status": "ok"
+    },
+    {
+      "name": "failureaccess-1.0.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/failureaccess-1.0.1.jar",
+      "git_blob": "9b56dc751c1cc7dff75ed80ccbb45f027058e8ce",
+      "sha256": "a171ee4c734dd2da837e4b16be9df4661afab72a41adaf31eb84dfdaf936ca26",
+      "bytes": 4617,
+      "status": "ok"
+    },
+    {
+      "name": "junit-4.13.2.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-4.13.2.jar",
+      "git_blob": "6da55d8b8520dcc03c250a605151cc0d23a45518",
+      "sha256": "8e495b634469d64fb8acfa3495a065cbacc8a0fff55ce1e31007be4c16dc57d3",
+      "bytes": 384581,
+      "status": "ok"
+    },
+    {
+      "name": "hamcrest-core-1.3.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/hamcrest-core-1.3.jar",
+      "git_blob": "9d5fe16e3dd37ebe79a36f61f5d0e1a69a653a8a",
+      "sha256": "66fdef91e9739348df7a096aa384a5685f4e875584cce89386a7a47251c4d8e9",
+      "bytes": 45024,
+      "status": "ok"
+    },
+    {
+      "name": "junit-jupiter-api-5.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-jupiter-api-5.9.1.jar",
+      "git_blob": "b35d1b7993eb260853eb10a4e0f44309773ced1e",
+      "sha256": "5d2fe4d719dffb25a95d77e9c7a34893cbbb1b4cc6c86f2726af7e0fb7035b2f",
+      "bytes": 207720,
+      "status": "ok"
+    },
+    {
+      "name": "junit-jupiter-engine-5.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-jupiter-engine-5.9.1.jar",
+      "git_blob": "49003a68e533c30682d17856af974167acca91a0",
+      "sha256": "8bbc506b4f603ede1f6bafd8eee69a9cc43de0c26a0ee8d40d583d3feeedc2e9",
+      "bytes": 246530,
+      "status": "ok"
+    },
+    {
+      "name": "junit-jupiter-params-5.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-jupiter-params-5.9.1.jar",
+      "git_blob": "2aacb6eca7de41897d7dab75c7d4ad7ce5b66b86",
+      "sha256": "30157f26d857ba4f84c0d84d156f55f056e80dc09b4281affa8b1ed4d3205c08",
+      "bytes": 578947,
+      "status": "ok"
+    },
+    {
+      "name": "junit-platform-commons-1.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-platform-commons-1.9.1.jar",
+      "git_blob": "76ebc39661ba73a503a4ec54adf64eb43e79f30c",
+      "sha256": "a8e82d510bbbce5fe1777b2ecf7bc68401e9ae8327009e029b2db5798403d25e",
+      "bytes": 102986,
+      "status": "ok"
+    },
+    {
+      "name": "junit-platform-engine-1.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-platform-engine-1.9.1.jar",
+      "git_blob": "a7a43966027b96671d8c694857fad4ec5edea82e",
+      "sha256": "f59c3a67087f2b9bbb17a9c06dd416697989b2c53b38843874ebbbbcb0afc23f",
+      "bytes": 188204,
+      "status": "ok"
+    },
+    {
+      "name": "junit-platform-launcher-1.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-platform-launcher-1.9.1.jar",
+      "git_blob": "c376a4070c99a3e1cd174baa568e5c402d6985c2",
+      "sha256": "5fb50ef56168358892e1bd0a080e2e5bb74dc882b2ecc2a9bad0eadb5a6a449e",
+      "bytes": 169211,
+      "status": "ok"
+    },
+    {
+      "name": "junit-vintage-engine-5.9.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/junit-vintage-engine-5.9.1.jar",
+      "git_blob": "c4a74e942b9e370cd04dd1d7730b3c259ec01982",
+      "sha256": "b97de493877c9ba5e4f03b44bd348a53e5fc9df2df5b1a048923e0204f7d7178",
+      "bytes": 66898,
+      "status": "ok"
+    },
+    {
+      "name": "opentest4j-1.2.0.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/opentest4j-1.2.0.jar",
+      "git_blob": "d5006361a412f458525afc317aecb067dd093d0a",
+      "sha256": "58812de60898d976fb81ef3b62da05c6604c18fd4a249f5044282479fc286af2",
+      "bytes": 7653,
+      "status": "ok"
+    },
+    {
+      "name": "apiguardian-api-1.1.2.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/apiguardian-api-1.1.2.jar",
+      "git_blob": "2b678e154dc72413f3ca9030034ce95db837c052",
+      "sha256": "b509448ac506d607319f182537f0b35d71007582ec741832a1f111e5b5b70b38",
+      "bytes": 6806,
+      "status": "ok"
+    },
+    {
+      "name": "jsr305-3.0.2.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/jsr305-3.0.2.jar",
+      "git_blob": "59222d9ca5e5654f5dcf6680783d0e265baa848f",
+      "sha256": "766ad2a0783f2687962c8ad74ceecc38a28b9f72a2d085ee438b7813e928d0c7",
+      "bytes": 19936,
+      "status": "ok"
+    },
+    {
+      "name": "checker-qual-3.13.0.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/checker-qual-3.13.0.jar",
+      "git_blob": "b78186fd963d68e0610dbf232869789305355eb6",
+      "sha256": "3ea0dcd73b4d6cb2fb34bd7ed4dad6db327a01ebad7db05eb7894076b3d64491",
+      "bytes": 209527,
+      "status": "ok"
+    },
+    {
+      "name": "error_prone_annotations-2.7.1.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/error_prone_annotations-2.7.1.jar",
+      "git_blob": "8ea5377f9b9596fb5b23822172498315d1b1fe6d",
+      "sha256": "cd5257c08a246cf8628817ae71cb822be192ef91f6881ca4a3fcff4f1de1cff3",
+      "bytes": 14835,
+      "status": "ok"
+    },
+    {
+      "name": "j2objc-annotations-1.3.jar",
+      "url": "https://raw.githubusercontent.com/Berkeley-CS61B/library-sp24/6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2/j2objc-annotations-1.3.jar",
+      "git_blob": "a429c7219d30e797d4a6b3cfb579266f323dd030",
+      "sha256": "21af30c92267bd6122c0e0b4d20cccb6641a37eaf956c6540ec471d584e64a7b",
+      "bytes": 8781,
+      "status": "ok"
+    }
+  ]
+}
