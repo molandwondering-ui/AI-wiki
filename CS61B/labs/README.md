@@ -1,42 +1,70 @@
-# CS61B 实验索引
+# Labs 怎么用：先运行，再找错，最后自己实现
 
-这里只同步对应正课的 **Lab 01、02、03**，以及 Hashing 对应的 **Lab 08**。起始代码保留原样，没有代做练习。
+Lab 就是配套练习。你会拿到题目、老师写好的部分代码，以及一套检查程序。你要读懂要求，修改指定文件，再运行检查，看哪里还没有做好。
 
-| 实验 | 你要完成什么 | 修改范围与运行入口 |
+如果你现在只想看一段完整程序怎么工作，先去[可运行小例子](../examples/README.md)。这里的实验故意留了错误或空缺，第一次运行失败很正常。
+
+## 先做哪个
+
+按 Lab 01 → 02 → 03 做。Lab 08 是哈希表练习，读过第 19 讲、理解泛型和接口后再开始。
+
+| 实验 | 你实际要做的事 | 从哪里启动 |
 |---|---|---|
-| [Lab 01：Setup](lab01/README.md) | 配置开发环境，修复算术逻辑，通过测试 | Arithmetic.java；运行 ArithmeticTest |
-| [Lab 02：Debugging I](lab02/README.md) | 使用调试器找出三个阶段输入 | 只改 BombMain.java；从 BombTest 启动 |
-| [Lab 03：Debugging II](lab03/README.md) | 定位并修复四个冒险关卡的问题 | 按关卡修改；运行 AdventureGameTests |
-| [Lab 08：HashMap](lab08/README.md) | 实现泛型哈希映射，测试并记录性能 | MyHashMap.java、results.txt |
+| [Lab 01](lab01/README.md) | 让程序算两个整数的和与积，修正错误结果 | Arithmetic 的 main；ArithmeticTest |
+| [Lab 02](lab02/README.md) | 暂停程序，查看三个阶段需要的输入，填进 BombMain.java | BombTest 的 Debug 按钮 |
+| [Lab 03](lab03/README.md) | 读报错位置，修好冒险游戏的四个关卡 | AdventureGame；AdventureGameTests |
+| [Lab 08](lab08/README.md) | 自己实现按键存取的 MyHashMap，再测速度 | TestMyHashMap，之后才是速度测试 |
 
-## 打开一个实验
+Lecture 1–9 对应这里的 Lab 1–3，不是 Lab 1–9；第 19 讲另外配了 Lab 8。
 
-1. 安装/选择 **JDK 17 或更新版本**，IntelliJ 项目的语言级别与 JDK 相匹配。当前电脑未检测到可用 Java Runtime，本次未代装环境。
-2. 用 IntelliJ 单独打开相应的 `labNN/starter/`，例如 `lab02/starter/`。不要把四个实验的 src 混到同一个源码根：它们有重复的教学类名。
-3. 在 Project Structure 中把 `src/` 标为 Sources，把 `tests/` 标为 Test Sources。
-4. 把本目录的 [library](library/) 下所有 JAR 加入该模块依赖；这是从官方 library-sp24 固定版本同步的相关子集，不是整个课程的所有依赖。
-5. 按官方说明安装 CS 61B 插件和 Java Visualizer。普通断点与变量查看由 IntelliJ 提供，Visualizer 是 Lab 02 中观察引用结构的辅助工具。
-6. **Run/Debug Configuration 的 Working directory 设为该实验的 starter 目录**。测试会相对读取 `src/`、`tests/data/` 等资源；Lab 02 还会读取 Bomb.java 校验是否被修改。
-7. 从相应测试类旁的运行/调试按钮开始。调试练习的初始失败是预期现象，先区分依赖缺失、工作目录错误与真正的练习错误。
+## 第一次打开：以 Lab 01 为例
 
-官方实验混用 JUnit 4 与 JUnit 5。相关 API、engine、Vintage engine、Truth、Guava、algs4 等已同步，文件 SHA-256 见 [来源记录](../reference/lab-sources.json)。IDE 若提示配置 JUnit，按实际 import 识别版本，不要批量替换官方测试注解。
+1. 在 IntelliJ 中选择 **File → Open**，打开 `lab01/starter/`。这台电脑的完整路径是 `/Users/gemini/AI-wiki/CS61B/labs/lab01/starter`。
+2. 选择 JDK 17 或更新版本。JDK 是编译、运行 Java 的工具；在 **File → Project Structure → Project → SDK** 中选择。没有列出来时用 Add SDK → JDK 指向安装目录。
+3. 在左侧右键 `src`，选择 **Mark Directory as → Sources Root**；右键 `tests`，选择 **Test Sources Root**。这是告诉 IntelliJ：“这里是程序，这里是检查程序的测试。”
+4. 进入 **Project Structure → Modules → Dependencies → + → JARs or Directories**，添加 [library](library/) 中的所有 `.jar` 文件。它们提供输入工具、JUnit 和 Truth 等，程序和测试会用到。
+5. 打开 [Arithmetic.java](lab01/starter/src/Arithmetic.java)，点 main 旁的绿色三角形运行。在下方控制台输入一个整数并回车，再输入另一个整数并回车。
+6. 再打开 [ArithmeticTest.java](lab01/starter/tests/ArithmeticTest.java)，点测试类旁的运行按钮。看哪些检查通过、哪些失败，再按 [Lab 01 指南](lab01/README.md) 修改。
 
-## 每个目录里有什么
+**工作目录也要设对：**打开 Run → Edit Configurations，把 Working directory 设为正在做的实验的 `starter` 目录。程序按这个起点寻找文件。Lab 02 要读取 `src/bomb/Bomb.java`，Lab 03 要读取 `tests/data`；起点不对就会报找不到文件。
 
-- `README.md`：中文目标、步骤、检查点和允许修改范围。
-- `official.html` / `official.txt`：官方题目正文的 HTML 与文本快照。
-- `faq.html` / `faq.txt`：官方 FAQ 快照。
-- `starter/src/`：官方练习源码及需要的资源。
-- `starter/tests/`：官方测试与测试数据。
+每次单独打开一个实验，不要把四份 src 合并成同一个源码目录，里面有重复类名。按官方说明安装 CS 61B 插件和 Java Visualizer；后者能把对象与引用画出来，适合 Lab 02。普通断点和变量查看则是 IntelliJ 自带功能。
 
-HTML 的 40 张不同来源图片已缓存到 assets，保留原始来源记录；外部链接、嵌入视频与部分页面脚本仍可能需要联网，不能视为完整课程站镜像。起始代码固定于 `67caa5eef7f4a8402313e27476b18edf2b21d727`，依赖库固定于 `6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2`。
+### 这台电脑的 Java 在哪里
 
-## 自学如何判断完成
+2026-11-01 复查发现，Homebrew 已安装 OpenJDK 25.0.2，可用命令是 `/opt/homebrew/opt/openjdk/bin/java`。之前只检查系统 java 入口而误判为“没有 Java”，现已更正。
 
-读规格 → 用最小输入说明预期 → 做练习 → 本地测试 → 记录原因与修改。Lab 08 还需要真实运行速度测试、填写 results.txt；没有预填模拟数字。
+在 IntelliJ 中可尝试把 `/opt/homebrew/opt/openjdk/libexec/openjdk.jdk/Contents/Home` 添加为 JDK，并把本课程代码的语言级别设为 17。新增的 10 个例子已经按 Java 17 目标编译，再用 JDK 25 运行核对输出；本次没有运行或完成官方实验测试。
 
-本地测试不等于已提交 Berkeley 课程作业。官方页面中的 Beacon、Gradescope 和学生仓库步骤面向当期选课学生；自学不需要为了使用公开代码而创建这些受限资源。当前副本也没有连接学生仓库或执行提交。
+## 文件夹里的东西分别做什么
 
-本次完成的是资料同步与中文学习导引，没有宣称练习通过：本机缺少 Java Runtime；Lab 08 原始骨架缺接口实现，编译失败属于待完成状态。
+| 文件或目录 | 什么时候看 |
+|---|---|
+| README.md | 先读中文步骤，知道要改哪里、怎么检查 |
+| official.html / official.txt | 查看老师的完整题目；本地保存了网页和纯文字两种版本 |
+| faq.html / faq.txt | 遇到常见问题时查官方答疑 |
+| starter/src/ | 练习代码，按题目修改指定文件 |
+| starter/tests/ | 老师提供的检查程序和数据，运行它们检查自己的修改 |
+| library/*.jar | 程序需要用到的外部代码，在 IntelliJ 中添加为依赖即可 |
+
+## 报错时先判断是哪一类
+
+| 看到什么 | 先检查什么 |
+|---|---|
+| 找不到 JDK / Java Runtime | 是否选中了实际安装的 JDK，是否只是系统入口没配置 |
+| package org.junit… 或 edu.princeton… does not exist | library 的 JAR 是否加入了当前模块 |
+| 找不到 src/… 或 tests/data/… | Working directory 是否为当前实验的 starter |
+| expected 与 actual 不同 | 测试已经跑起来了；对照输入，看程序为什么没算出预期结果 |
+| Lab 08 提示没有实现接口方法 | 这份起始代码本来就没写完，需要按题目补全 |
+
+JUnit 负责运行测试，Truth 负责写“结果应该是什么”的检查。官方材料同时使用 JUnit 4 和 5，依赖已一并保存；遇到 import 问题先检查环境，不要批量改老师的测试。
+
+## 怎样算做完
+
+先拿一个小输入自己算答案，再修改代码，运行相应测试。修好后把已有测试再跑一遍，确认之前的功能仍然正常。最后用几句话记下：原来哪里错了，怎样发现，改了什么。Lab 08 还要实际测速度并填写 results.txt。
+
+本地做练习不需要 Berkeley 学生账号。官方题目中的 Beacon、Gradescope 等面向当期选课学生；此处没有替你创建学生仓库或提交作业。
+
+起始代码与测试保留官方原样，版本为 `67caa5eef7f4a8402313e27476b18edf2b21d727`；依赖版本为 `6ba6f63aae658fa92dc1c4ec42c053fe33e8a6f2`。[来源记录](../reference/lab-sources.json)保存了校验值。题目网页的 40 张图片已缓存在本地，外部链接、视频及部分脚本仍需要网络。
 
 [返回课程索引](../README.md)

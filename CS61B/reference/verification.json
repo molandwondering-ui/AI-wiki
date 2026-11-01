@@ -2,17 +2,93 @@
   "date": "2026-11-01",
   "notes": 10,
   "figures": 83,
-  "local_links_checked": 1580,
+  "local_links_checked": 1659,
   "lab_starter_files": 43,
-  "java_runtime": "unavailable; lab tests not run",
+  "java_runtime": "Homebrew OpenJDK 25.0.2; examples compiled with --release 17 and run in compiled and source modes; official lab tests not run",
   "starter_status": "original unsolved; Lab08 intentionally lacks required methods",
   "issues": [],
   "lab_images_cached": 40,
   "lab_image_references_checked": 42,
   "library_jars_verified": 19,
-  "browser_preview": {
+  "language_revision": {
+    "date": "2026-11-01",
+    "notes": 10,
+    "sections": 83,
+    "lab_guides": 4,
+    "runnable_examples": [
+      {
+        "file": "examples/lecture01/CarDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "小红剩余轮子：2\n小蓝剩余轮子：4\n"
+      },
+      {
+        "file": "examples/lecture02/DogDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "类方法选中：20\n实例方法选中：20\n返回原来的 big：true\n"
+      },
+      {
+        "file": "examples/lecture03/ReferenceDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "方法里面：[7, 8]\na：[9, 2]\nb：[9, 2]\n同一个数组：true\n"
+      },
+      {
+        "file": "examples/lecture04/SentinelListDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "[]，size=0\n[10, 20]，size=2\n"
+      },
+      {
+        "file": "examples/lecture05/ArrayCopyDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "修改盒子：9 / 9\n换个盒子：9 / 7\n第一行还没创建：true\n不等长的两行：[[1], [2, 3]]\n"
+      },
+      {
+        "file": "examples/lecture06/VarianceDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "5 组方差检查全部通过\n整数除法：7\n浮点除法：7.375\n"
+      },
+      {
+        "file": "examples/lecture07/ResizableListDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "size=1，容量=2\nsize=2，容量=2\n扩容到：4\nsize=3，容量=4\n第二个数：20\n删除末尾：30\n读取被拒绝：下标 2，size=2\n空列表不能删除\n"
+      },
+      {
+        "file": "examples/lecture08/InterfaceDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "通用问候：你好，Lin\n英文问候：Hello, Lin\n"
+      },
+      {
+        "file": "examples/lecture09/InheritanceDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "豆豆：汪\n然后摇尾巴\n给贵宾犬梳毛\n转换后仍是同一只狗：true\n小黄是贵宾犬吗：false\n转换失败：普通 Dog 不能当作 Poodle\n"
+      },
+      {
+        "file": "examples/lecture19/HashCollisionDemo.java",
+        "release": 17,
+        "compiled_and_source_mode": "pass",
+        "stdout": "两个哈希值：2112 / 2112\n键是否相等：false\n分别查询：奶茶 / 咖啡\n更新后：少糖奶茶，size=2\n缺失的键：null\n负数取余：-1\n合法桶下标：3\n最小整数的绝对值：-2147483648\n"
+      }
+    ],
+    "original_code_math_figures": "preserved",
+    "starter_sha256_verified": 43,
+    "jar_sha256_verified": 19
+  },
+  "browser_preview_before_language_revision": {
     "course_index": "rendered and visually inspected",
     "hashing_note": "formula layout visually inspected; all 10 figures loaded; 3 math blocks rendered without errors",
     "lab02_official_snapshot": "14 image elements loaded successfully"
+  },
+  "browser_preview": {
+    "lecture03": "intro and embedded runnable example visually inspected; 8 images loaded",
+    "labs_index": "intro and experiment table visually inspected",
+    "lecture19": "formula section visually inspected after MathJax and fonts finished loading; 10 images loaded; 3 math blocks; no MathJax errors"
   }
 }

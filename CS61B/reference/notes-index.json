@@ -2,7 +2,7 @@
   {
     "lecture": 1,
     "part": 1,
-    "title": "Java入门与对象",
+    "title": "让 Java 程序跑起来，再认识类和对象",
     "file": "Lecture01_Java入门与对象.md",
     "figures": [
       120,
@@ -18,7 +18,7 @@
   {
     "lecture": 2,
     "part": 6,
-    "title": "类实例与交互式调试",
+    "title": "同一段代码怎样操作不同对象，再用调试器找错",
     "file": "Lecture02_类实例与交互式调试.md",
     "figures": [
       480,
@@ -34,7 +34,7 @@
   {
     "lecture": 3,
     "part": 12,
-    "title": "引用按值传递与IntList",
+    "title": "为什么改了 b，a 有时也会跟着变",
     "file": "Lecture03_引用按值传递与IntList.md",
     "figures": [
       120,
@@ -50,7 +50,7 @@
   {
     "lecture": 4,
     "part": 15,
-    "title": "SLList封装与哨兵节点",
+    "title": "把链表包装好，让它更容易使用",
     "file": "Lecture04_SLList封装与哨兵节点.md",
     "figures": [
       120,
@@ -66,7 +66,7 @@
   {
     "lecture": 5,
     "part": 18,
-    "title": "双向链表泛型与数组",
+    "title": "让链表能往回走，再认识泛型和数组",
     "file": "Lecture05_双向链表泛型与数组.md",
     "figures": [
       300,
@@ -82,7 +82,7 @@
   {
     "lecture": 6,
     "part": 9,
-    "title": "测试驱动开发与方差调试",
+    "title": "程序算错了，怎样一步步找到原因",
     "file": "Lecture06_测试驱动开发与方差调试.md",
     "figures": [
       300,
@@ -98,7 +98,7 @@
   {
     "lecture": 7,
     "part": 21,
-    "title": "数组列表扩容与内存保留",
+    "title": "数组装满以后，列表怎样继续加东西",
     "file": "Lecture07_数组列表扩容与内存保留.md",
     "figures": [
       120,
@@ -114,7 +114,7 @@
   {
     "lecture": 8,
     "part": 25,
-    "title": "接口继承与动态方法选择",
+    "title": "换一种列表，为什么不该重写整段业务代码",
     "file": "Lecture08_接口继承与动态方法选择.md",
     "figures": [
       120,
@@ -130,7 +130,7 @@
   {
     "lecture": 9,
     "part": 28,
-    "title": "类继承组合与类型转换",
+    "title": "给已有的类增加能力，以及继承容易踩的坑",
     "file": "Lecture09_类继承组合与类型转换.md",
     "figures": [
       480,
@@ -147,7 +147,7 @@
   {
     "lecture": 19,
     "part": 59,
-    "title": "哈希表从分桶到常数时间",
+    "title": "哈希表为什么能很快找到你要的东西",
     "file": "Lecture19_哈希表从分桶到常数时间.md",
     "figures": [
       120,

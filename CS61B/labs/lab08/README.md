@@ -1,73 +1,80 @@
-# Lab 08：实现并评测 MyHashMap
+# Lab 08：自己做一个能按名字查值的 HashMap
 
-[官方题目](https://sp24.datastructur.es/labs/lab08/) · [题目快照](official.html) · [FAQ 快照](faq.html) · [起始代码](starter/) · [环境配置](../README.md)
+[官方题目](https://sp24.datastructur.es/labs/lab08/) · [本地题目](official.html) · [本地 FAQ](faq.html) · [练习代码](starter/) · [第一次打开与配置环境](../README.md)
 
-以下为中文实验导引，原始英文规格与 starter 保留供核对。同步日期 2026-11-01；未填写解答，也未修改官方测试。
+下面按实际操作顺序说明怎么做。原始题目、代码和测试均保留，具体要求可随时对照官方材料。整理日期：2026-11-01。
 
-## 本实验要学会什么
+## 这次做什么
 
-将 Lecture 19 的“哈希 → 分桶 → 比较键 → 控制负载”实现成泛型 Map。重点是契约、冲突正确性、扩容和可替换的桶结构。
+想象你要保存“用户名 → 手机号”。put 存入或更新，get 根据用户名查手机号，containsKey 判断是否存在，size 告诉你保存了多少个用户名。这个实验要你自己实现这些操作。
 
-开始前先读 [Map61B.java](starter/src/hashmap/Map61B.java) 和 [MyHashMap.java](starter/src/hashmap/MyHashMap.java)。当前 starter 故意缺少接口方法，不能直接编译；这属于练习内容，不是下载损坏。
+先跑[哈希冲突的小例子](../../examples/lecture19/README.md)，看看 Java 自带 HashMap 怎么用，再读第 19 讲理解分桶。实验中要做的是自己的 MyHashMap。
 
-## 按依赖顺序实现
+打开 [Map61B.java](starter/src/hashmap/Map61B.java) 看各方法的要求，再看 [MyHashMap.java](starter/src/hashmap/MyHashMap.java)。起始代码故意没有补齐接口方法，一开始不能编译是正常状态。
 
-1. 补全字段和三个构造器：无参、initialCapacity、initialCapacity + loadFactor。官方默认 **16 个桶、最大负载 0.75**。
-2. 实现桶创建方式。保持 `Collection<Node>[] buckets`，通过 `createBucket()` 创建每个桶，让测试可以通过子类替换桶类型。
-3. 实现 get、containsKey、size，再实现 put 的已有键更新和新键插入。
-4. 实现增长与重分桶，保持 size 等于键值映射数量。
-5. 实现 clear。对本次不做的可选方法，按接口声明提供抛 UnsupportedOperationException 的方法体，确保类满足接口。
-6. 基本功能通过后，再运行不同桶类型测试和速度实验。
+## 第一步：先把需要保存的东西想清楚
 
-上述顺序是中文学习建议；方法语义以官方接口和题目为准。
+每条记录有 key 和 value，比如用户名和手机号。Node 保存一条记录，桶保存被分到同一位置的多条记录，数组管理所有桶。除此之外，还需要记住当前有多少条记录，以及桶多挤时需要扩容。
 
-## 必须保持的约束
+补全三个构造器：不传参数、指定 initialCapacity、指定 initialCapacity 与 loadFactor。默认是 **16 个桶、最大负载 0.75**。负载就是“记录数除以桶数”；计算时要保留小数。
 
-- Node 保存 key/value；同一键再次 put 是更新值，不增加 size。
-- 冲突键可以有相同 hashCode，仍必须按 equals 区分。不同对象也可能表示同一个键。
-- 正容量 M 下可用 `Math.floorMod(key.hashCode(), M)` 得到合法下标；直接 `%` 可能返回负数。
-- 负载按浮点计算，不要使用被截断的整数除法；新增键导致超阈值时按几何方式增长。
-- 扩容要按**新容量**重新计算每个键的桶，不能仅复制旧桶数组。搬运已有条目时不要把 size 再累计一遍。
-- 题目假设不会插入 null key。Map 接口的缺失键返回 null；若允许 null value，containsKey 应检查键是否存在，不能简单等同 `get(key) != null`。
-- clear 后 size 为 0，旧映射不可访问，之后仍能正常插入。
+桶数组按题目使用 `Collection<Node>[] buckets`，每个桶通过 `createBucket()` 创建。暂时可以用 LinkedList 作桶，但外面只依赖 Collection 提供的添加、遍历等操作。
 
-## 桶只依赖 Collection 的能力
+## 第二步：先能找到，再能放进去
 
-默认可以选择 LinkedList，但不能把所有桶硬编码为 LinkedList 后调用专有方法。官方测试会覆盖 ArrayList、LinkedList、HashSet、Stack、ArrayDeque 等桶实现，检验你的算法是否仅依赖 Collection 约定的插入与遍历等能力。
+给定一个 key，先算它该去哪一桶，再逐条用 equals 核对桶里的键。不同键可能落在同一桶，不能仅凭 hashCode 相同就认定找到了。
 
-数组创建也有泛型限制：不能直接 `new Collection<Node>[capacity]`。按课程方式创建再处理 unchecked 警告；不要把泛型问题误诊断为哈希算法问题。
+对正桶数 M，可以用 `Math.floorMod(key.hashCode(), M)` 得到下标。直接使用 `%` 可能得到负数，不适合作数组下标。
 
-## 测试顺序
+可以先写 size、get、containsKey，然后写 put：找到原来的键就更新 value，没有找到才增加记录和 size。为了逐步编译，可先补齐其他接口方法的声明，用明确的临时异常标出尚未实现处，再逐个完成；不要把必做方法一直留成空实现。
 
-| 阶段 | 入口 | 重点 |
+例如先 `put("Lin", "号码A")`，再 `put("Lin", "号码B")`，最后只应有一条记录，查询得到号码 B。自己写测试验证这个行为。
+
+题目假设不会插入 null key。缺失键的 get 返回 null；如果 value 允许为 null，仅凭 get 返回 null 就不能确定没有这个键，所以 containsKey 要实际检查键。
+
+## 第三步：桶太挤，就增加桶并重新安排所有记录
+
+新增键后，如果负载超过阈值，就按倍数增加桶数。旧元素也要按**新的桶数**重新算下标。例如键 20，模 4 在桶 0，模 8 在桶 4；只复制旧桶不会得到正确新位置。
+
+搬运记录时，别把 size 再加一遍：记录只是换位置，没有新增。扩容后要逐条查回已有键，验证值和数量都没变。
+
+再实现 clear：清除所有记录，size 归零，旧键查不到，之后仍可以正常插入。
+
+## 第四步：换一种桶，操作也应该正确
+
+官方测试会把桶换成 ArrayList、LinkedList、HashSet、Stack、ArrayDeque 等。如果代码把桶写死成 LinkedList 并调用专有方法，换一种就会出问题。因此使用 createBucket，把“桶怎么创建”和“怎样在桶里查键”分开。
+
+泛型数组不能直接写 `new Collection<Node>[capacity]`。这里会遇到第 7 讲的数组创建限制，可按课程方式创建并处理类型转换警告；这与分桶逻辑是两个问题。
+
+## 第五步：先测功能，再测速度
+
+| 先后 | 运行入口 | 看什么 |
 |---|---|---|
-| 功能 | [TestMyHashMap](starter/tests/hashmap/TestMyHashMap.java) | 插入、更新、查询、clear、泛型、扩容、边界 |
-| 桶兼容性 | [TestMyHashMapBuckets](starter/tests/hashmap/TestMyHashMapBuckets.java) | 更换桶容器后行为仍正确 |
-| 可选功能 | [TestMyHashMapExtra](starter/tests/hashmap/TestMyHashMapExtra.java) | 按本次实现的可选接口运行 |
-| 随机插入 | [InsertRandomSpeedTest](starter/tests/speed/InsertRandomSpeedTest.java) | 对比 MyHashMap、ULLMap、Java HashMap |
-| 有序插入 | [InsertInOrderSpeedTest](starter/tests/speed/InsertInOrderSpeedTest.java) | 对比另一种输入分布 |
-| 桶比较 | [BucketsSpeedTest](starter/tests/speed/BucketsSpeedTest.java) | 观察不同桶结构的实际速度 |
+| 1 | [TestMyHashMap](starter/tests/hashmap/TestMyHashMap.java) | 能否插入、更新、查询、清空，扩容后是否丢数据 |
+| 2 | [TestMyHashMapBuckets](starter/tests/hashmap/TestMyHashMapBuckets.java) | 换桶的容器类型后是否仍正确 |
+| 可选 | [TestMyHashMapExtra](starter/tests/hashmap/TestMyHashMapExtra.java) | 你选做的额外操作是否实现正确 |
+| 3 | [InsertRandomSpeedTest](starter/tests/speed/InsertRandomSpeedTest.java) | 随机插入时 MyHashMap、ULLMap、Java HashMap 的速度 |
+| 4 | [InsertInOrderSpeedTest](starter/tests/speed/InsertInOrderSpeedTest.java) | 按顺序插入时的速度 |
+| 5 | [BucketsSpeedTest](starter/tests/speed/BucketsSpeedTest.java) | 换不同桶容器后，速度怎样变化 |
 
-不要先运行速度测试来绕过功能错误。官方自带测试既有 JUnit 4，也有 JUnit 5，依赖见[环境说明](../README.md)。
+JUnit 4/5 的依赖已经保存，添加方式见[环境说明](../README.md)。有功能错误时先修好它；错误程序跑得再快，也没有完成题目。
 
-## 记录真实结果，不把复杂度结论当基准数字
+## results.txt 填什么
 
-将运行环境、输入规模、各实现时间和简短观察填入 [src/results.txt](starter/src/results.txt)。官方不规定必须有多少数据点，但应能体现你实际进行了实验。
+把实际测得的数据写进 [results.txt](starter/src/results.txt)：电脑与 Java 环境、输入数量、使用哪种实现、耗时，以及你观察到的差异。可以先用下面的空表记录，再整理进文件。
 
-可按下面的空表收集，再整理到 results.txt：
-
-| 输入模式 | 元素数 | 桶实现 | 用时 | 观察 |
+| 输入方式 | 元素数 | 实现或桶类型 | 实测时间 | 观察 |
 |---|---|---|---|---|
-| 随机 / 有序 | 待实测 | 待选择 | 待实测 | 待记录 |
+| 随机 / 有序 | 待填写 | 待填写 | 待运行 | 待填写 |
 
-一次更快不等于证明渐近复杂度更好。输入分布、JIT、桶内查找及测试噪声都可能影响观察；结合负载和碰撞解释结果。
+不要根据“O(1) 应该很快”自己填一个时间。一次更快也不能证明所有规模都更快；输入、冲突、Java 运行时优化和测量波动都会影响数字。结合负载和数据量解释你实际看到的变化。
 
-## 必做与可选的版本差异
+## 哪些可选，哪些必须有
 
-核心功能、桶兼容性与 results.txt 是本实验主线。remove、keySet、iterator 属于可选实现；若不做也须提供对应声明的异常方法体，以便编译。
+主线是基本功能、换桶测试与速度记录。remove、keySet、iterator 可选做；不做时仍需提供对应方法，并抛出 UnsupportedOperationException，明确表示这个操作暂不支持。否则类缺少接口要求的方法，仍然不能编译。
 
-官方页面可选段还提到 `remove(K key, V value)`，但本次固定版本的 Map61B 接口只声明 `remove(K key)`。因此以已同步接口和测试的实际签名为准，不要凭其他学期的教程强加不匹配的方法要求。
+官方网页还提到 `remove(K key, V value)`，但本次保存的接口只声明 `remove(K key)`。以本地 Map61B 和测试的实际签名为准，不用照其他学期的教程加上不匹配的要求。
 
-完成后应能解释：为什么重分桶必须重算下标、为什么更新键不增加 size，以及期望摊还 O(1) 需要哪些条件。
+做完后试着解释三个问题：同一个键再次 put 为什么不增加 size？为什么扩容要重新算下标？为什么哈希表很快仍然需要“分布合理、负载受控”等条件？
 
 [返回实验索引](../README.md)

@@ -1,48 +1,52 @@
-# Lab 03：从异常栈定位冒险游戏的错误
+# Lab 03：沿着报错信息，修好冒险游戏的四个关卡
 
-[官方题目](https://sp24.datastructur.es/labs/lab03/) · [题目快照](official.html) · [FAQ 快照](faq.html) · [起始代码](starter/) · [环境配置](../README.md)
+[官方题目](https://sp24.datastructur.es/labs/lab03/) · [本地题目](official.html) · [本地 FAQ](faq.html) · [练习代码](starter/) · [第一次打开与配置环境](../README.md)
 
-以下为中文实验导引，原始英文规格与 starter 保留供核对。同步日期 2026-11-01；未填写解答，也未修改官方测试。
+下面按实际操作顺序说明怎么做。原始题目、代码和测试均保留，具体要求可随时对照官方材料。整理日期：2026-11-01。
 
-## 本实验要学会什么
+## 这次做什么
 
-识别异常类型、读取调用栈、找到根因，并用最小改动修复。相关正课是引用与列表、测试，以及第 9 讲的抽象边界。
+这份冒险游戏已经写好，但藏了几处错误。你要让程序跑到出错处，读清它当时的数据，再修好。涉及引用、列表、测试；读完第 9 讲还可以回来理解为什么不必钻进每个辅助方法的内部。
 
-先运行 [AdventureGame](starter/src/adventure/AdventureGame.java) 的 main，了解游戏要做什么；随后运行 [AdventureGameTests](starter/tests/adventure/AdventureGameTests.java)。初始失败是预期，按下面的关卡顺序推进。
+先运行 [AdventureGame](starter/src/adventure/AdventureGame.java) 的 main，看看游戏怎么玩。再运行 [AdventureGameTests](starter/tests/adventure/AdventureGameTests.java)，找到失败的关卡。Working directory 设为 `starter/`，否则会找不到 `tests/data`。
 
-## 先学会读栈，再开始猜原因
+## 先读报错，不急着改代码
 
-异常第一行告诉你错误类型，后续行表示异常发生的方法和逐层调用者。最顶端常是触发错误的位置，但根因可能在更早的构造函数、参数准备或循环状态中。
+报错后通常有一串 `at 类名.方法名(文件.java:行号)`。它记录了“哪里出错、谁调用了它、再往外是谁调用的”，这串信息叫调用栈。
 
-遇到库内部的 ArrayList/Objects 栈帧，可以向下找自己代码最先调用它的位置。不要因为栈顶不是你写的类，就断定库有错误。运行配置的工作目录设为 starter，保证测试能读取 tests/data。
+先看最上面的错误类型。比如 NullPointerException 常表示通过空引用访问对象，IndexOutOfBoundsException 表示用了范围之外的位置。再点你自己代码对应的行号，设断点，查看那个变量为什么是 null，或者下标与长度分别是多少。
 
-## 四个关卡
+栈顶有时是 Java 库的方法。先往下找到自己代码调用它的位置，检查传入了什么，不要立即认定库有问题。真正的原因也可能在更早的初始化或循环里。
 
-| 顺序 | 文件 | 观察目标 | 官方修改规模参考 |
-|---|---|---|---|
-| 1 | [BeeCountingStage](starter/src/adventure/BeeCountingStage.java) | 先解决空引用，再检查索引边界 | 两个问题，各约 1 行 |
-| 2 | [SpeciesListStage](starter/src/adventure/SpeciesListStage.java) | 结合调用参数和 Javadoc 检查列表边界情况 | 约 3–4 行 |
-| 3 | [PalindromeStage](starter/src/adventure/PalindromeStage.java) | 利用 IDE 提示，再定位无法退出的循环 | 约 3 行 |
-| 4 | [MachineStage](starter/src/adventure/MachineStage.java) | 对照逐元素最大值与求和结果检查辅助函数 | 约 2–5 行 |
+## 按这个顺序修
 
-行数只是官方提示，不是机械目标。每修完一个关卡，先跑对应测试，再跑已通过的关卡；不要把整段代码重写到看不出原本练习的问题。
+| 关卡 | 打开哪个文件 | 重点观察 |
+|---|---|---|
+| 1 | [BeeCountingStage](starter/src/adventure/BeeCountingStage.java) | 对象有没有创建？循环有没有走到合法范围之外？ |
+| 2 | [SpeciesListStage](starter/src/adventure/SpeciesListStage.java) | 传入的列表是什么样？方法上方的 Javadoc 对特殊输入怎么规定？ |
+| 3 | [PalindromeStage](starter/src/adventure/PalindromeStage.java) | 先处理 IDE 提示，再看循环里哪些变量本应变化却没变 |
+| 4 | [MachineStage](starter/src/adventure/MachineStage.java) | 先算正确的中间结果，再检查辅助方法返回了什么 |
 
-## MachineStage 用输出契约隔离错误
+官方提示的修改规模依次是：第一关两个问题，各约 1 行；第二关约 3–4 行；第三关约 3 行；第四关约 2–5 行。行数只是帮助你缩小范围，不用为了凑行数修改。
 
-对 `{2,0,10,14}` 和 `{-5,5,20,30}`，逐元素最大值应为 `{2,5,20,30}`，和为 57。先独立算出这些中间结果，再看函数实际返回什么。
+每修一关就运行相应测试，再重跑已经通过的关卡。找到具体错误后改它，通常比把整关重写更容易理解原因。
 
-官方要求不要钻进混淆的 mysteryMax、mysteryAdd 源码猜逻辑，使用 Step Over 看结果。只有确认某个函数违反契约后，才按规格允许的方式整体重写那个函数。误入时可以 Step Out。
+## MachineStage：不知道内部怎么写，也能检查它做得对不对
 
-这个练习说明：不用理解每一层内部实现，也能根据输入输出判断某层是否有错。
+两组输入是 `{2,0,10,14}` 和 `{-5,5,20,30}`。每个位置挑较大的数，应该得到 `{2,5,20,30}`，再相加应该是 57。先把这些结果写下来，再单步观察程序。
 
-## 可选：异常断点、表达式与 Watches
+官方要求对 mysteryMax、mysteryAdd 使用 **Step Over**，不要钻进故意写得难读的内部代码。你只要知道“给什么、应该返回什么”，就能检查它的结果。确认某个函数没有按要求完成任务后，再按题目允许的方式重写这个函数。误点进去时用 Step Out 返回。
 
-[puzzle/Puzzle.java](starter/src/puzzle/Puzzle.java) 是可选练习。不要修改 Puzzle.java；按异常信息和调试观察调整 [answer.txt](starter/src/puzzle/answer.txt)。
+用技术语言说，这就是根据函数的输入输出约定来排查问题，不必理解它内部每一步。
 
-异常断点在特定异常抛出时暂停；Evaluate Expression 计算当前状态中的表达式；Watch 可以持续观察表达式随执行变化。表达式若调用会修改状态的方法，本身也可能影响程序，优先观察无副作用的内容。
+## 可选：Puzzle
 
-## 完成标准
+四关做完后，可以试 [Puzzle.java](starter/src/puzzle/Puzzle.java)。它不要求修改 Puzzle.java，而是通过调试观察修改 [answer.txt](starter/src/puzzle/answer.txt)。
 
-Adventure 的四个关卡测试与整体测试通过，保护文件和测试未被任意修改。官方当期必做部分对应这四关；Puzzle 是可选，不能因为它未做就误判四关必做任务未完成。将每个问题的“症状 → 证据 → 根因 → 修复 → 验证”各写一行，留作以后调试模板。
+可以练习异常断点（出特定错误时暂停）、Evaluate Expression（计算当前表达式）和 Watches（持续观察一个表达式）。观察时尽量只读取值；如果你在表达式里调用删除、添加等方法，也会改变正在调试的程序。
+
+## 怎样算做完
+
+四个关卡和整体 Adventure 测试通过。Puzzle 是可选，没做它不影响四关主任务完成。为每个问题写几句：报了什么错，看到了什么值，原因在哪，怎样修改，用哪个测试确认。
 
 [返回实验索引](../README.md)

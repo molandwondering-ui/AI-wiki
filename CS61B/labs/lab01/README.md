@@ -1,34 +1,36 @@
-# Lab 01：建立 Java 编辑、运行与测试流程
+# Lab 01：让程序跑起来，再修正算错的结果
 
-[官方题目](https://sp24.datastructur.es/labs/lab01/) · [题目快照](official.html) · [FAQ 快照](faq.html) · [起始代码](starter/) · [环境配置](../README.md)
+[官方题目](https://sp24.datastructur.es/labs/lab01/) · [本地题目](official.html) · [本地 FAQ](faq.html) · [练习代码](starter/) · [第一次打开与配置环境](../README.md)
 
-以下为中文实验导引，原始英文规格与 starter 保留供核对。同步日期 2026-11-01；未填写解答，也未修改官方测试。
+下面按实际操作顺序说明怎么做。原始题目、代码和测试均保留，具体要求可随时对照官方材料。整理日期：2026-11-01。
 
-## 本实验要学会什么
+## 这次做什么
 
-让一段 Java 程序从源码运行起来，并用测试区分“能够启动”和“计算正确”。它与 Lecture 1–2 对应，工具设置本身也是实验的一部分。
+程序让你输入两个整数，再打印它们的乘积与和。你的任务是先把它运行起来，然后判断它算得对不对，修好错误。对应第 1–2 讲。
 
-## 按这条顺序操作
+如果还没试过运行 Java，可以先跑[两辆车的小例子](../../examples/lecture01/README.md)，熟悉 main 和输出窗口。
 
-1. 先按[共同环境说明](../README.md)配置 JDK、IntelliJ、源码根和 library。官方要求 Java 17 或以上。
-2. 打开 [Arithmetic.java](starter/src/Arithmetic.java)，运行 main，依提示输入两个整数。先观察乘积和和的输出，不急着修改。
-3. 选择一组你可以独立手算、且能区分不同运算的输入，写下预期结果。确认异常是程序逻辑错误，而不是输入格式错误。
-4. 运行 [ArithmeticTest.java](starter/tests/ArithmeticTest.java)，阅读哪些测试通过、哪些失败。
-5. 只修改 Arithmetic.java 中与题目不符的逻辑，再运行全部测试和一次交互输入。
+## 一步一步做
 
-## 需要理解的文件关系
+1. 按[环境说明](../README.md)在 IntelliJ 打开 `starter/`，选好 JDK，添加 library。
+2. 打开 [Arithmetic.java](starter/src/Arithmetic.java)，点 main 旁的运行按钮。看到提示后输入 `2`，回车，再输入 `3`，回车。
+3. 先不改代码。你知道乘积应该是 6，和应该是 5，对照屏幕结果看哪一个不对。
+4. 打开 [ArithmeticTest.java](starter/tests/ArithmeticTest.java)，运行测试。测试会调用程序里的方法，把返回值与预期答案比较；失败时查看 expected（预期）和 actual（实际）。
+5. 回到 Arithmetic.java，找到对应计算，按题意修改。重新跑全部测试，再运行一次 main 输入数字，确认两种方式都正常。
 
-Arithmetic.java 是实现；ArithmeticTest.java 是对实现的独立检查。main 用 algs4 的 StdIn 读取输入，所以如果出现 `package edu.princeton.cs.algs4 does not exist`，先检查依赖配置，而不是删除 import。
+## 这两个文件是什么关系
 
-IDE 中绿色运行按钮可能表示运行 main，也可能表示运行测试。看清选择的是哪个入口，避免以为“交互程序没有报错”就代表所有测试通过。
+Arithmetic.java 是做计算的程序。ArithmeticTest.java 则像一张附了标准答案的练习卷，自动给程序出题并核对结果。程序能启动，不代表它能答对题，所以 main 和测试都要会运行。
 
-## 完成检查
+`StdIn` 是用来读取输入的外部工具。如果提示 `package edu.princeton.cs.algs4 does not exist`，意思是没找到这个工具；回到环境设置添加 JAR，不要把 import 删掉。
 
-- 能说明声明、编译和运行分别做什么。
-- 能独立运行 main，也能独立运行测试。
-- ArithmeticTest 全部通过，未修改测试来迁就实现。
-- 记录错误原因、修改位置和验证输入。
+## 做完后检查
 
-官方还介绍 Git 仓库、add/commit/push 和 Gradescope 的工作流。自学可在自己的练习副本记录提交；当前 AI-wiki 资料目录没有替你配置学生仓库或执行课程提交。
+- 输入 2 和 3，乘积为 6，和为 5；再自己换一组数字核对。
+- ArithmeticTest 全部通过，测试中的预期答案没有被改过。
+- 能指着代码说明：从哪里开始运行、在哪里读输入、哪两个方法计算结果。
+- 留一条记录：我发现了什么错误，改了哪里，用什么输入检查过。
+
+官方还介绍 Git 和 Gradescope。自学可以在自己的练习副本中记录 Git 提交；当前资料没有替你连接学生仓库或提交课程作业。
 
 [返回实验索引](../README.md)

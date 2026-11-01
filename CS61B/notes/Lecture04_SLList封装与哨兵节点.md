@@ -1,6 +1,6 @@
-# Lecture 4：SLList封装与哨兵节点
+# Lecture 4：把链表包装好，让它更容易使用
 
-**改善数据结构不只是在循环里提速，还包括让使用者更容易正确使用它。** 本讲把暴露节点的 IntList 逐步改造成 SLList：隐藏节点、缓存长度，再用哨兵统一空表和非空表。
+上一讲的链表能存东西，但使用者还得亲自处理“下一个节点接在哪里”。这一讲会一步步把这些细节收进去，让调用者只管添加、读取和查询长度。最后加一个始终存在的起点，让空列表也更好处理。
 
 来源：CS61B Spring 2024，B 站 P15（不是第 15 讲）。整理日期：2026-11-01。
 
@@ -8,7 +8,11 @@
 
 以下是结合字幕与画面重写的中文学习笔记，不是逐字译稿。代码为课堂思路的教学整理；额外边界说明单独标注。
 
-## 1. 裸链表让使用者承担了过多内部细节
+## 1. 使用链表的人，不该每次都亲自接线
+
+你只是想把 10 加到列表开头，却要先找到节点，再改 next，最后重新记住开头在哪里。每次都让使用者干这些事，很容易接错，甚至把链表接成一个永远走不出去的圈。我们可以把这些操作写好，让使用者直接说“加到开头”。
+
+**再看技术解释：**
 
 IntList 要求使用者知道 first、rest 和 null，还允许外部直接修改链接。想添加一个元素时，调用者需要操作引用；一旦把节点连回自己，就会让遍历永远无法结束。
 
@@ -18,7 +22,11 @@ IntList 要求使用者知道 first、rest 和 null，还允许外部直接修�
 
 *课堂画面：[回看 02:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=120)。IntList 的裸递归表示把节点结构直接暴露给使用者。*
 
-## 2. 包装类提供稳定的列表入口
+## 2. 让列表对象替使用者管理里面的节点
+
+现在增加一个专门管理节点的 SLList。外面的人拿着 SLList，调用 addFirst(10)；它在内部完成创建节点和连接的操作。以后第一节点换了，使用者仍然拿着原来那个列表对象，不需要自己追着新开头跑。
+
+**再看技术解释：**
 
 最初的包装形式可理解为：
 
@@ -39,11 +47,15 @@ public class SLList {
 
 *课堂画面：[回看 11:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=660)。SLList 在使用者与节点之间增加一层稳定接口。*
 
-## 3. private 限制外部代码破坏内部结构
+## 3. 把不该随便动的部分藏起来
+
+如果任何人都能改链表内部的 next，列表就很难保证不会被接坏。把 first 设为 private，相当于规定：外部只能通过公开的添加、删除等方法来修改列表。这样实现者能集中检查修改是否正确，使用者也少了许多必须理解的细节。
+
+**再看技术解释：**
 
 把 first 设为 private，外部就不能随意写 `L.first.next = ...`。添加、删除等操作通过公开方法完成，结构约束集中由 SLList 维护。
 
-好处有两个：使用者要理解的东西减少；实现者以后可以改变内部表示，只要公开操作仍然满足原先约定。课堂用方向盘和油路类比：驾驶者需要操作方向盘，不需要直接改变油路。
+好处有两个：使用者要理解的东西减少；实现者以后可以改变内部存储方式，只要公开操作仍然满足原先约定。课堂用方向盘和油路类比：驾驶者需要操作方向盘，不需要直接改变油路。
 
 private 是语言层面的访问控制，不代表字段从对象或字节码中消失，也不是抵御所有反射等机制的安全边界。这里关心的是正常程序设计中的封装。
 
@@ -51,7 +63,11 @@ private 是语言层面的访问控制，不代表字段从对象或字节码中
 
 *课堂画面：[回看 14:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=840)。公开接口与私有表示帮助维护抽象边界。*
 
-## 4. 嵌套节点类让实现细节留在使用它的地方
+## 4. 只给链表内部用的小类型，放在链表内部定义
+
+IntNode 只负责当链表节点，其他代码没有必要直接使用它。把它定义在 SLList 里面，读者就容易知道这是谁的内部零件。这里的 static 也不是说“所有节点共用一份数据”，而是说节点不需要额外记住它属于哪个外层 SLList 对象。
+
+**再看技术解释：**
 
 IntNode 若只用于 SLList，就可以嵌套在 SLList 内部：
 
@@ -71,7 +87,11 @@ private static class IntNode {
 
 *课堂画面：[回看 23:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=1380)。IntNode 嵌套进 SLList，使节点表示保持在实现内部。*
 
-## 5. 递归辅助方法把内部算法与公开接口分开
+## 5. 对外只提供 size，内部怎么数由列表自己决定
+
+使用者只问“这个列表有几个元素”，不需要知道从哪个节点开始数。于是公开的 size() 负责回答问题，内部的辅助方法负责沿节点计算。添加到末尾也一样：要改的是尾节点的 next；只让临时变量 p 指向新节点，并没有把新节点接进列表。
+
+**再看技术解释：**
 
 SLList 自己不再是递归节点，不能直接写原先的 `rest.size()`。可以让公开 `size()` 委托给接收节点的私有辅助方法，由辅助方法沿 next 递归。
 
@@ -83,7 +103,11 @@ SLList 自己不再是递归节点，不能直接写原先的 `rest.size()`。�
 
 *课堂画面：[回看 32:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=1920)。公开 size 可以委托给接收节点的私有递归辅助方法。*
 
-## 6. 缓存 size 用更新成本换取常数时间查询
+## 6. 与其每次重新数，不如增删时顺手记一下总数
+
+如果你总是问列表有多长，每次从头数一遍就很浪费。可以另外保存一个 size：成功加一个元素就加 1，删一个就减 1，查询时直接读它。但多保存了一份数字，就要保证它一直与实际元素数一致。这个“每次操作后都必须成立的规则”叫不变量。
+
+**再看技术解释：**
 
 每次查询都遍历一遍链表，在频繁查询时很浪费。增加一个整数 size，在添加时递增、删除时递减，查询就只返回字段。
 
@@ -95,7 +119,11 @@ SLList 自己不再是递归节点，不能直接写原先的 `rest.size()`。�
 
 *课堂画面：[回看 35:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=2100)。缓存长度以后，size 查询不再扫描节点。*
 
-## 7. 空列表暴露了原先代码的特殊情况
+## 7. 以前一直有第一个节点，现在空列表没有了
+
+原来的代码会先找到第一个节点，再看它后面还有没有节点。空列表连第一个节点都没有，一开始读 p.next 就会出错。可以为这种情况单写一个分支，但如果很多操作都有空表分支，代码会越来越绕。接下来要换一种更统一的表示方法。
+
+**再看技术解释：**
 
 用 `first = null, size = 0` 表示空表很自然，但原来的 addLast 一开始就读取 `p.next`；当 p 为 null 时直接异常。可以专门写空表分支，然而每个操作都可能不断积累类似判断。
 
@@ -105,7 +133,11 @@ SLList 自己不再是递归节点，不能直接写原先的 `rest.size()`。�
 
 *课堂画面：[回看 38:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=2280)。支持零元素列表后，必须重新检查原先依赖 first 非空的代码。*
 
-## 8. 哨兵统一链接操作，但不替代空表的接口约定
+## 8. 留一个不算元素的起点，空表也能从这里开始
+
+无论列表里有没有内容，都先放一个固定的起点节点。它不代表用户放进去的数字，只负责指向真正的第一个元素。空表时它后面没人，有内容时从它往后走。这样“找到末尾再接一个节点”的步骤，两种情况都能用。这个固定起点就叫哨兵。
+
+**再看技术解释：**
 
 最终表示为：`sentinel → 第一个真实节点 → ... → null`。空表是 `sentinel.next == null`，sentinel 自己始终存在，item 的值不参与列表内容。
 
@@ -130,7 +162,70 @@ public void addLast(int x) {
 
 *课堂画面：[回看 47:00](https://www.bilibili.com/video/BV1QP4y1u7jv/?p=15&t=2820)。从永不为空的哨兵出发，addLast 不再需要单独处理空表。*
 
-## 动手检查理解
+## 跑一个完整例子：空列表也有一个固定的起点
+
+这是为本笔记补充的可运行代码。程序先打印空列表，再向末尾加 20、向开头加 10。你会看到哨兵一直存在，但不计入元素数量。
+
+```java
+public class SentinelListDemo {
+    private static class Node {
+        int value;
+        Node next;
+        Node(int value, Node next) { this.value = value; this.next = next; }
+    }
+
+    private final Node sentinel = new Node(0, null); // 0 只是占位值，不是列表元素。
+    private int size;
+
+    void addFirst(int value) {
+        sentinel.next = new Node(value, sentinel.next);
+        size++;
+    }
+
+    void addLast(int value) {
+        Node p = sentinel; // 空表也能从这里开始。
+        while (p.next != null) {
+            p = p.next;
+        }
+        p.next = new Node(value, null); // 改尾节点的连接，才真正接上了新节点。
+        size++;
+    }
+
+    String values() {
+        StringBuilder out = new StringBuilder("[");
+        for (Node p = sentinel.next; p != null; p = p.next) {
+            if (p != sentinel.next) { out.append(", "); }
+            out.append(p.value);
+        }
+        return out.append("]").toString();
+    }
+
+    public static void main(String[] args) {
+        SentinelListDemo list = new SentinelListDemo();
+        System.out.println(list.values() + "，size=" + list.size);
+        list.addLast(20);
+        list.addFirst(10);
+        System.out.println(list.values() + "，size=" + list.size);
+    }
+}
+```
+
+`sentinel.next` 指向第一个真正元素；空表时它是 null。`addLast` 从哨兵向后走，空表和非空表都能走到“下一站为空”的位置。`values()` 只负责把节点内容拼成可读文字，`StringBuilder` 可以理解为逐段拼接文字的工具。这份简单实现的尾部添加仍需遍历，耗时 O(N)。
+
+**运行方式：**在 CS61B 目录执行 `java examples/lecture04/SentinelListDemo.java`。首次运行可先看[环境说明](../examples/README.md)。
+
+预期输出：
+
+```text
+[]，size=0
+[10, 20]，size=2
+```
+
+**改一处试试：**只执行 `addLast(0)`，观察列表打印 `[0]`、size 为 1。为什么这个 0 算元素，哨兵里的 0 却不算？
+
+[打开完整 Java 文件](../examples/lecture04/SentinelListDemo.java) · [单独阅读这个例子](../examples/lecture04/README.md)
+
+## 自己动手试一试
 
 1. 画出空表、一个元素、两个元素三种哨兵结构。
 2. 说明 `p = new IntNode(...)` 与 `p.next = new IntNode(...)` 为什么不同。
